@@ -9,8 +9,9 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    android:background="@mipmap/custom_background"
-    tools:context="cs490.breakfastclub.MainActivity">
+    tools:context="cs490.breakfastclub.MainActivity"
+    android:background="@mipmap/custom_background" >
+
 <!--
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -36,9 +37,10 @@
         android:background="@color/Purdue_Gold">
         <Button
             android:id="@+id/btn_nav"
-            android:background="@mipmap/back_arrow"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@mipmap/back_arrow" />
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,11 +54,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button"
-        android:background="@mipmap/login_with_facebook"
         android:onClick="loginWithFacebook"
         style="@android:style/Widget.DeviceDefault.Button"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@mipmap/login_with_facebook" />
+
 
 
 </RelativeLayout>
