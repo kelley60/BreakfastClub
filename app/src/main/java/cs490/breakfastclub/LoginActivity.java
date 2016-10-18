@@ -13,28 +13,26 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -42,6 +40,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cs490.breakfastclub.Classes.User;
 
 
 /**
@@ -55,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     public AccessTokenTracker accessTokenTracker;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference mDatabase;
 
     @Override
     //provide the onCreate method to apply the Friends layout to the activity
@@ -84,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         callbackManager = CallbackManager.Factory.create();
         //gets the login button from activity_login.xml
         loginButton = (LoginButton) findViewById(R.id.fb_button);
@@ -210,6 +218,67 @@ public class LoginActivity extends AppCompatActivity {
                         // ...
                     }
                 });
+
+
+        final User currentUser = new User();
+
+        Bundle params = new Bundle();
+        params.putString("fields", "id, name, picture.type(large), friends");
+
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/me",
+                params,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+            /* handle the result */
+                        JSONObject object = response.getJSONObject();
+                        JSONObject profileImageObject = null;
+                        JSONArray friendsObject = null;
+                        try {
+                            profileImageObject = object.getJSONObject("picture").getJSONObject("data");
+                            friendsObject = object.getJSONObject("friends").getJSONArray("data");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Log.v("Public Profile Object: " , object.toString());
+                        Log.v("Image Object: ", profileImageObject.toString());
+                        Log.v("Friends Object: ", friendsObject.toString());
+
+
+                        try {
+                            currentUser.setUserId(object.getString("id"));
+                            currentUser.setName(object.getString("name"));
+                            currentUser.setProfileImageUrl(profileImageObject.getString("url"));
+
+                            ArrayList<User> friends = new ArrayList<User>();
+                            for (int i = 0; i < friendsObject.length(); i++)
+                            {
+                                User friend = new User();
+                                JSONObject friendObject = (JSONObject) friendsObject.get(i);
+                                friend.setName(friendObject.getString("name"));
+                                friend.setUserId(friendObject.getString("id"));
+                                friends.add(friend);
+                            }
+                            currentUser.setFriends(friends);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Log.v("CurrentUser Object: ", currentUser.toString());
+                        ((MyApplication) getApplication()).setCurrentUser(currentUser);
+                        writeNewUser(currentUser);
+                    }
+                }
+        ).executeAsync();
+
+    }
+
+    private void writeNewUser(User user) {
+        mDatabase.child("Users").child(user.getUserId()).child("name").setValue(user.getName());
+        mDatabase.child("Users").child(user.getUserId()).child("profileImageUrl").setValue(user.getProfileImageUrl());
+        mDatabase.child("Users").child(user.getUserId()).child("receivesPushNotifications").setValue(user.isReceivesPushNotifications());
     }
 
 
