@@ -4,6 +4,7 @@ package cs490.breakfastclub;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 import com.facebook.AccessToken;
@@ -34,6 +35,13 @@ import android.widget.VideoView;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 /**
@@ -45,6 +53,8 @@ public class LoginActivity extends AppCompatActivity {
     public static LoginButton loginButton;
     public static CallbackManager callbackManager;
     public AccessTokenTracker accessTokenTracker;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     //provide the onCreate method to apply the Friends layout to the activity
@@ -73,12 +83,11 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 
-
+        mAuth = FirebaseAuth.getInstance();
         callbackManager = CallbackManager.Factory.create();
         //gets the login button from activity_login.xml
         loginButton = (LoginButton) findViewById(R.id.fb_button);
-        loginButton.setReadPermissions("public_profile");
-        loginButton.setReadPermissions("user_friends");
+        loginButton.setReadPermissions("email", "public_profile", "user_friends");
         //gets the textview from activity_login.xml
         info = (TextView) findViewById(R.id.fb_info);
         final Button btnnav = (Button) findViewById(R.id.btn_nav);
@@ -98,6 +107,7 @@ public class LoginActivity extends AppCompatActivity {
         {
             info.setText("User is Logged In.");
             btnnav.setVisibility(View.VISIBLE);
+            handleFacebookAccessToken(AccessToken.getCurrentAccessToken());
         }
         else
         {
@@ -112,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
                 // DO something with information you got
                 btnnav.setVisibility(View.VISIBLE);
+                handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
             @Override
@@ -139,6 +150,21 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         };
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d("Signed in", "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    // User is signed out
+                    Log.d("Signed Out", "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+        };
     }
 
     @Override
@@ -150,6 +176,40 @@ public class LoginActivity extends AppCompatActivity {
     public boolean isLoggedIn() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         return accessToken != null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
+
+    private void handleFacebookAccessToken(AccessToken token) {
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d("Signed in Credential", "signInWithCredential:onComplete:" + task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Log.w("Signed In Credential", "signInWithCredential", task.getException());
+                        }
+
+                        // ...
+                    }
+                });
     }
 
 
