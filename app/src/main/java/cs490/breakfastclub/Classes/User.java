@@ -1,5 +1,7 @@
 package cs490.breakfastclub.Classes;
 
+import java.util.ArrayList;
+
 /**
  * Created by Sean on 10/17/16.
  */
@@ -10,12 +12,15 @@ public class User {
     private String userId;
     private String profileImageUrl;
     private boolean receivesPushNotifications;
+    private ArrayList<User> friends;
 
-    public User(String name, String userId, String profileImageUrl){
+
+    public User(String name, String userId, String profileImageUrl, ArrayList<User> friends){
         this.name = name;
         this.userId = userId;
         this.profileImageUrl = profileImageUrl;
         this.receivesPushNotifications = true;
+        this.friends = friends;
     }
 
     //TODO
@@ -23,14 +28,6 @@ public class User {
     private void createSquad(String squadName){
         Squad squad = new Squad(squadName, User.this);
     }
-
-
-
-
-
-
-
-
 
 
 
@@ -88,5 +85,21 @@ public class User {
 
     public void setReceivesPushNotifications(boolean receivesPushNotifications) {
         this.receivesPushNotifications = receivesPushNotifications;
+    }
+
+    public String toString()
+    {
+        return "Name: " + name + " UserId: " + userId + " ProfileImageUrl: " + profileImageUrl
+                + " ReceivesPushNotifications: " + receivesPushNotifications
+                + " Friends: " + friends;
+    }
+
+    public void setFriends(ArrayList<User> friends) {
+        this.friends = friends;
+    }
+
+    public ArrayList<User> getFriends()
+    {
+        return friends;
     }
 }

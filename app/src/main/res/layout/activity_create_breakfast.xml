@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_create_breakfast"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:background="@mipmap/custom_background"
+    tools:context="cs490.breakfastclub.CreateBreakfastActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:orientation="horizontal"
+        android:background="@color/Purdue_Gold"
+        android:id="@+id/relativeLayout">
+        <Button
+            android:id="@+id/btn_nav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/back_arrow" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/Purdue_White"
+            android:textSize="24sp"
+            android:text="Breakfast Club"/>
+    </RelativeLayout>
+
+
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:text="Breakfast Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/lblBrkfstName"
+                    android:textColor="@color/Purdue_White" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:text="Name"
+                    android:ems="10"
+                    android:id="@+id/txtBrkfstName"
+                    android:layout_marginStart="28dp"
+                    android:layout_alignBaseline="@+id/lblBrkfstName"
+                    android:layout_alignBottom="@+id/lblBrkfstName"
+                    android:layout_toEndOf="@+id/lblBrkfstName"
+                    android:textColor="@color/Purdue_White"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
+                    android:id="@+id/imageView"
+                    android:layout_centerHorizontal="true"
+                    android:cropToPadding="false"
+                    android:layout_centerInParent="true"
+                    android:onClick="changeBrkfstPic"/>
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/txtBrkfstDesc"
+                    android:textColor="@color/Purdue_White" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:ems="10"
+                    android:layout_below="@+id/txtBrkfstDesc"
+                    android:layout_alignStart="@+id/txtBrkfstDesc"
+                    android:id="@+id/editText2"
+                    android:textColor="@color/Purdue_White"
+                    android:text="[Description Here]"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TimePicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/timePicker2"
+                    android:layout_centerInParent="true"
+                    android:timePickerMode="spinner"
+                    android:numbersInnerTextColor="@color/Purdue_White"
+                    android:numbersTextColor="@color/Purdue_White"
+                    android:numbersSelectorColor="@color/Purdue_White"
+                    android:background="@color/Purdue_White" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:text="Create"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginBottom="54dp"
+                    android:id="@+id/btnBrkfstCreate" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>
