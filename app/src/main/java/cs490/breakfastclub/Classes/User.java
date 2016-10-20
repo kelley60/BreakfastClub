@@ -18,7 +18,11 @@ public class User {
         this.receivesPushNotifications = true;
     }
 
-
+    //TODO
+    //add squad to DB
+    private void createSquad(String squadName){
+        Squad squad = new Squad(squadName, User.this);
+    }
 
 
 

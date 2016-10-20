@@ -48,9 +48,6 @@ public class Breakfast {
 
 
 
-
-
-
     //GETTERS AND SETTERS --------------------------------------------------------------
     public Date getDate() {
         return date;
