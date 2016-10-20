@@ -3,7 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="Purdue_Gold">#B1810B</color>
+    <color name="Purdue_Gold">#b1810b</color>
     <color name="Purdue_Black">#000000</color>
     <color name="Purdue_White">#FFFFFF</color>
 </resources>

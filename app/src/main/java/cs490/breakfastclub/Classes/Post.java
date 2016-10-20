@@ -16,11 +16,13 @@ public class Post {
     private String message;
     private String imgURL;
     private Date date;
+    private int score;
 
     public Post(String message, String imgURL, Date date){
         this.message = message;
         this.imgURL = imgURL;
         this.date = date;
+        this.score = 0;
     }
 
 
@@ -74,5 +76,13 @@ public class Post {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }
