@@ -12,25 +12,10 @@
     tools:context="cs490.breakfastclub.MainActivity"
     android:background="@mipmap/custom_background" >
 
-<!--
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/Purdue_Gold"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
-
-        <Button
-            android:id="@+id/btn_nav"
-            android:background="@mipmap/back_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </android.support.v7.widget.Toolbar>
--->
+    <!-- This is the 'toolbar', do not modify this, otherwise the look
+         of this activity will not be consistent -->
     <RelativeLayout
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:orientation="horizontal"
@@ -50,37 +35,10 @@
             android:textSize="24sp"
             android:text="Breakfast Club"/>
     </RelativeLayout>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button"
-        android:onClick="loginWithFacebook"
-        style="@android:style/Widget.DeviceDefault.Button"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:background="@mipmap/login_with_facebook" />
+
+    <!-- Put all other UI elements below this comment! -->
 
 
 
 </RelativeLayout>
-<!-- From the tutorial online
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:background="@color/Purdue_White">
 
-    <EditText android:id="@+id/edit_message"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/edit_message" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_send"
-        android:onClick="sendMessage"/>
-</LinearLayout>
--->
