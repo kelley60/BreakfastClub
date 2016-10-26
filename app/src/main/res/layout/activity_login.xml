@@ -43,9 +43,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text=""
+        android:text="FB_INFO"
         android:id="@+id/fb_info"
-        android:layout_gravity="center_horizontal|bottom" />
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_below="@id/toolbar"
+        android:textColor="@color/Purdue_White"/>
 
     <Button
         android:id="@+id/btn_nav"
