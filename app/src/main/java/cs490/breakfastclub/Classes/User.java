@@ -23,6 +23,16 @@ public class User {
         this.friends = friends;
     }
 
+    public User(String name, String userId, String profileImageUrl)
+    {
+        this(name, userId, profileImageUrl, new ArrayList<User>());
+    }
+
+    public User()
+    {
+        this("DEFAULT", "DEFAULT", "DEFAULT", new ArrayList<User>());
+    }
+
     //TODO
     //add squad to DB
     private void createSquad(String squadName){
