@@ -40,8 +40,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -268,7 +271,29 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         Log.v("CurrentUser Object: ", currentUser.toString());
                         ((MyApplication) getApplication()).setCurrentUser(currentUser);
-                        writeNewUser(currentUser);
+                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users/" + currentUser.getUserId());
+                        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                // Add the user to the database if they are not already there
+                                if (!dataSnapshot.exists()) {
+                                    Log.v("User does not exisit", "User does not already exists");
+                                    writeNewUser(currentUser);
+
+                                }
+                                // Get the information needed and update the user
+                                else {
+                                    Log.v("User already exisits", "User already exists");
+                                    currentUser.setReceivesPushNotifications((boolean) dataSnapshot.child("receivesPushNotifications").getValue());
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                System.out.println("The read failed: " + databaseError.getCode());
+                            }
+                        });
+
                     }
                 }
         ).executeAsync();
