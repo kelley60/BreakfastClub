@@ -1,6 +1,8 @@
 package cs490.breakfastclub;
 
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -23,15 +25,21 @@ import com.facebook.login.widget.LoginButton;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -74,6 +82,21 @@ public class LoginActivity extends AppCompatActivity {
         AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_login);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        if (getIntent().hasExtra("CameFromDrawer"))
+        {
+            boolean cameFromDrawer = getIntent().getBooleanExtra("CameFromDrawer", false);
+            if (cameFromDrawer == true)
+            {
+                myToolbar.setVisibility(View.VISIBLE);
+            }
+
+        }
+
 
         // Add code to print out the key hash
         try {
@@ -106,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent init = new Intent(LoginActivity.this, MainActivity.class);
+                Intent init = new Intent(LoginActivity.this, DrawerActivity.class);
                 init.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(init);
                 finish();
@@ -117,12 +140,14 @@ public class LoginActivity extends AppCompatActivity {
         if (isLoggedIn())
         {
             info.setText("User is Logged In.");
+            getSupportActionBar().setTitle("Sign Out");
             btnnav.setVisibility(View.VISIBLE);
             handleFacebookAccessToken(AccessToken.getCurrentAccessToken());
         }
         else
         {
             info.setText("User is not Logged In.");
+            getSupportActionBar().setTitle("Sign In");
         }
 
 
@@ -304,6 +329,19 @@ public class LoginActivity extends AppCompatActivity {
         mDatabase.child("Users").child(user.getUserId()).child("name").setValue(user.getName());
         mDatabase.child("Users").child(user.getUserId()).child("profileImageUrl").setValue(user.getProfileImageUrl());
         mDatabase.child("Users").child(user.getUserId()).child("receivesPushNotifications").setValue(user.isReceivesPushNotifications());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

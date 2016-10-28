@@ -65,6 +65,12 @@
         android:layout_toRightOf="@id/btn_disp_msg"
         android:layout_alignTop="@id/btn_disp_msg"
         android:text="Login"/>
+    <Button
+        android:id="@+id/btn_drawerTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_disp_msg"
+        android:text="DrawerTest"/>
 
 
 

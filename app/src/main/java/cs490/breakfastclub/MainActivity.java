@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     Button createBreakfastButton;
     Button displayMessageButton;
     Button loginButton;
+    Button drawerButton;
     GoogleApiClient mGoogleApiClient;
 
     @Override
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         createBreakfastButton = (Button) findViewById(R.id.btn_create_brkfst);
         displayMessageButton = (Button) findViewById(R.id.btn_disp_msg);
         loginButton = (Button) findViewById(R.id.btn_login);
+        drawerButton = (Button) findViewById(R.id.btn_drawerTest);
+
 
 
         campusFeedButton.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +80,14 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+        drawerButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, DrawerActivity.class);
                 startActivity(intent);
             }
         });
