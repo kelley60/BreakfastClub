@@ -12,9 +12,18 @@
     tools:context="cs490.breakfastclub.CampusFeedActivity"
     android:background="@mipmap/custom_background" >
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/Purdue_Gold"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/PopupOverlay"/>
+
     <!-- This is the 'toolbar', do not modify this, otherwise the look
          of this activity will not be consistent -->
-    <RelativeLayout
+    <!--<RelativeLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="64dp"
@@ -36,7 +45,7 @@
             android:text="Breakfast Club"/>
     </RelativeLayout>
 
-    <!-- Put all other UI elements below this comment! -->
+    <!- Put all other UI elements below this comment! -->
 
     <TextView
         android:text="0"
@@ -66,7 +75,7 @@
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_menu_camera"
         android:id="@+id/cameraButtonId"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/my_toolbar"
         android:layout_alignParentEnd="true" />
 
 

@@ -12,8 +12,17 @@
     tools:context="cs490.breakfastclub.DisplayMessageActivity"
     android:background="@mipmap/custom_background" >
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/Purdue_Gold"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/PopupOverlay"/>
+
     <!-- This is the 'toolbar', do not modify this, otherwise the look
-         of this activity will not be consistent -->
+         of this activity will not be consistent
     <RelativeLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -36,12 +45,12 @@
             android:text="Breakfast Club"/>
     </RelativeLayout>
 
-    <!-- Put all other UI elements below this comment! -->
+    <!- Put all other UI elements below this comment! -->
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar">
+        android:layout_below="@+id/my_toolbar">
 
         <!-- TODO: Figure out how to populate list. Follow this link
         https://github.com/delaroy/MyListView/blob/master/app/src/main/java/com/delaroystudios/mylistview/CustomAdapter.java

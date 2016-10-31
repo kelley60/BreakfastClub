@@ -88,6 +88,15 @@ public class DrawerActivity extends AppCompatActivity
             Intent intent = new Intent(DrawerActivity.this, LoginActivity.class);
             intent.putExtra("CameFromDrawer", true);
             startActivity(intent);
+        } else if (id == R.id.nav_profile) {
+            Intent intent = new Intent(DrawerActivity.this, ProfileViewActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_squadCreate) {
+            Intent intent = new Intent(DrawerActivity.this, SquadCreateActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_squadView) {
+            Intent intent = new Intent(DrawerActivity.this, SquadViewActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

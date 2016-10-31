@@ -3,6 +3,9 @@ package cs490.breakfastclub;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -28,6 +31,11 @@ public class CampusFeedActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         String layout = bundle.getString("Layout Type");
         setLayoutFromIntentString(layout);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Campus Feed");
 
     }
 
@@ -88,6 +96,19 @@ public class CampusFeedActivity extends AppCompatActivity {
     //TODO Sean
     private void increaseCurrentPostScore() {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
