@@ -89,7 +89,8 @@
                     android:layout_centerHorizontal="true"
                     android:cropToPadding="false"
                     android:layout_centerInParent="true"
-                    android:onClick="changeSquadPic"/>
+                    android:onClick="changeSquadPic"
+                    android:id="@+id/squadPhoto"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -136,7 +137,8 @@
                     android:layout_height="wrap_content"
                     android:text="Create"
                     android:layout_centerInParent="true"
-                    android:textColor="@color/Purdue_Black"/>
+                    android:textColor="@color/Purdue_Black"
+                    android:id="@+id/createSquad"/>
 
             </RelativeLayout>
 
