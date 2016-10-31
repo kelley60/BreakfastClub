@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     }
 
     private void buttonInit() {
-        campusFeedButton = (Button) findViewById(R.id.btn_campus_feed);
+        /*campusFeedButton = (Button) findViewById(R.id.btn_campus_feed);
         createBreakfastButton = (Button) findViewById(R.id.btn_create_brkfst);
         displayMessageButton = (Button) findViewById(R.id.btn_disp_msg);
         loginButton = (Button) findViewById(R.id.btn_login);
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 Intent intent = new Intent(MainActivity.this, DrawerActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
     }
 
     private Intent chooseCampusFeedActivity() {

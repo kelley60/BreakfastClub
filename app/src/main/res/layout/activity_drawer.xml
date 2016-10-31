@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
-    android:background="@mipmap/custom_background">
+    android:background="@drawable/gradient_background">
 
     <include
         layout="@layout/app_bar_drawer"

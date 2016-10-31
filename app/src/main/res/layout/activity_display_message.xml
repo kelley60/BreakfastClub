@@ -10,7 +10,7 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     tools:context="cs490.breakfastclub.DisplayMessageActivity"
-    android:background="@mipmap/custom_background" >
+    android:background="@drawable/gradient_background" >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -21,31 +21,8 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/PopupOverlay"/>
 
-    <!-- This is the 'toolbar', do not modify this, otherwise the look
-         of this activity will not be consistent
-    <RelativeLayout
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:orientation="horizontal"
-        android:background="@color/Purdue_Gold">
-        <Button
-            android:id="@+id/btn_nav"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/back_arrow" />
 
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/Purdue_White"
-            android:textSize="24sp"
-            android:text="Breakfast Club"/>
-    </RelativeLayout>
-
-    <!- Put all other UI elements below this comment! -->
+    <!-- Put all other UI elements below this comment! -->
 
     <ScrollView
         android:layout_width="match_parent"

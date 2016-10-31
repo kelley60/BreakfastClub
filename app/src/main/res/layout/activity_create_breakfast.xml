@@ -9,7 +9,7 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    android:background="@mipmap/custom_background"
+    android:background="@drawable/gradient_background"
     tools:context="cs490.breakfastclub.CreateBreakfastActivity">
 
     <android.support.v7.widget.Toolbar
@@ -20,29 +20,6 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/PopupOverlay"/>
-
-    <!--<RelativeLayout
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:orientation="horizontal"
-        android:background="@color/Purdue_Gold">
-        <Button
-            android:id="@+id/btn_nav"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/back_arrow" />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/Purdue_White"
-            android:textSize="24sp"
-            android:text="Breakfast Club"/>
-    </RelativeLayout> -->
-
 
 
 

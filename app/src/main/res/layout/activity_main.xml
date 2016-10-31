@@ -10,69 +10,9 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     tools:context="cs490.breakfastclub.MainActivity"
-    android:background="@mipmap/custom_background" >
+    android:background="@drawable/gradient_background" >
 
-    <!-- This is the 'toolbar', do not modify this, otherwise the look
-         of this activity will not be consistent -->
-    <RelativeLayout
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:orientation="horizontal"
-        android:background="@color/Purdue_Gold">
-        <Button
-            android:id="@+id/btn_nav"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/back_arrow" />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/Purdue_White"
-            android:textSize="24sp"
-            android:text="Navigation Page"/>
-    </RelativeLayout>
-
-    <!-- Put all other UI elements below this comment! -->
-
-    <!-- TODO: Make all these buttons switch to their respective view -->
-    <Button
-        android:id="@+id/btn_campus_feed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
-        android:text="Campus Feed"/>
-    <Button
-        android:id="@+id/btn_create_brkfst"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/btn_campus_feed"
-        android:layout_alignTop="@id/btn_campus_feed"
-        android:text="Create Breakfast"/>
-    <Button
-        android:id="@+id/btn_disp_msg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btn_campus_feed"
-        android:text="Display Message"/>
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/btn_disp_msg"
-        android:layout_alignTop="@id/btn_disp_msg"
-        android:text="Login"/>
-    <Button
-        android:id="@+id/btn_drawerTest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btn_disp_msg"
-        android:text="DrawerTest"/>
-
-
+    <!-- UNUSED -->
 
 </RelativeLayout>
 
