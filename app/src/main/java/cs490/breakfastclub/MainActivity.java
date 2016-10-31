@@ -19,11 +19,11 @@ import com.google.android.gms.location.LocationServices;
 public class MainActivity extends AppCompatActivity implements ConnectionCallbacks, OnConnectionFailedListener{
 
     public static String EXTRA_MESSAGE="KEY";
-    Button campusFeedButton;
+    /*Button campusFeedButton;
     Button createBreakfastButton;
     Button displayMessageButton;
     Button loginButton;
-    Button drawerButton;
+    Button drawerButton;*/
     GoogleApiClient mGoogleApiClient;
 
     @Override

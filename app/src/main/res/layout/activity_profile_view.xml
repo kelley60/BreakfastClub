@@ -24,5 +24,74 @@
 
 
     <!-- Put all other UI elements below this comment! -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/my_toolbar">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/lblProfileName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[Profile Name]"
+                    android:textColor="@color/Purdue_White"
+                    android:textSize="24sp"
+                    android:layout_centerInParent="true"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[Squad]"
+                    android:layout_below="@id/lblProfileName"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/Purdue_White"
+                    android:textSize="20sp"
+                    android:layout_marginTop="15dp"/>
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
+                    android:padding="5dp"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/lblAboutMe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[FB About Me Section]"
+                    android:textColor="@color/Purdue_White"
+                    android:textSize="16sp"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>
