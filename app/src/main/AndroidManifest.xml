@@ -52,6 +52,7 @@
             android:label="@string/title_activity_drawer"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".SquadGalleryActivity" />
+        <activity android:name=".AdminViewUsersActivity"></activity>
     </application>
 
 </manifest>
