@@ -8,8 +8,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.app.AlertDialog;
 import android.view.View;
-
-public class SquadViewActivity extends AppCompatActivity{
+/*
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+*/
+public class SquadViewActivity extends AppCompatActivity/* implements OnMapReadyCallback*/{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,4 +59,13 @@ public class SquadViewActivity extends AppCompatActivity{
                 .setNegativeButton("No", null)
                 .show();
     }
+
+    /*
+    @Override
+    public void onMapReady(GoogleMap map) {
+        map.addMarker(new MarkerOptions()
+                .position(new LatLng(0, 0))
+                .title("Marker"));
+    }
+    */
 }

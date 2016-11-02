@@ -7,4 +7,5 @@
     <color name="Purdue_Black">#000000</color>
     <color name="Purdue_White">#FFFFFF</color>
     <color name="Gray">#AAAAAA</color>
+    <color name="Red">#FF0000</color>
 </resources>

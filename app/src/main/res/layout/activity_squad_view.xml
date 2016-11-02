@@ -19,7 +19,22 @@
         android:background="@color/Purdue_Gold"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/PopupOverlay"/>
+        app:popupTheme="@style/PopupOverlay">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lblBrkfstCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Countdown: [XXh XXm]"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="5dp"/>
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
 
     <!-- Put all other UI elements below this comment! -->
 
@@ -63,14 +78,6 @@
                     android:onClick="changeSquadPic"
                     android:id="@+id/squadPhoto"/>
 
-                <Button
-                    android:id="@+id/btnLeaveSquad"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Leave Squad"
-                    android:onClick="leaveSquadConf"
-                    android:layout_margin="5dp"
-                    android:layout_alignParentStart="true"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -136,6 +143,32 @@
                 android:layout_height="wrap_content"
                 android:background="@color/Purdue_White">
             </ListView>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/btnLeaveSquad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Leave Squad"
+                    android:onClick="leaveSquadConf"
+                    android:layout_margin="5dp"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
+            <!-- TODO: Fix google maps stuff
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    class="com.google.android.gms.maps.SupportMapFragment" />
+            </RelativeLayout>
+            -->
 
 
 
