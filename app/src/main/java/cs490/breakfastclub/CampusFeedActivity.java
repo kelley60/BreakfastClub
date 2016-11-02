@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import cs490.breakfastclub.Classes.Breakfast;
 import cs490.breakfastclub.Classes.Post;
 
 public class CampusFeedActivity extends AppCompatActivity {
@@ -19,6 +20,7 @@ public class CampusFeedActivity extends AppCompatActivity {
     ImageButton cameraButton;
     TextView pictureScore;
     Post currentPost;
+    Breakfast currentBreakfast;
 
 
     @Override
