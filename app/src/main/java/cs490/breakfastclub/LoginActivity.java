@@ -310,6 +310,15 @@ public class LoginActivity extends AppCompatActivity {
                                 else {
                                     Log.v("User already exisits", "User already exists");
                                     currentUser.setReceivesPushNotifications((boolean) dataSnapshot.child("receivesPushNotifications").getValue());
+                                    if(dataSnapshot.child("squad").exists()) {
+                                        currentUser.createSquad((String) dataSnapshot.child("squad").getValue());
+                                        currentUser.setPartOfSquad(true);
+                                    }
+                                    else
+                                    {
+                                        currentUser.setPartOfSquad(false);
+                                    }
+
                                 }
                             }
 
