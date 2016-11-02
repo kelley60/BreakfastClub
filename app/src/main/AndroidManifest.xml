@@ -12,6 +12,14 @@
     <!-- For Geofencing -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <!-- For Google Maps -->
+    <meta-data
+        android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyBLZa6VfRy6NyG0tXzEGNDiQC7tUgVRq2E" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -42,8 +50,9 @@
         <activity
             android:name=".DrawerActivity"
             android:label="@string/title_activity_drawer"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-        <activity android:name=".SquadGalleryActivity"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".SquadGalleryActivity" />
+        <activity android:name=".SquadLocationActivity"></activity>
     </application>
 
 </manifest>
