@@ -39,9 +39,11 @@ import cs490.breakfastclub.Classes.Squad;
 import cs490.breakfastclub.Classes.User;
 
 public class SquadViewActivity extends AppCompatActivity {
-    private ArrayList<String> mMemberNames;
+    private ArrayList<User> mMemberNames;
+    private ArrayList<User> mFriends;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
+    private TextView mDrawerTitle;
 
 
     @Override
@@ -55,12 +57,12 @@ public class SquadViewActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("[SQUAD_NAME]");
 
-        mMemberNames = new ArrayList<String>();
-        mMemberNames.add("Something");
-        mMemberNames.add("Else");
+        mMemberNames = new ArrayList<User>();
+        mFriends = new ArrayList<User>();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.right_drawer);
+        mDrawerTitle = (TextView) findViewById(R.id.drawerTitle);
 
 
 
@@ -70,16 +72,14 @@ public class SquadViewActivity extends AppCompatActivity {
         final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
         if (currentUser.isPartOfSquad()) {
             DatabaseReference squadRef = FirebaseDatabase.getInstance().getReference("Squads/" + currentUser.getSquad().getSquadID());
-            squadRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            squadRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                     HashMap<String, String> members = (HashMap) dataSnapshot.child("Members").getValue();
                     Log.v("Members", members.toString());
-                    final ArrayList<User> squadMembers = new ArrayList<User>();
 
-                    for (Map.Entry<String, String> member : members.entrySet())
-                    {
+                    for (Map.Entry<String, String> member : members.entrySet()) {
                         Log.v("Member", member.getKey() + " " + member.getValue());
                         DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + member.getValue());
                         memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -89,17 +89,8 @@ public class SquadViewActivity extends AppCompatActivity {
                                 currentMember.setName((String) dataSnapshot.child("name").getValue());
                                 currentMember.setProfileImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
                                 currentMember.setUserId((String) dataSnapshot.getKey());
-                                squadMembers.add(currentMember);
-                                // Set the adapter for the list view
-                                mDrawerList.setAdapter(new SquadMemberAdapter(SquadViewActivity.this,
-                                        R.layout.squad_member_list_item, squadMembers));
-                                // Set the list's click listener
-                                mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                mMemberNames.add(currentMember);
 
-                                    }
-                                });
                             }
 
                             @Override
@@ -119,7 +110,24 @@ public class SquadViewActivity extends AppCompatActivity {
             });
         }
 
+        for (int i = 0; i < currentUser.getFriends().size(); i++) {
+            DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + currentUser.getFriends().get(i).getUserId());
+            memberRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User currentMember = new User();
+                    currentMember.setName((String) dataSnapshot.child("name").getValue());
+                    currentMember.setProfileImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
+                    currentMember.setUserId((String) dataSnapshot.getKey());
+                    mFriends.add(currentMember);
+                }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
     @Override
@@ -133,11 +141,39 @@ public class SquadViewActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
         }
-        if (item.getItemId() == R.id.viewSquad)
+        else if (item.getItemId() == R.id.viewSquad)
         {
             if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
                 mDrawerLayout.closeDrawer(Gravity.RIGHT);
             } else {
+                mDrawerTitle.setText("Squad Members");
+                mDrawerList.setAdapter(new SquadMemberAdapter(SquadViewActivity.this,
+                        R.layout.squad_member_list_item, mMemberNames));
+                // Set the list's click listener
+                mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    }
+                });
+                mDrawerLayout.openDrawer(Gravity.RIGHT);
+            }
+        }
+        else if (item.getItemId() == R.id.addToSquad)
+        {
+            if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                mDrawerLayout.closeDrawer(Gravity.RIGHT);
+            } else {
+                mDrawerTitle.setText("Add a Friend to Squad");
+                mDrawerList.setAdapter(new SquadMemberAdapter(SquadViewActivity.this,
+                        R.layout.squad_member_list_item, mFriends));
+                // Set the list's click listener
+                mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    }
+                });
                 mDrawerLayout.openDrawer(Gravity.RIGHT);
             }
         }
