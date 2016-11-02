@@ -62,6 +62,15 @@
                     android:layout_centerInParent="true"
                     android:onClick="changeSquadPic"
                     android:id="@+id/squadPhoto"/>
+
+                <Button
+                    android:id="@+id/btnLeaveSquad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Leave Squad"
+                    android:onClick="leaveSquadConf"
+                    android:layout_margin="5dp"
+                    android:layout_alignParentStart="true"/>
             </RelativeLayout>
 
             <RelativeLayout

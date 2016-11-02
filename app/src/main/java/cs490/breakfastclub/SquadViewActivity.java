@@ -1,10 +1,13 @@
 package cs490.breakfastclub;
 
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.app.AlertDialog;
+import android.view.View;
 
 public class SquadViewActivity extends AppCompatActivity {
 
@@ -31,5 +34,22 @@ public class SquadViewActivity extends AppCompatActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //@Override
+    public void leaveSquadConf(View view) {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Leaving Squad")
+                .setMessage("Are you sure you want to leave your Squad [insert squad name here]?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 }
