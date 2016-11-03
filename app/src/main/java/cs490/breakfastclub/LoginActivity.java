@@ -308,7 +308,7 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                                 // Get the information needed and update the user
                                 else {
-                                    Log.v("User already exisits", "User already exists");
+                                    Log.v("User already exists", "User already exists");
                                     currentUser.setReceivesPushNotifications((boolean) dataSnapshot.child("receivesPushNotifications").getValue());
                                     if(dataSnapshot.child("squad").exists()) {
                                         currentUser.createSquad((String) dataSnapshot.child("squad").getValue());
