@@ -11,8 +11,10 @@ import java.util.TimeZone;
 public class TimeFunctions {
 
     public TimeFunctions(){
-
     }
+
+    private static final int NINE_HOURS_IN_SECONDS = 32400;
+    private static final int TWENTYONE_HOURS_IN_SECONDS = 75600;
 
     public static String timeUntilEventString(Calendar breakfastTime) {
         Calendar currentTime = getCurrentTime();
@@ -51,5 +53,35 @@ public class TimeFunctions {
     public static long secondsToBreakfast(Calendar breakfastTime, Calendar currentTime){
         long secondsDifference = (breakfastTime.getTimeInMillis() - currentTime.getTimeInMillis()) / 1000;
         return secondsDifference;
+    }
+
+    public static boolean isDuringVotingPeriod() {
+        long currentTimeSeconds = (getCurrentTime().getTimeInMillis() / 1000);
+        Calendar breakfastCalendar = getCurrentTime();
+        setBreakfastTime(breakfastCalendar);
+        long breakfastStartTimeSeconds = (breakfastCalendar.getTimeInMillis() / 1000);
+        int difference = (int)(currentTimeSeconds - breakfastStartTimeSeconds);
+
+        if (difference > 0 && difference <= TWENTYONE_HOURS_IN_SECONDS) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public static boolean isDuringBreakfast() {
+        long currentTimeSeconds = (getCurrentTime().getTimeInMillis() / 1000);
+        Calendar breakfastCalendar = getCurrentTime();
+        setBreakfastTime(breakfastCalendar);
+        long breakfastStartTimeSeconds = (breakfastCalendar.getTimeInMillis() / 1000);
+        int difference = (int)(currentTimeSeconds - breakfastStartTimeSeconds);
+
+        if (difference > 0 && difference <= NINE_HOURS_IN_SECONDS) {
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }

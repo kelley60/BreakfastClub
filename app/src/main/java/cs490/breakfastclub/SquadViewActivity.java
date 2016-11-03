@@ -47,21 +47,7 @@ import java.util.ArrayList;
 import cs490.breakfastclub.Classes.User;
 import cs490.breakfastclub.Classes.UserAdapter;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
-/*
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-*/
-public class SquadViewActivity extends AppCompatActivity/* implements OnMapReadyCallback*/{
+public class SquadViewActivity extends AppCompatActivity{
     private ArrayList<User> mMemberNames;
     private ArrayList<User> mFriends;
     private DrawerLayout mDrawerLayout;
@@ -87,10 +73,6 @@ public class SquadViewActivity extends AppCompatActivity/* implements OnMapReady
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.right_drawer);
         mDrawerTitle = (TextView) findViewById(R.id.drawerTitle);
-
-
-
-
 
 
         final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
@@ -160,11 +142,22 @@ public class SquadViewActivity extends AppCompatActivity/* implements OnMapReady
             });
         }
 
+        /*
         Button btnSearch = (Button) findViewById(R.id.btnInviteMember);
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SquadViewActivity.this, SearchMemberActivity.class);
+                startActivity(intent);
+            }
+        });
+        */
+
+        Button btnLocate = (Button) findViewById(R.id.btnLocation);
+        btnLocate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SquadViewActivity.this, SquadLocationActivity.class);
                 startActivity(intent);
             }
         });
@@ -181,6 +174,9 @@ public class SquadViewActivity extends AppCompatActivity/* implements OnMapReady
 
         ListView lView = (ListView) findViewById(R.id.lstSquadMembers);
         lView.setAdapter(uAdapter);
+
+
+
     }
 
     @Override
@@ -297,12 +293,7 @@ public class SquadViewActivity extends AppCompatActivity/* implements OnMapReady
     }
 
 
-    /*
-    @Override
-    public void onMapReady(GoogleMap map) {
-        map.addMarker(new MarkerOptions()
-                .position(new LatLng(0, 0))
-                .title("Marker"));
-    }
-    */
+
+
+
 }

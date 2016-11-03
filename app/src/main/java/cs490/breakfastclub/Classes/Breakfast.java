@@ -14,14 +14,29 @@ public class Breakfast {
     private String eventInfo;
     private ArrayList<Post> campusFeed;
     private Post topPhoto;
+    private boolean currentBreakfast;
 
     public Breakfast(Date date, String eventInfo){
         this.date = date;
         this.eventInfo = eventInfo;
         campusFeed = new ArrayList<Post>();
         topPhoto = null;
+        currentBreakfast = true;
+
     }
 
+
+    //TODO
+    //gets current breakfast from database
+    public static Breakfast getCurrentBreakfast(){
+        Breakfast breakfast = null;
+        //LOAD FIRST 10 OR LESS PICTURES FROM DB
+        return breakfast;
+    }
+
+    public static void loadPictures(){
+        //LOAD 10 PICTURES INTO CURRENTBREAKFAST
+    }
 
 
 
