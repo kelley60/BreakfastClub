@@ -11,7 +11,7 @@
 
     <!-- For Geofencing -->
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!-- For Google Maps -->
@@ -45,7 +45,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".DisplayMessageActivity" />
         <activity android:name=".CampusFeedActivity" />
-        <activity android:name=".CreateBreakfastActivity" />
+        <activity android:name=".CreateBreakfastActivities.CreateBreakfastActivity" />
         <activity android:name=".SquadCreateActivity" />
         <activity android:name=".SquadViewActivity" />
         <activity android:name=".ProfileViewActivity" />
@@ -54,13 +54,15 @@
             android:label="@string/title_activity_drawer"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".SquadGalleryActivity" />
+
         <service
             android:name=".GeofenceTransitionsIntentService"
-            android:exported="false" >
-        </service>
-        <activity android:name=".AdminViewUsersActivity" />
-        <activity android:name=".SearchMemberActivity"></activity>
+            android:exported="false" />
 
+        <activity android:name=".AdminViewUsersActivity" />
+        <activity android:name=".SearchMemberActivity" />
+        <activity android:name=".CreateBreakfastActivities.CreateBreakfastActivity2" />
+        <activity android:name=".CreateBreakfastActivities.CreateBreakfastActivity3"></activity>
     </application>
 
 </manifest>
