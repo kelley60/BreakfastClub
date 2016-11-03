@@ -17,6 +17,12 @@ import java.util.ArrayList;
 import cs490.breakfastclub.Classes.User;
 import cs490.breakfastclub.Classes.UserAdapter;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 /*
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -26,6 +32,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 */
 public class SquadViewActivity extends AppCompatActivity/* implements OnMapReadyCallback*/{
+
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +93,9 @@ public class SquadViewActivity extends AppCompatActivity/* implements OnMapReady
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
                         // TODO - add code here to remove user from squad on db
+                        mDatabase = FirebaseDatabase.getInstance().getReference();
+                        final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+                        mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
                     }
 
                 })
