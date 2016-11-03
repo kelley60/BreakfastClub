@@ -1,5 +1,6 @@
 package cs490.breakfastclub;
 
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
@@ -97,6 +98,12 @@ public class SquadViewActivity extends AppCompatActivity/* implements OnMapReady
             squadRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    // If squad is empty, delete it
+                    if (dataSnapshot.child("Members").exists())
+                    {
+
+                    }
 
                     HashMap<String, String> members = (HashMap) dataSnapshot.child("Members").getValue();
                     Log.v("Members", members.toString());
@@ -234,10 +241,15 @@ public class SquadViewActivity extends AppCompatActivity/* implements OnMapReady
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
-                        // TODO - add code here to remove user from squad on db
+
                         mDatabase = FirebaseDatabase.getInstance().getReference();
                         final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
-                        mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
+                        mDatabase.child("Users/" + currentUser.getUserId()).child("Squad").removeValue();
+                        mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(currentUser.getUserId()).removeValue();
+
+                        // TODO - Delete squad if this was the last user
+
+                        // TODO - If leaver is captain, ask to change captain or delete squad
                     }
 
                 })
