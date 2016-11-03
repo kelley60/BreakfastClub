@@ -13,7 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import cs490.breakfastclub.Classes.Breakfast;
 import cs490.breakfastclub.Classes.GeofenceManager;
+import cs490.breakfastclub.Classes.TimeFunctions;
 import cs490.breakfastclub.CreateBreakfastActivities.CreateBreakfastActivity;
 
 import static cs490.breakfastclub.GeofenceTransitionsIntentService.MYPREFERENCES;
@@ -118,13 +120,16 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
         SharedPreferences sharedpreferences = getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
-        boolean onCampus = sharedpreferences.getBoolean("IsInGeofence", false);
+        boolean onCampus = sharedpreferences.getBoolean("IsInGeofence", true);
+        boolean isDuringBreakfast = sharedpreferences.getBoolean("isDuringBreakfast", true);
 
-        //if (onCampus == false) {
-        if (1 == 0){
+        Breakfast currentBreakfast = getCurrentBreakfast();
+
+        if (onCampus == false) {
             intent.putExtra("Layout Type", "Not on Campus");
         }
-        else if (1 == 1){
+        //else if (1 == 1){
+        else if (TimeFunctions.isDuringVotingPeriod() == true){
             //not breakfast club time
             intent.putExtra("Layout Type", "Not Time");
         }
@@ -132,6 +137,12 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             intent.putExtra("Layout Type", "Campus Feed");
         }
         return intent;
+    }
+
+    //TODO get current breakfast from the database
+    private Breakfast getCurrentBreakfast() {
+
+        return null;
     }
 
 
