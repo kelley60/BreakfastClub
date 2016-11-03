@@ -8,12 +8,18 @@ import java.util.ArrayList;
 
 public class User {
 
+    public enum Permissions {
+        Member,
+        Moderator,
+        Developer
+    }
+
     private String name;
     private String userId;
     private String profileImageUrl;
     private boolean receivesPushNotifications;
     private ArrayList<User> friends;
-
+    private Permissions permissions;
 
     public User(String name, String userId, String profileImageUrl, ArrayList<User> friends){
         this.name = name;
@@ -21,6 +27,7 @@ public class User {
         this.profileImageUrl = profileImageUrl;
         this.receivesPushNotifications = true;
         this.friends = friends;
+        this.permissions = Permissions.Member;
     }
 
     public User(String name, String userId, String profileImageUrl)
@@ -38,27 +45,6 @@ public class User {
     private void createSquad(String squadName){
         Squad squad = new Squad(squadName, User.this);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -112,4 +98,7 @@ public class User {
     {
         return friends;
     }
+
+    public Permissions getPermissions() { return permissions; }
+    public void setPermissions(Permissions p) { permissions = p; }
 }

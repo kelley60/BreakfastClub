@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,6 +47,34 @@ public class UserAdapter extends ArrayAdapter<User>
         // Populate the data into the template view using the data object
         lblName.setText(user.getName());
 
+
+        Button addButton = (Button) convertView.findViewById(R.id.btnAddPermissions);
+        Button removeButton = (Button) convertView.findViewById(R.id.btnRemovePermissions);
+
+        // Cache user object inside the button using `setTag`
+        addButton.setTag(user);
+        removeButton.setTag(user);
+
+        // Attach the click event handler
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Access user from within the tag
+                User user = (User) view.getTag();
+                // TODO: Update the user in database
+                user.setPermissions(User.Permissions.Moderator);
+            }
+        });
+
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Access user from within the tag
+                User user = (User) view.getTag();
+                // TODO: Update the user in database
+                user.setPermissions(User.Permissions.Member);
+            }
+        });
 
         // Return the completed view to render on screen
         return convertView;
