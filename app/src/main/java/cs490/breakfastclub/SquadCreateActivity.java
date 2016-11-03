@@ -1,9 +1,11 @@
 package cs490.breakfastclub;
 
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -26,6 +28,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 
+import cs490.breakfastclub.Classes.Squad;
 import cs490.breakfastclub.Classes.User;
 
 public class SquadCreateActivity extends AppCompatActivity {
@@ -52,33 +55,59 @@ public class SquadCreateActivity extends AppCompatActivity {
         createSquad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String currentSquadKey = mDatabase.child("Squads").push().getKey();
-                EditText squadName = (EditText) findViewById(R.id.txtSquadName);
-                EditText squadDesc = (EditText) findViewById(R.id.txtSquadDesc);
-                ImageView squadPhoto = (ImageView) findViewById(R.id.squadPhoto);
-                mDatabase.child("Squads/" + currentSquadKey).child("name").setValue(squadName.getText().toString());
-                mDatabase.child("Squads/" + currentSquadKey).child("description").setValue(squadDesc.getText().toString());
-                mDatabase.child("Squads/" + currentSquadKey).child("captain").setValue(currentUser.getUserId());
-                StorageReference squadRef = mStorage.child("Squads/" + currentSquadKey);
-                Bitmap bitmap = ((BitmapDrawable)squadPhoto.getDrawable()).getBitmap();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] data = baos.toByteArray();
+                if (!currentUser.isPartOfSquad()) {
+                    final String currentSquadKey = mDatabase.child("Squads").push().getKey();
+                    final EditText squadName = (EditText) findViewById(R.id.txtSquadName);
+                    final EditText squadDesc = (EditText) findViewById(R.id.txtSquadDesc);
+                    final ImageView squadPhoto = (ImageView) findViewById(R.id.squadPhoto);
+                    mDatabase.child("Squads/" + currentSquadKey).child("name").setValue(squadName.getText().toString());
+                    mDatabase.child("Squads/" + currentSquadKey).child("description").setValue(squadDesc.getText().toString());
+                    mDatabase.child("Squads/" + currentSquadKey).child("Members").child(currentUser.getUserId()).setValue("captain");
+                    mDatabase.child("Users/" + currentUser.getUserId()).child("squad").setValue(currentSquadKey);
+                    StorageReference squadRef = mStorage.child("Squads/" + currentSquadKey);
+                    Bitmap bitmap = ((BitmapDrawable) squadPhoto.getDrawable()).getBitmap();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] data = baos.toByteArray();
 
-                UploadTask uploadTask = squadRef.putBytes(data);
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Log.v("Image Upload", "Failure Image Upload");
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        Log.v("Image Upload", "SuccessFul Image Upload " + downloadUrl.toString());
-                    }
-                });
+                    UploadTask uploadTask = squadRef.putBytes(data);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            Log.v("Image Upload", "Failure Image Upload");
+                            // Do something if this fails to work
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL
+                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                            Log.v("Image Upload", "SuccessFul Image Upload " + downloadUrl.toString());
+                            Squad currentSquad = new Squad(squadName.getText().toString(),
+                                    currentSquadKey, squadPhoto, squadDesc.getText().toString());
+                            currentUser.setSquad(currentSquad);
+                            currentUser.setPartOfSquad(true);
+                        }
+                    });
+                }
+                else
+                {
+                    new AlertDialog.Builder(SquadCreateActivity.this)
+                            .setTitle("Create Squad")
+                            .setMessage("You cannot create a squad because you are already a part of a squad.")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // continue with delete
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
 
 
             }

@@ -20,6 +20,8 @@ public class User {
     private boolean receivesPushNotifications;
     private ArrayList<User> friends;
     private Permissions permissions;
+    private Squad squad;
+    private boolean partOfSquad;
 
     public User(String name, String userId, String profileImageUrl, ArrayList<User> friends){
         this.name = name;
@@ -42,13 +44,19 @@ public class User {
 
     //TODO
     //add squad to DB
-    private void createSquad(String squadName){
-        Squad squad = new Squad(squadName, User.this);
+    public void createSquad(String squadID){
+        this.squad = new Squad(null, squadID, null, null);
     }
 
+    public void setSquad(Squad squad)
+    {
+        this.squad = squad;
+    }
 
-
-
+    public Squad getSquad()
+    {
+        return squad;
+    }
     //GETTERS AND SETTERS --------------------------------------------------------------
 
     public String getName() {
@@ -97,6 +105,14 @@ public class User {
     public ArrayList<User> getFriends()
     {
         return friends;
+    }
+
+    public boolean isPartOfSquad() {
+        return partOfSquad;
+    }
+
+    public void setPartOfSquad(boolean partOfSquad) {
+        this.partOfSquad = partOfSquad;
     }
 
     public Permissions getPermissions() { return permissions; }
