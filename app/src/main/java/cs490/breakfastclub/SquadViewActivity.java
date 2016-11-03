@@ -46,6 +46,7 @@ public class SquadViewActivity extends AppCompatActivity{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
+                        // TODO - add code here to remove user from squad on db
                     }
 
                 })
