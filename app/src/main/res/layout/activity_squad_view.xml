@@ -38,7 +38,9 @@
 
     <!-- Put all other UI elements below this comment! -->
 
+
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/my_toolbar">
@@ -103,7 +105,7 @@
                 android:layout_height="wrap_content">
 
                 <!-- TODO: Adjust width of these buttons in java code to be 50% of total width -->
-                <!-- TODO: Make functional -->
+                 <!--  TODO: Make functional -->
                 <Button
                     android:id="@+id/btnViewSquadPhotos"
                     android:layout_width="wrap_content"
@@ -145,7 +147,7 @@
                     android:textSize="14sp"/>
             </RelativeLayout>
 
-            <!-- TODO: Fix scrolling issue -->
+             <!-- TODO: Fix scrolling issue -->
             <ListView
                 android:id="@+id/lstSquadMembers"
                 android:layout_width="match_parent"
@@ -165,23 +167,37 @@
                     android:layout_centerInParent="true"/>
             </RelativeLayout>
 
-            <!-- TODO: Fix google maps stuff
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/map"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    class="com.google.android.gms.maps.SupportMapFragment" />
-            </RelativeLayout>
-            -->
-
-
 
         </LinearLayout>
 
     </ScrollView>
+
+    <!-- TODO: Fix google maps stuff -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:layout_below="@id/scrollView">
+
+
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="cs490.breakfastclub.SquadViewActivity"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            map:cameraZoom="13"
+            map:mapType="normal"
+            map:uiCompass="true"
+            map:uiRotateGestures="true"
+            map:uiScrollGestures="true"
+            map:uiTiltGestures="true"
+            map:uiZoomControls="true"
+            map:uiZoomGestures="true"/>
+
+
+    </RelativeLayout>
+
 
 </RelativeLayout>

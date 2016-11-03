@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.app.AlertDialog;
@@ -17,15 +18,15 @@ import java.util.ArrayList;
 import cs490.breakfastclub.Classes.User;
 import cs490.breakfastclub.Classes.UserAdapter;
 
-/*
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-*/
-public class SquadViewActivity extends AppCompatActivity/* implements OnMapReadyCallback*/{
+
+public class SquadViewActivity extends AppCompatActivity implements OnMapReadyCallback{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class SquadViewActivity extends AppCompatActivity/* implements OnMapReady
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("[SQUAD_NAME]");
+
 
         Button btnSearch = (Button) findViewById(R.id.btnInviteMember);
         btnSearch.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +61,12 @@ public class SquadViewActivity extends AppCompatActivity/* implements OnMapReady
 
         ListView lView = (ListView) findViewById(R.id.lstSquadMembers);
         lView.setAdapter(uAdapter);
+
+
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
     }
 
     @Override
@@ -93,12 +101,13 @@ public class SquadViewActivity extends AppCompatActivity/* implements OnMapReady
     }
 
 
-    /*
+
     @Override
     public void onMapReady(GoogleMap map) {
         map.addMarker(new MarkerOptions()
-                .position(new LatLng(0, 0))
-                .title("Marker"));
+                .position(new LatLng(40.4237, -86.9100))
+                .title("Purdue"));
+
     }
-    */
+
 }
