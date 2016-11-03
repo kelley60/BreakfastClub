@@ -1,5 +1,7 @@
 package cs490.breakfastclub.Classes;
 
+import android.widget.ImageView;
+
 import java.security.acl.Group;
 import java.util.ArrayList;
 
@@ -10,14 +12,24 @@ import java.util.ArrayList;
 public class Squad {
 
     private String squadName;
-    private User squadLeader;
+    private String squadID;
+    private String squadDesc;
+    private ImageView squadPhoto;
     private ArrayList<User> userList;
     private GroupFeed groupFeed;
 
+    public Squad()
+    {
+        this.userList = new ArrayList<User>();
+        this.groupFeed = new GroupFeed();
+    }
 
-    public Squad(String squadName, User squadLeader){
+
+    public Squad(String squadName, String squadID, ImageView squadPhoto, String squadDesc){
         this.squadName = squadName;
-        this.squadLeader = squadLeader;
+        this.squadID = squadID;
+        this.squadPhoto = squadPhoto;
+        this.squadDesc = squadDesc;
         userList = new ArrayList<User>();
         groupFeed = new GroupFeed();
     }
@@ -61,14 +73,6 @@ public class Squad {
         this.userList = userList;
     }
 
-    public User getSquadLeader() {
-        return squadLeader;
-    }
-
-    public void setSquadLeader(User squadLeader) {
-        this.squadLeader = squadLeader;
-    }
-
     public GroupFeed getGroupFeed() {
         return groupFeed;
     }
@@ -83,5 +87,29 @@ public class Squad {
 
     public void setSquadName(String squadName) {
         this.squadName = squadName;
+    }
+
+    public String getSquadID() {
+        return squadID;
+    }
+
+    public void setSquadID(String squadID) {
+        this.squadID = squadID;
+    }
+
+    public String getSquadDesc() {
+        return squadDesc;
+    }
+
+    public void setSquadDesc(String squadDesc) {
+        this.squadDesc = squadDesc;
+    }
+
+    public ImageView getSquadPhoto() {
+        return squadPhoto;
+    }
+
+    public void setSquadPhoto(ImageView squadPhoto) {
+        this.squadPhoto = squadPhoto;
     }
 }

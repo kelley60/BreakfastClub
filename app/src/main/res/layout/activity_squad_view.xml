@@ -12,140 +12,156 @@
     tools:context="cs490.breakfastclub.SquadViewActivity"
     android:background="@drawable/gradient_background" >
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
+    <android.support.v4.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/Purdue_Gold"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/PopupOverlay">
-
+        android:layout_height="match_parent">
+        <!-- The main content view -->
         <RelativeLayout
+            android:id="@+id/content_frame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent" >
 
-            <TextView
-                android:id="@+id/lblBrkfstCounter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Countdown: [XXh XXm]"
-                android:layout_alignParentEnd="true"
-                android:layout_margin="5dp"/>
-        </RelativeLayout>
-
-    </android.support.v7.widget.Toolbar>
-
-    <!-- Put all other UI elements below this comment! -->
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/my_toolbar">
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="5dp">
-
-            <RelativeLayout
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/my_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/Purdue_Gold"
+                android:elevation="4dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/PopupOverlay">
 
-                <TextView
-                    android:id="@+id/txtSquadName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="[Squad_Name_Here]"
-                    android:textColor="@color/Purdue_White"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            </RelativeLayout>
+                    <TextView
+                        android:id="@+id/lblBrkfstCounter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Countdown: [XXh XXm]"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="5dp"/>
+                </RelativeLayout>
 
-            <RelativeLayout
+            </android.support.v7.widget.Toolbar>
+
+            <!-- Put all other UI elements below this comment! -->
+
+            <ScrollView
+                android:id="@+id/scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp">
+                android:layout_below="@id/my_toolbar">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
-                    android:layout_centerHorizontal="true"
-                    android:cropToPadding="false"
-                    android:layout_centerInParent="true"
-                    android:onClick="changeSquadPic"
-                    android:id="@+id/squadPhoto"/>
 
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp">
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:text="[Description Here]"
-                    android:textSize="14sp"
-                    android:textColor="@color/Purdue_White"
-                    android:id="@+id/txtSquadDesc"
-                    />
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
-            </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/txtSquadName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="[Squad_Name_Here]"
+                            android:textColor="@color/Purdue_White"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
+                            android:layout_centerHorizontal="true"
+                            android:cropToPadding="false"
+                            android:layout_centerInParent="true"
+                            android:onClick="changeSquadPic"
+                            android:id="@+id/squadPhoto"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:text="[Description Here]"
+                            android:textSize="14sp"
+                            android:textColor="@color/Purdue_White"
+                            android:id="@+id/txtSquadDesc"
+                            />
+
+                    </RelativeLayout>
 
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                <!-- TODO: Adjust width of these buttons in java code to be 50% of total width -->
-                <!-- TODO: Make functional -->
-                <Button
-                    android:id="@+id/btnViewSquadPhotos"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="View Photos"
-                    android:layout_margin="5dp"
-                    android:layout_alignParentStart="true"/>
+                        <!-- TODO: Adjust width of these buttons in java code to be 50% of total width -->
+                        <!-- TODO: Make functional -->
+                        <Button
+                            android:id="@+id/btnViewSquadPhotos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="View Photos"
+                            android:layout_margin="5dp"
+                            android:layout_alignParentStart="true"/>
 
-                <Button
-                    android:id="@+id/btnViewSquadMsgs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="View Messages"
-                    android:layout_margin="5dp"
-                    android:layout_toRightOf="@id/btnViewSquadPhotos"
-                    android:layout_alignParentEnd="true"/>
-
-                <Button
-                    android:id="@+id/btnInviteMember"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Invite Members"
-                    android:layout_margin="5dp"
-                    android:layout_below="@id/btnViewSquadPhotos"
-                    android:layout_alignParentStart="true"/>
-
-            </RelativeLayout>
+                        <Button
+                            android:id="@+id/btnViewSquadMsgs"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="View Messages"
+                            android:layout_margin="5dp"
+                            android:layout_toRightOf="@id/btnViewSquadPhotos"
+                            android:layout_alignParentEnd="true"/>
 
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                        <Button
+                            android:id="@+id/btnLocation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Locate Members"
+                            android:layout_margin="5dp"
+                            android:layout_below="@id/btnViewSquadPhotos"
+                            android:layout_alignParentStart="true"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Members:"
-                    android:textColor="@color/Purdue_White"
-                    android:textSize="14sp"/>
-            </RelativeLayout>
+                    </RelativeLayout>
 
-            <!-- TODO: Fix scrolling issue -->
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Members:"
+                            android:textColor="@color/Purdue_White"
+                            android:textSize="14sp"/>
+                    </RelativeLayout>
+
+
+
+
+             <!-- TODO: Fix scrolling issue -->
             <ListView
                 android:id="@+id/lstSquadMembers"
                 android:layout_width="match_parent"
@@ -165,23 +181,37 @@
                     android:layout_centerInParent="true"/>
             </RelativeLayout>
 
-            <!-- TODO: Fix google maps stuff
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/map"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    class="com.google.android.gms.maps.SupportMapFragment" />
-            </RelativeLayout>
-            -->
-
-
 
         </LinearLayout>
 
     </ScrollView>
+
+
+        </RelativeLayout>
+        <!-- The navigation drawer -->
+        <RelativeLayout
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right">
+            <TextView
+                android:id="@+id/drawerTitle"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text=""
+                android:textSize="18sp"
+                android:textColor="@color/Purdue_White"
+                android:background="#111"/>
+            <ListView
+                android:id="@+id/right_drawer"
+                android:layout_width="240dp"
+                android:layout_height="match_parent"
+                android:choiceMode="singleChoice"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="0dp"
+                android:background="#111"
+                android:layout_below="@id/drawerTitle"/>
+        </RelativeLayout>
+    </android.support.v4.widget.DrawerLayout>
 
 </RelativeLayout>
