@@ -26,6 +26,7 @@ public class User {
     private int numberOfOffensives;
 
     private Squad squad;
+    private String squadRole;
     private boolean partOfSquad;
     private double lat, lng;
 
@@ -73,6 +74,14 @@ public class User {
         return squad;
     }
     //GETTERS AND SETTERS --------------------------------------------------------------
+
+    public String getSquadRole() {
+        return squadRole;
+    }
+
+    public void setSquadRole(String squadRole) {
+        this.squadRole = squadRole;
+    }
 
     public String getName() {
         return name;

@@ -64,6 +64,7 @@ public class SquadCreateActivity extends AppCompatActivity {
                     mDatabase.child("Squads/" + currentSquadKey).child("description").setValue(squadDesc.getText().toString());
                     mDatabase.child("Squads/" + currentSquadKey).child("Members").child(currentUser.getUserId()).setValue("captain");
                     mDatabase.child("Users/" + currentUser.getUserId()).child("squad").setValue(currentSquadKey);
+                    mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").setValue("captain");
                     StorageReference squadRef = mStorage.child("Squads/" + currentSquadKey);
                     Bitmap bitmap = ((BitmapDrawable) squadPhoto.getDrawable()).getBitmap();
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -86,6 +87,7 @@ public class SquadCreateActivity extends AppCompatActivity {
                             Squad currentSquad = new Squad(squadName.getText().toString(),
                                     currentSquadKey, squadPhoto, squadDesc.getText().toString());
                             currentUser.setSquad(currentSquad);
+                            currentUser.setSquadRole("captain");
                             currentUser.setPartOfSquad(true);
                         }
                     });
