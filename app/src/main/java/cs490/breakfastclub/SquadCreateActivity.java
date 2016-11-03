@@ -91,6 +91,13 @@ public class SquadCreateActivity extends AppCompatActivity {
                             currentUser.setPartOfSquad(true);
                         }
                     });
+
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(SquadCreateActivity.this);
+                    builder.setMessage("Squad " + squadName.getText() + " has been successfully created.")
+                            .setCancelable(false)
+                            .setPositiveButton("OK", null);
+                    android.app.AlertDialog alert = builder.create();
+                    alert.show();
                 }
                 else
                 {
