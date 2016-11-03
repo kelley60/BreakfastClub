@@ -2,35 +2,43 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/Purdue_Black">
 
-    <!-- Profile image -->
-    <ImageView
-        android:id="@+id/imgProfilePic"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"/>
+        android:background="@color/Purdue_White">
 
-    <!-- Member Name -->
-    <TextView
-        android:id="@+id/lblMemberName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Member Name"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/imgProfilePic"
-        />
+        <!-- Profile image -->
+        <ImageView
+            android:id="@+id/imgProfilePic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"/>
 
-    <!-- Add to squad button -->
-    <!-- TODO: Add functionality -->
-    <Button
-        android:id="@+id/btnAddMember"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+"
-        android:textSize="20sp"
-        android:layout_toRightOf="@id/lblMemberName"
-        android:layout_centerVertical="true"/>
+        <!-- Member Name -->
+        <TextView
+            android:id="@+id/lblMemberName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Member Name"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/imgProfilePic"
+            />
+
+        <!-- Add to squad button -->
+        <!-- TODO: Add functionality -->
+        <Button
+            android:id="@+id/btnAddMember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:textSize="20sp"
+            android:layout_toRightOf="@id/lblMemberName"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>

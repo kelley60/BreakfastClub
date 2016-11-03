@@ -135,13 +135,11 @@
                     android:textSize="14sp"/>
             </RelativeLayout>
 
-            <!-- TODO: Figure out how to populate this list -->
-            <!-- TODO: Color of list is only temporary -->
+            <!-- TODO: Fix scrolling issue -->
             <ListView
                 android:id="@+id/lstSquadMembers"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/Purdue_White">
+                android:layout_height="wrap_content">
             </ListView>
 
             <RelativeLayout

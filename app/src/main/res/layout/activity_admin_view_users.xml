@@ -39,16 +39,12 @@
     <!-- Put all other UI elements below this comment! -->
 
 
-    <ScrollView
+    <ListView
+        android:id="@+id/lstAllUsers"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_below="@id/my_toolbar">
+    </ListView>
 
-        <ListView
-            android:id="@+id/lstAllUsers"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </ListView>
-
-    </ScrollView>
 
 </RelativeLayout>

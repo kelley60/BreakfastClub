@@ -8,6 +8,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.app.AlertDialog;
 import android.view.View;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+
+import cs490.breakfastclub.Classes.User;
+import cs490.breakfastclub.Classes.UserAdapter;
+
 /*
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -28,6 +35,19 @@ public class SquadViewActivity extends AppCompatActivity/* implements OnMapReady
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("[SQUAD_NAME]");
+
+        // Populate the list view
+        ArrayList<User> userList = new ArrayList<>();
+        for(int i = 0; i < 10; i++)
+        {
+            User u = new User("Name " + i, "[url_here]", null);
+            userList.add(u);
+        }
+
+        UserAdapter uAdapter = new UserAdapter(this, userList);
+
+        ListView lView = (ListView) findViewById(R.id.lstSquadMembers);
+        lView.setAdapter(uAdapter);
     }
 
     @Override
