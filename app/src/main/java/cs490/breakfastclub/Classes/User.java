@@ -22,6 +22,7 @@ public class User {
     private Permissions permissions;
     private Squad squad;
     private boolean partOfSquad;
+    private double lat, lng;
 
     public User(String name, String userId, String profileImageUrl, ArrayList<User> friends){
         this.name = name;
@@ -117,4 +118,8 @@ public class User {
 
     public Permissions getPermissions() { return permissions; }
     public void setPermissions(Permissions p) { permissions = p; }
+
+    public void updateLocation(double lt, double lg) { lat = lt; lng = lg; }
+    public double getLat() { return lat; }
+    public double getLng() { return lng; }
 }
