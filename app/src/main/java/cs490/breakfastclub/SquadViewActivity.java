@@ -48,14 +48,7 @@ import cs490.breakfastclub.Classes.User;
 import cs490.breakfastclub.Classes.UserAdapter;
 
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-public class SquadViewActivity extends AppCompatActivity implements OnMapReadyCallback{
+public class SquadViewActivity extends AppCompatActivity{
     private ArrayList<User> mMemberNames;
     private ArrayList<User> mFriends;
     private DrawerLayout mDrawerLayout;
@@ -142,11 +135,22 @@ public class SquadViewActivity extends AppCompatActivity implements OnMapReadyCa
             });
         }
 
+        /*
         Button btnSearch = (Button) findViewById(R.id.btnInviteMember);
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SquadViewActivity.this, SearchMemberActivity.class);
+                startActivity(intent);
+            }
+        });
+        */
+
+        Button btnLocate = (Button) findViewById(R.id.btnLocation);
+        btnLocate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SquadViewActivity.this, SquadLocationActivity.class);
                 startActivity(intent);
             }
         });
@@ -165,11 +169,7 @@ public class SquadViewActivity extends AppCompatActivity implements OnMapReadyCa
         lView.setAdapter(uAdapter);
 
 
-        /*
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        */
+
     }
 
     @Override
@@ -242,12 +242,6 @@ public class SquadViewActivity extends AppCompatActivity implements OnMapReadyCa
 
 
 
-    @Override
-    public void onMapReady(GoogleMap map) {
-        map.addMarker(new MarkerOptions()
-                .position(new LatLng(40.4237, -86.9100))
-                .title("Purdue"));
 
-    }
 
 }
