@@ -1,5 +1,6 @@
 package cs490.breakfastclub;
 
+import android.media.Image;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,7 @@ public class CampusFeedActivity extends AppCompatActivity {
     ImageButton upArrow;
     ImageButton downArrow;
     ImageButton cameraButton;
+    ImageButton removePictureButton;
     TextView pictureScore;
     TextView countDownText;
     Breakfast currentBreakfast;
@@ -101,6 +103,7 @@ public class CampusFeedActivity extends AppCompatActivity {
         upArrow = (ImageButton) findViewById(R.id.upArrowId);
         downArrow = (ImageButton) findViewById(R.id.downArrowId);
         cameraButton = (ImageButton) findViewById(R.id.cameraButtonId);
+        removePictureButton = (ImageButton) findViewById(R.id.removePhotoButtonId);
         pictureScore = (TextView) findViewById(R.id.pictureScoreId);
         image = (ImageView) findViewById(R.id.campusFeedImageId);
 
@@ -132,10 +135,12 @@ public class CampusFeedActivity extends AppCompatActivity {
             }
         });
 
-        cameraButton.setVisibility(View.INVISIBLE);
-        if (isDuringBreakfast()){
-            cameraButton.setVisibility(View.VISIBLE);
+        cameraButton.setVisibility(View.VISIBLE);
+        if (isDuringBreakfast() == false || currentUser.getNumberOfOffensives() >= 3){
+            cameraButton.setVisibility(View.INVISIBLE);
         }
+
+        removePictureButton.setVisibility(View.INVISIBLE);
 
         /*
         currentUser = User.getCurrentUser();
@@ -144,7 +149,16 @@ public class CampusFeedActivity extends AppCompatActivity {
         pictureScore.setText(currentPost.getScore());
         String imgUrl = currentPost.getImgURL();
         image.setImageDrawable(null);
+
+        User.Permissions Permission = currentUser.getPermissions();
+        if (Permission == User.Permissions.Developer || Permission == User.Permissions.Moderator){
+            removePictureButton.setVisibility(View.VISIBLE);
+        }
+
         */
+
+
+
 
     }
 

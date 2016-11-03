@@ -154,4 +154,11 @@ public class User {
     public double getLat() { return lat; }
     public double getLng() { return lng; }
 
+    public int getNumberOfOffensives() {
+        return numberOfOffensives;
+    }
+
+    public void setNumberOfOffensives(int numberOfOffensives) {
+        this.numberOfOffensives = numberOfOffensives;
+    }
 }

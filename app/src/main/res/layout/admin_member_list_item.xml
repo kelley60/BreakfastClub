@@ -13,7 +13,6 @@
         android:background="@color/Purdue_White">
 
 
-        <!-- TODO: Make visible if user is a moderator -->
         <TextView
             android:id="@+id/lblPermissions"
             android:layout_width="wrap_content"
@@ -46,7 +45,7 @@
             android:layout_toRightOf="@id/imgProfilePic"
             />
 
-        <!-- Add/Remove Moderator permissions -->
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -62,7 +62,7 @@ public class CreateBreakfastActivity3 extends AppCompatActivity {
     private void createBreakfastEvent(int hour, int minute) {
         Calendar calendar = TimeFunctions.getCurrentTime();
         calendar.set(year, month, day, hour, minute, 0);
-
+        
 
     }
 
