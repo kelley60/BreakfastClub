@@ -12,8 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 import cs490.breakfastclub.Classes.GeofenceManager;
+import cs490.breakfastclub.Classes.User;
 import cs490.breakfastclub.CreateBreakfastActivities.CreateBreakfastActivity;
 
 import static cs490.breakfastclub.GeofenceTransitionsIntentService.MYPREFERENCES;
@@ -101,8 +104,20 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             Intent intent = new Intent(DrawerActivity.this, SquadCreateActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_squadView) {
-            Intent intent = new Intent(DrawerActivity.this, SquadViewActivity.class);
-            startActivity(intent);
+            // disable SquadViewActivity if user is not in squad
+            final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+            if (currentUser.isPartOfSquad()){
+                Intent intent = new Intent(DrawerActivity.this, SquadViewActivity.class);
+                startActivity(intent);
+            }
+            else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("You must be in a Squad to access that.")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", null);
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
         }else if (id == R.id.nav_adminViewUsers) {
             Intent intent = new Intent(DrawerActivity.this, AdminViewUsersActivity.class);
             startActivity(intent);

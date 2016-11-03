@@ -95,15 +95,17 @@ public class SquadViewActivity extends AppCompatActivity/* implements OnMapReady
 
         final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
         if (currentUser.isPartOfSquad()) {
-            DatabaseReference squadRef = FirebaseDatabase.getInstance().getReference("Squads/" + currentUser.getSquad().getSquadID());
+            final DatabaseReference squadRef = FirebaseDatabase.getInstance().getReference("Squads/" + currentUser.getSquad().getSquadID());
             squadRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                     // If squad is empty, delete it
-                    if (dataSnapshot.child("Members").exists())
+                    if (!dataSnapshot.child("Members").exists())
                     {
-
+                        squadRef.removeEventListener(this);
+                        mDatabase = FirebaseDatabase.getInstance().getReference();
+                        mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).removeValue();
                     }
 
                     HashMap<String, String> members = (HashMap) dataSnapshot.child("Members").getValue();
@@ -233,28 +235,65 @@ public class SquadViewActivity extends AppCompatActivity/* implements OnMapReady
 
     //@Override
     public void leaveSquadConf(View view) {
+//        final boolean captCheck = false;
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+
         new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
+                .setCancelable(false)
                 .setTitle("Leaving Squad")
-                .setMessage("Are you sure you want to leave your Squad [insert squad name here]?")
+                .setMessage("Are you sure you want to leave your Squad " + currentUser.getSquad().getSquadName() + "?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finish();
+                        // System.out.println("In the Yes function");
+                        // If leaver is captain, ask to change captain or delete squad
+                        if (currentUser.getSquadRole().equals("captain")) {
+                            // System.out.println("CUrrent user equals captain");
+                            // Captain is the only user in here. Delete the squad
+                            if (currentUser.getSquad().getUserList().size() == 1) {
+                                mDatabase.child("Users/" + currentUser.getUserId()).child("Squad").removeValue();
+                                mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).removeValue();
+                                System.out.println("Leaving squad");
+                                finish();
+                            }
+                            // Captain is not the only user. Ask to change captain or delete squad
+                            else {
 
-                        mDatabase = FirebaseDatabase.getInstance().getReference();
-                        final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
-                        mDatabase.child("Users/" + currentUser.getUserId()).child("Squad").removeValue();
-                        mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(currentUser.getUserId()).removeValue();
+//                                captCheck = true;
+                            }
+                        }
+                        else
+                        {
+                            // Delete user from Squad
+                            mDatabase.child("Users/" + currentUser.getUserId()).child("Squad").removeValue();
+                            mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(currentUser.getUserId()).removeValue();
+                            finish();
+                        }
+                    }   // end of onclick
 
-                        // TODO - Delete squad if this was the last user
-
-                        // TODO - If leaver is captain, ask to change captain or delete squad
-                    }
-
-                })
+                })  // end of setPositiveButton
                 .setNegativeButton("No", null)
                 .show();
+
+//        if (captCheck)
+//        {
+//            new AlertDialog.Builder(this)
+//                    .setIcon(android.R.drawable.ic_dialog_alert)
+//                    .setTitle("Dun dun dunnnnnnn")
+//                    .setMessage("Would you like to delete your squad or change ownership?")
+//                    .setPositiveButton("Change Owner", null)
+//                    .setNegativeButton("Delete Squad", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//
+//
+//                            finish();
+//                        }
+//                    })
+//                    .show();
+//        }
     }
 
 

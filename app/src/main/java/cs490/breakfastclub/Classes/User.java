@@ -21,6 +21,7 @@ public class User {
     private ArrayList<User> friends;
     private Permissions permissions;
     private Squad squad;
+    private String squadRole;
     private boolean partOfSquad;
 
     public User(String name, String userId, String profileImageUrl, ArrayList<User> friends){
@@ -58,6 +59,14 @@ public class User {
         return squad;
     }
     //GETTERS AND SETTERS --------------------------------------------------------------
+
+    public String getSquadRole() {
+        return squadRole;
+    }
+
+    public void setSquadRole(String squadRole) {
+        this.squadRole = squadRole;
+    }
 
     public String getName() {
         return name;

@@ -25,6 +25,7 @@ import com.facebook.login.widget.LoginButton;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
@@ -313,11 +314,13 @@ public class LoginActivity extends AppCompatActivity {
                                     if(dataSnapshot.child("squad").exists()) {
                                         currentUser.createSquad((String) dataSnapshot.child("squad").getValue());
                                         currentUser.setPartOfSquad(true);
+                                        currentUser.setSquadRole((String) dataSnapshot.child("squadRole").getValue());
                                     }
                                     else
                                     {
                                         currentUser.setPartOfSquad(false);
                                     }
+
 
                                 }
                             }
