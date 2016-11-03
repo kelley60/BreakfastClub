@@ -125,10 +125,11 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         SharedPreferences.Editor editor = sharedpreferences.edit();
         boolean onCampus = sharedpreferences.getBoolean("IsInGeofence", false);
 
-        if (onCampus == false) {
+        //if (onCampus == false) {
+        if (1 == 0){
             intent.putExtra("Layout Type", "Not on Campus");
         }
-        else if (1 == 0){
+        else if (1 == 1){
             //not breakfast club time
             intent.putExtra("Layout Type", "Not Time");
         }

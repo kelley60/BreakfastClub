@@ -1,5 +1,6 @@
 package cs490.breakfastclub;
 
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,8 +14,13 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
 import cs490.breakfastclub.Classes.Breakfast;
 import cs490.breakfastclub.Classes.Post;
+import cs490.breakfastclub.Classes.TimeFunctions;
 
 public class CampusFeedActivity extends AppCompatActivity {
 
@@ -23,6 +29,7 @@ public class CampusFeedActivity extends AppCompatActivity {
     ImageButton cameraButton;
     TextView pictureScore;
     Post currentPost;
+    TextView countDownText;
     Breakfast currentBreakfast;
 
 
@@ -39,17 +46,45 @@ public class CampusFeedActivity extends AppCompatActivity {
     private void setLayoutFromIntentString(String layout) {
         if (layout.equals("Campus Feed")) {
             setContentView(R.layout.activity_campus_feed);
-            UIInit();
+            campusFeedInit();
         }
         if (layout.equals("Not on Campus")){
             setContentView(R.layout.not_on_campus);
         }
         if (layout.equals("Not Time")){
             setContentView(R.layout.time_until_breakfast);
+            notTimeInit();
         }
     }
 
-    private void UIInit() {
+    private void notTimeInit() {
+        countDownText = (TextView) findViewById(R.id.countdownTextId);
+        createCountdownTimer();
+    }
+
+    private void createCountdownTimer() {
+
+        final Calendar breakfastTime = TimeFunctions.getCurrentTime();
+        breakfastTime.set(2016, 10, 5, 3, 0, 0);
+        Calendar currentTime = TimeFunctions.getCurrentTime();
+
+        long secondsToEvent = TimeFunctions.secondsToBreakfast(breakfastTime, currentTime);
+
+
+        new CountDownTimer(secondsToEvent, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                String timeRemainingString = TimeFunctions.timeUntilEventString(breakfastTime);
+                countDownText.setText(timeRemainingString);
+            }
+
+            public void onFinish() {
+                countDownText.setText("done!");
+            }
+        }.start();
+    }
+
+    private void campusFeedInit() {
         upArrow = (ImageButton) findViewById(R.id.upArrowId);
         downArrow = (ImageButton) findViewById(R.id.downArrowId);
         cameraButton = (ImageButton) findViewById(R.id.cameraButtonId);
