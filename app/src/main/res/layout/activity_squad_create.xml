@@ -2,15 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_create_breakfast"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="0dp"
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    android:background="@drawable/gradient_background"
-    tools:context="cs490.breakfastclub.CreateBreakfastActivity">
+    tools:context="cs490.breakfastclub.SquadCreateActivity"
+    android:background="@drawable/gradient_background" >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -37,49 +37,43 @@
     </android.support.v7.widget.Toolbar>
 
 
-
+    <!-- Put all other UI elements below this comment! -->
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/my_toolbar"
-        android:layout_alignParentStart="true">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/my_toolbar">
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
+            android:orientation="vertical"
+            android:padding="5dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:padding="5dp">
                 <TextView
-                    android:text="Breakfast Name"
+                    android:id="@+id/lblSquadName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:id="@+id/lblBrkfstName"
-                    android:textColor="@color/Purdue_White" />
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:text="Name"
-                    android:ems="10"
-                    android:id="@+id/txtBrkfstName"
-                    android:layout_marginStart="28dp"
-                    android:layout_alignBaseline="@+id/lblBrkfstName"
-                    android:layout_alignBottom="@+id/lblBrkfstName"
-                    android:layout_toEndOf="@+id/lblBrkfstName"
+                    android:text="Squad Name"
+                    android:textSize="18sp"
                     android:textColor="@color/Purdue_White"
-                    android:textSize="14sp" />
-            </RelativeLayout>
+                    />
+                <EditText
+                    android:id="@+id/txtSquadName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/txtSquadName"
+                    android:text="[Squad_Name_Here]"
+                    android:textSize="18sp"
+                    android:textColor="@color/Purdue_White"
+                    android:layout_marginTop="15dp"/>
 
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -89,74 +83,68 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
-                    android:id="@+id/imageView"
                     android:layout_centerHorizontal="true"
                     android:cropToPadding="false"
                     android:layout_centerInParent="true"
-                    android:onClick="changeBrkfstPic"/>
-
+                    android:onClick="changeSquadPic"
+                    android:id="@+id/squadPhoto"/>
             </RelativeLayout>
-
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="5dp">
 
                 <TextView
-                    android:text="Description"
+                    android:id="@+id/lblSquadDesc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:id="@+id/txtBrkfstDesc"
-                    android:textColor="@color/Purdue_White" />
+                    android:textColor="@color/Purdue_White"
+                    android:text="Description"
+                    android:textSize="18sp"/>
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
                     android:ems="10"
-                    android:layout_below="@+id/txtBrkfstDesc"
-                    android:layout_alignStart="@+id/txtBrkfstDesc"
-                    android:id="@+id/editText2"
+                    android:layout_below="@id/lblSquadDesc"
                     android:textColor="@color/Purdue_White"
                     android:text="[Description Here]"
-                    android:textSize="14sp" />
+                    android:textSize="18sp"
+                    android:id="@+id/txtSquadDesc"
+                    />
 
             </RelativeLayout>
 
-
-            <RelativeLayout
+            <!-- TODO: Figure out how to populate this list -->
+            <!-- TODO: Background color is temporary -->
+            <ListView
+                android:id="@+id/lstSquadMembers"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@color/Purdue_White">
+            </ListView>
 
-                <TimePicker
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/timePicker2"
-                    android:layout_centerInParent="true"
-                    android:timePickerMode="spinner"
-                    android:numbersInnerTextColor="@color/Purdue_White"
-                    android:numbersTextColor="@color/Purdue_White"
-                    android:numbersSelectorColor="@color/Purdue_White"
-                    android:background="@color/Purdue_White" />
-            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:text="Create"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="Create"
                     android:layout_centerInParent="true"
-                    android:layout_marginBottom="54dp"
-                    android:id="@+id/btnBrkfstCreate" />
+                    android:textColor="@color/Purdue_Black"
+                    android:id="@+id/createSquad"/>
+
             </RelativeLayout>
 
-        </LinearLayout>
-    </ScrollView>
 
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

@@ -10,8 +10,17 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <!-- For Geofencing -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- For Google Maps -->
+    <meta-data
+        android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyBLZa6VfRy6NyG0tXzEGNDiQC7tUgVRq2E" />
 
     <application
         android:name=".MyApplication"
@@ -33,12 +42,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".DisplayMessageActivity" />
-        <activity android:name=".CampusFeedActivity"></activity>
-        <activity android:name=".CreateBreakfastActivity"></activity>
+        <activity android:name=".CampusFeedActivity" />
+        <activity android:name=".CreateBreakfastActivity" />
+        <activity android:name=".SquadCreateActivity" />
+        <activity android:name=".SquadViewActivity" />
+        <activity android:name=".ProfileViewActivity" />
+        <activity
+            android:name=".DrawerActivity"
+            android:label="@string/title_activity_drawer"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".SquadGalleryActivity" />
 
+        <service
+            android:name=".GeofenceTransitionsIntentService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

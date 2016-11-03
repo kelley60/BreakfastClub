@@ -21,6 +21,10 @@ public class GeofenceTransitionsIntentService extends IntentService {
     private String TAG = "Geofence Transitions";
     public static final String MYPREFERENCES = "MyPrefs";
 
+    public GeofenceTransitionsIntentService(){
+        super("GeofenceTransitionsIntentService");
+    }
+
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
@@ -31,6 +35,8 @@ public class GeofenceTransitionsIntentService extends IntentService {
     }
 
     protected void onHandleIntent(Intent intent) {
+        Log.d(TAG,"Made it to Transition Intent Service");
+
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         if (geofencingEvent.hasError()) {
             String errorMessage = "Error has occurred with Geofencing";
@@ -44,10 +50,12 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
         // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
+            Log.d(TAG, "Inside Geofence");
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putBoolean("IsInGeofence", true);
             editor.commit();
         } else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
+            Log.d(TAG, "Outside Geofence");
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putBoolean("IsInGeofence", false);
             editor.commit();

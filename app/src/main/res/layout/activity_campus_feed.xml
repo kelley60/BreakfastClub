@@ -10,33 +10,65 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     tools:context="cs490.breakfastclub.CampusFeedActivity"
-    android:background="@mipmap/custom_background" >
+    android:background="@drawable/gradient_background" >
 
-    <!-- This is the 'toolbar', do not modify this, otherwise the look
-         of this activity will not be consistent -->
-    <RelativeLayout
-        android:id="@+id/toolbar"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:orientation="horizontal"
-        android:background="@color/Purdue_Gold">
-        <Button
-            android:id="@+id/btn_nav"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/back_arrow" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/Purdue_Gold"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/PopupOverlay">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lblBrkfstCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Countdown: [XXh XXm]"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="5dp"/>
+        </RelativeLayout>
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/Purdue_White"
-            android:textSize="24sp"
-            android:text="Breakfast Club"/>
-    </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
+
 
     <!-- Put all other UI elements below this comment! -->
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_camera"
+        android:id="@+id/cameraButtonId"
+        android:layout_below="@+id/my_toolbar"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="5dp"/>
+
+    <!-- TODO: Set visibility to [not gone] in java if user is a Moderator -->
+    <Button
+        android:id="@+id/btnRemovePost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remove Post"
+        android:layout_below="@id/my_toolbar"
+        android:layout_alignParentStart="true"
+        android:layout_margin="5dp"
+        android:background="@color/Red"
+        android:visibility="gone"/>
+
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"/>
+
 
     <TextView
         android:text="0"
@@ -61,13 +93,9 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:id="@+id/downArrowId" />
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_menu_camera"
-        android:id="@+id/cameraButtonId"
-        android:layout_below="@+id/toolbar"
-        android:layout_alignParentEnd="true" />
+
+
+
 
 
 </RelativeLayout>

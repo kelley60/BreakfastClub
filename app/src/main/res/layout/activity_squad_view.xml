@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    tools:context="cs490.breakfastclub.SquadViewActivity"
+    android:background="@drawable/gradient_background" >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/Purdue_Gold"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/PopupOverlay">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lblBrkfstCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Countdown: [XXh XXm]"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="5dp"/>
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <!-- Put all other UI elements below this comment! -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/my_toolbar">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/txtSquadName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[Squad_Name_Here]"
+                    android:textColor="@color/Purdue_White"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
+                    android:layout_centerHorizontal="true"
+                    android:cropToPadding="false"
+                    android:layout_centerInParent="true"
+                    android:onClick="changeSquadPic"
+                    android:id="@+id/squadPhoto"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:text="[Description Here]"
+                    android:textSize="14sp"
+                    android:textColor="@color/Purdue_White"
+                    android:id="@+id/txtSquadDesc"
+                    />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!-- TODO: Adjust width of these buttons in java code to be 50% of total width -->
+                <Button
+                    android:id="@+id/btnViewSquadPhotos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="View Photos"
+                    android:layout_margin="5dp"
+                    android:layout_alignParentStart="true"/>
+
+                <Button
+                    android:id="@+id/btnViewSquadMsgs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="View Messages"
+                    android:layout_margin="5dp"
+                    android:layout_toRightOf="@id/btnViewSquadPhotos"
+                    android:layout_alignParentEnd="true"/>
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Members:"
+                    android:textColor="@color/Purdue_White"
+                    android:textSize="14sp"/>
+            </RelativeLayout>
+
+            <!-- TODO: Figure out how to populate this list -->
+            <!-- TODO: Color of list is only temporary -->
+            <ListView
+                android:id="@+id/lstSquadMembers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/Purdue_White">
+            </ListView>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/btnLeaveSquad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Leave Squad"
+                    android:onClick="leaveSquadConf"
+                    android:layout_margin="5dp"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
+            <!-- TODO: Fix google maps stuff
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    class="com.google.android.gms.maps.SupportMapFragment" />
+            </RelativeLayout>
+            -->
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

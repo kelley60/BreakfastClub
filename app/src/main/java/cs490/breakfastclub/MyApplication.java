@@ -12,7 +12,7 @@ public class MyApplication extends Application {
     private User currentUser;
 
     // Use to get the application's current student
-    public User getUser()
+    public User getCurrentUser()
     {
         return currentUser;
     }

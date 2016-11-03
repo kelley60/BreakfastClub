@@ -10,32 +10,31 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     tools:context="cs490.breakfastclub.MainActivity"
-    android:background="@mipmap/custom_background" >
+    android:background="@drawable/gradient_background" >
 
-    <!-- This is the 'toolbar', do not modify this, otherwise the look
-         of this activity will not be consistent -->
-    <RelativeLayout
-        android:id="@+id/toolbar"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:orientation="horizontal"
-        android:background="@color/Purdue_Gold">
-        <!-- TODO: NAME IS DUPLICATED -->
-        <Button
-            android:id="@+id/btn_nav_"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/back_arrow" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/Purdue_Gold"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/PopupOverlay">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/Purdue_White"
-            android:textSize="24sp"
-            android:text="Breakfast Club"/>
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/lblBrkfstCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Countdown: [XXh XXm]"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="5dp"/>
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
 
     <!-- Put all other UI elements below this comment! -->
 
@@ -46,14 +45,14 @@
         android:text="FB_INFO"
         android:id="@+id/fb_info"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/my_toolbar"
         android:textColor="@color/Purdue_White"/>
 
     <Button
         android:id="@+id/btn_nav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Go to MainActivity"
+        android:text="Go to Navigation"
         android:layout_below="@id/fb_info"
         android:visibility="invisible"/>
 
