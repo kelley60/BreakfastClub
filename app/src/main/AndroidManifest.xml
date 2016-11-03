@@ -54,11 +54,13 @@
             android:label="@string/title_activity_drawer"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".SquadGalleryActivity" />
-
         <service
             android:name=".GeofenceTransitionsIntentService"
             android:exported="false" >
         </service>
+        <activity android:name=".AdminViewUsersActivity" />
+        <activity android:name=".SearchMemberActivity"></activity>
+
     </application>
 
 </manifest>

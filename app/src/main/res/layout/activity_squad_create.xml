@@ -54,30 +54,30 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp">
+                android:layout_margin="5dp"
+                android:background="@color/Purdue_White">
                 <TextView
                     android:id="@+id/lblSquadName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Squad Name"
                     android:textSize="18sp"
-                    android:textColor="@color/Purdue_White"
+                    android:layout_margin="5dp"
                     />
                 <EditText
                     android:id="@+id/txtSquadName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/txtSquadName"
+                    android:layout_below="@id/lblSquadName"
                     android:text="[Squad_Name_Here]"
-                    android:textSize="18sp"
-                    android:textColor="@color/Purdue_White"
-                    android:layout_marginTop="15dp"/>
+                    android:textSize="18sp"/>
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -93,23 +93,24 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp">
+                android:layout_margin="5dp"
+                android:background="@color/Purdue_White">
 
                 <TextView
                     android:id="@+id/lblSquadDesc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/Purdue_White"
                     android:text="Description"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp"
+                    android:layout_margin="5dp"/>
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:inputType="textMultiLine"
                     android:ems="10"
                     android:layout_below="@id/lblSquadDesc"
-                    android:textColor="@color/Purdue_White"
                     android:text="[Description Here]"
                     android:textSize="18sp"
                     android:id="@+id/txtSquadDesc"
@@ -131,6 +132,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <!-- TODO: Redirect to SearchMemberActivity after asking if user wants to invite members -->
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

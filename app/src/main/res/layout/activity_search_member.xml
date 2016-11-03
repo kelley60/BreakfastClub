@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    tools:context="cs490.breakfastclub.SearchMemberActivity"
+    android:background="@drawable/gradient_background" >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/Purdue_Gold"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/PopupOverlay">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lblBrkfstCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Countdown: [XXh XXm]"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="5dp"/>
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <!-- Put all other UI elements below this comment! -->
+
+    <RelativeLayout
+        android:id="@+id/relLay0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_below="@id/my_toolbar">
+
+        <EditText
+            android:id="@+id/txtMemberName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="[Member Name]"
+            android:background="@color/Purdue_White"/>
+
+        <!-- TODO: Make this functional -->
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/txtMemberName" />
+
+    </RelativeLayout>
+
+
+    <ListView
+        android:id="@+id/lstSearchMembers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/relLay0">
+    </ListView>
+
+</RelativeLayout>

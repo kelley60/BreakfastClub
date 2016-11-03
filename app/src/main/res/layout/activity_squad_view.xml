@@ -103,6 +103,7 @@
                 android:layout_height="wrap_content">
 
                 <!-- TODO: Adjust width of these buttons in java code to be 50% of total width -->
+                <!-- TODO: Make functional -->
                 <Button
                     android:id="@+id/btnViewSquadPhotos"
                     android:layout_width="wrap_content"
@@ -120,6 +121,15 @@
                     android:layout_toRightOf="@id/btnViewSquadPhotos"
                     android:layout_alignParentEnd="true"/>
 
+                <Button
+                    android:id="@+id/btnInviteMember"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Invite Members"
+                    android:layout_margin="5dp"
+                    android:layout_below="@id/btnViewSquadPhotos"
+                    android:layout_alignParentStart="true"/>
+
             </RelativeLayout>
 
 
@@ -135,13 +145,11 @@
                     android:textSize="14sp"/>
             </RelativeLayout>
 
-            <!-- TODO: Figure out how to populate this list -->
-            <!-- TODO: Color of list is only temporary -->
+            <!-- TODO: Fix scrolling issue -->
             <ListView
                 android:id="@+id/lstSquadMembers"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/Purdue_White">
+                android:layout_height="wrap_content">
             </ListView>
 
             <RelativeLayout
