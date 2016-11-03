@@ -1,6 +1,7 @@
 package cs490.breakfastclub;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
@@ -110,7 +111,7 @@ public class SquadViewActivity extends AppCompatActivity/* implements OnMapReady
 
                     for (Map.Entry<String, String> member : members.entrySet()) {
                         Log.v("Member", member.getKey() + " " + member.getValue());
-                        DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + member.getValue());
+                        DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + member.getKey());
                         memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -119,7 +120,6 @@ public class SquadViewActivity extends AppCompatActivity/* implements OnMapReady
                                 currentMember.setProfileImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
                                 currentMember.setUserId((String) dataSnapshot.getKey());
                                 mMemberNames.add(currentMember);
-
                             }
 
                             @Override
