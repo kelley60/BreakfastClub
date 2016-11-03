@@ -12,8 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
+import cs490.breakfastclub.Classes.Breakfast;
 import cs490.breakfastclub.Classes.GeofenceManager;
+import cs490.breakfastclub.Classes.User;
+import cs490.breakfastclub.Classes.TimeFunctions;
 import cs490.breakfastclub.CreateBreakfastActivities.CreateBreakfastActivity;
 
 import static cs490.breakfastclub.GeofenceTransitionsIntentService.MYPREFERENCES;
@@ -101,8 +106,20 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             Intent intent = new Intent(DrawerActivity.this, SquadCreateActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_squadView) {
-            Intent intent = new Intent(DrawerActivity.this, SquadViewActivity.class);
-            startActivity(intent);
+            // disable SquadViewActivity if user is not in squad
+            final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+            if (currentUser.isPartOfSquad()){
+                Intent intent = new Intent(DrawerActivity.this, SquadViewActivity.class);
+                startActivity(intent);
+            }
+            else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("You must be in a Squad to access that.")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", null);
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
         }else if (id == R.id.nav_adminViewUsers) {
             Intent intent = new Intent(DrawerActivity.this, AdminViewUsersActivity.class);
             startActivity(intent);
@@ -118,13 +135,16 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
         SharedPreferences sharedpreferences = getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
-        boolean onCampus = sharedpreferences.getBoolean("IsInGeofence", false);
+        boolean onCampus = sharedpreferences.getBoolean("IsInGeofence", true);
+        boolean isDuringBreakfast = sharedpreferences.getBoolean("isDuringBreakfast", true);
 
-        //if (onCampus == false) {
-        if (1 == 0){
+        Breakfast currentBreakfast = getCurrentBreakfast();
+
+        if (onCampus == false) {
             intent.putExtra("Layout Type", "Not on Campus");
         }
-        else if (1 == 1){
+        //else if (1 == 1){
+        else if (TimeFunctions.isDuringVotingPeriod() == true){
             //not breakfast club time
             intent.putExtra("Layout Type", "Not Time");
         }
@@ -132,6 +152,12 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             intent.putExtra("Layout Type", "Campus Feed");
         }
         return intent;
+    }
+
+    //TODO get current breakfast from the database
+    private Breakfast getCurrentBreakfast() {
+
+        return null;
     }
 
 
