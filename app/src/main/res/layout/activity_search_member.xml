@@ -9,7 +9,7 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    tools:context="cs490.breakfastclub.DisplayMessageActivity"
+    tools:context="cs490.breakfastclub.SearchMemberActivity"
     android:background="@drawable/gradient_background" >
 
     <android.support.v7.widget.Toolbar
@@ -36,54 +36,38 @@
 
     </android.support.v7.widget.Toolbar>
 
-
     <!-- Put all other UI elements below this comment! -->
 
-    <ScrollView
+    <RelativeLayout
+        android:id="@+id/relLay0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/my_toolbar">
+        android:layout_margin="5dp"
+        android:layout_below="@id/my_toolbar">
 
-        <!-- TODO: Figure out how to populate list. Follow this link
-        https://github.com/delaroy/MyListView/blob/master/app/src/main/java/com/delaroystudios/mylistview/CustomAdapter.java
-        https://www.youtube.com/watch?v=HRPpQw0dzko
-        -->
-        <ListView
+        <EditText
+            android:id="@+id/txtMemberName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:text="[Member Name]"
+            android:background="@color/Purdue_White"/>
 
-        </ListView>
+        <!-- TODO: Make this functional -->
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/txtMemberName" />
+
+    </RelativeLayout>
 
 
-
-    </ScrollView>
-
-
-    <EditText
+    <ListView
+        android:id="@+id/lstSearchMembers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txt_msg"
-        android:layout_alignParentBottom="true"
-        android:background="@color/Purdue_White"
-        android:textSize="24sp"/>
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnImgAttach"
-        app:srcCompat="@android:drawable/ic_menu_camera"
-        android:layout_alignParentStart="true"
-        android:layout_above="@id/txt_msg"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnSend"
-        android:text="Send"
-        android:layout_alignParentEnd="true"
-        android:layout_above="@id/txt_msg"/>
-
-
-
+        android:layout_below="@id/relLay0">
+    </ListView>
 
 </RelativeLayout>

@@ -19,7 +19,22 @@
         android:background="@color/Purdue_Gold"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/PopupOverlay"/>
+        app:popupTheme="@style/PopupOverlay">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lblBrkfstCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Countdown: [XXh XXm]"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="5dp"/>
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
 
     <!-- Put all other UI elements below this comment! -->
 
@@ -63,14 +78,6 @@
                     android:onClick="changeSquadPic"
                     android:id="@+id/squadPhoto"/>
 
-                <Button
-                    android:id="@+id/btnLeaveSquad"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Leave Squad"
-                    android:onClick="leaveSquadConf"
-                    android:layout_margin="5dp"
-                    android:layout_alignParentStart="true"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -96,6 +103,7 @@
                 android:layout_height="wrap_content">
 
                 <!-- TODO: Adjust width of these buttons in java code to be 50% of total width -->
+                <!-- TODO: Make functional -->
                 <Button
                     android:id="@+id/btnViewSquadPhotos"
                     android:layout_width="wrap_content"
@@ -113,6 +121,15 @@
                     android:layout_toRightOf="@id/btnViewSquadPhotos"
                     android:layout_alignParentEnd="true"/>
 
+                <Button
+                    android:id="@+id/btnInviteMember"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Invite Members"
+                    android:layout_margin="5dp"
+                    android:layout_below="@id/btnViewSquadPhotos"
+                    android:layout_alignParentStart="true"/>
+
             </RelativeLayout>
 
 
@@ -128,14 +145,38 @@
                     android:textSize="14sp"/>
             </RelativeLayout>
 
-            <!-- TODO: Figure out how to populate this list -->
-            <!-- TODO: Color of list is only temporary -->
+            <!-- TODO: Fix scrolling issue -->
             <ListView
                 android:id="@+id/lstSquadMembers"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/Purdue_White">
+                android:layout_height="wrap_content">
             </ListView>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/btnLeaveSquad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Leave Squad"
+                    android:onClick="leaveSquadConf"
+                    android:layout_margin="5dp"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
+            <!-- TODO: Fix google maps stuff
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    class="com.google.android.gms.maps.SupportMapFragment" />
+            </RelativeLayout>
+            -->
 
 
 

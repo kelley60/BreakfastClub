@@ -1,6 +1,8 @@
 package cs490.breakfastclub;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,8 +16,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class DrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
+import cs490.breakfastclub.Classes.GeofenceManager;
+
+import static cs490.breakfastclub.GeofenceTransitionsIntentService.MYPREFERENCES;
+
+public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +44,8 @@ public class DrawerActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        GeofenceManager.getInstance().init(this);
     }
 
     @Override
@@ -97,6 +108,9 @@ public class DrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_squadView) {
             Intent intent = new Intent(DrawerActivity.this, SquadViewActivity.class);
             startActivity(intent);
+        }else if (id == R.id.nav_adminViewUsers) {
+            Intent intent = new Intent(DrawerActivity.this, AdminViewUsersActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -106,11 +120,16 @@ public class DrawerActivity extends AppCompatActivity
 
     private Intent chooseCampusFeedActivity() {
         Intent intent = new Intent(DrawerActivity.this, CampusFeedActivity.class);
-        if (1 == 0) {
-            //not on campus
+
+        SharedPreferences sharedpreferences = getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        boolean onCampus = sharedpreferences.getBoolean("IsInGeofence", false);
+
+        //if (onCampus == false) {
+        if (1 == 0){
             intent.putExtra("Layout Type", "Not on Campus");
         }
-        else if (1 == 0){
+        else if (1 == 1){
             //not breakfast club time
             intent.putExtra("Layout Type", "Not Time");
         }
@@ -119,4 +138,6 @@ public class DrawerActivity extends AppCompatActivity
         }
         return intent;
     }
+
+
 }

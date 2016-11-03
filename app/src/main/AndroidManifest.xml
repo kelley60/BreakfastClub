@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <!-- For Geofencing -->
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!-- For Google Maps -->
@@ -52,7 +54,13 @@
             android:label="@string/title_activity_drawer"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".SquadGalleryActivity" />
-        <activity android:name=".SquadLocationActivity"></activity>
+        <service
+            android:name=".GeofenceTransitionsIntentService"
+            android:exported="false" >
+        </service>
+        <activity android:name=".AdminViewUsersActivity" />
+        <activity android:name=".SearchMemberActivity"></activity>
+
     </application>
 
 </manifest>
