@@ -162,6 +162,15 @@ public class SquadViewActivity extends AppCompatActivity{
             }
         });
 
+        Button btnGallery = (Button) findViewById(R.id.btnViewSquadPhotos);
+        btnGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SquadViewActivity.this, SquadGalleryActivity.class);
+                startActivity(intent);
+            }
+        });
+
         // Populate the list view
         ArrayList<User> userList = new ArrayList<>();
         for(int i = 0; i < 10; i++)
