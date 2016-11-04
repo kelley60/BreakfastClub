@@ -1,10 +1,9 @@
 package cs490.breakfastclub;
 
-import android.media.Image;
-import android.os.CountDownTimer;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,13 +12,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-import org.w3c.dom.Text;
-
 import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
 
+import cs490.breakfastclub.Camera.CameraActivity;
 import cs490.breakfastclub.Classes.Breakfast;
 import cs490.breakfastclub.Classes.Post;
 import cs490.breakfastclub.Classes.TimeFunctions;
@@ -172,7 +167,8 @@ public class CampusFeedActivity extends AppCompatActivity {
 
     //TODO for Emma
     private void launchCameraActivity() {
-
+        Intent intent = new Intent(CampusFeedActivity.this, CameraActivity.class);
+        startActivity(intent);
     }
 
     private void decreaseCurrentPostScore() {

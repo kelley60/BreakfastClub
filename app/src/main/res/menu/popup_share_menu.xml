@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/set_profile_pic"
+        android:title="Set as Profile Picture"/>
+
+    <item
+        android:id="@+id/squad_post"
+        android:title="Post to Squad Feed"/>
+
+    <item
+        android:id="@+id/breakfast_post"
+        android:title="Post to Breakfast Feed"/>
+
+    <item
+        android:id="@+id/facebook_share"
+        android:title="Share on Facebook"/>
+
+</menu>  
