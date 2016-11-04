@@ -5,11 +5,13 @@ package cs490.breakfastclub;
  */
 import android.app.Application;
 
+import cs490.breakfastclub.Classes.Photos;
 import cs490.breakfastclub.Classes.User;
 
 public class MyApplication extends Application {
 
     private User currentUser;
+    private Photos currentPhotos;
 
     // Use to get the application's current student
     public User getCurrentUser()
@@ -23,5 +25,13 @@ public class MyApplication extends Application {
         this.currentUser = user;
     }
 
+
+    public Photos getCurrentPhotos() {
+        return currentPhotos;
+    }
+
+    public void setCurrentPhotos(Photos currentPhotos) {
+        this.currentPhotos = currentPhotos;
+    }
 
 }
