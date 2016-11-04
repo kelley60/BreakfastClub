@@ -51,8 +51,10 @@ public class ProfileViewActivity extends AppCompatActivity {
                     TextView profileNameView = (TextView) findViewById(R.id.lblProfileName);
                     profileNameView.setText((String) dataSnapshot.child("name").getValue());
                     ImageView profileImageView = (ImageView) findViewById(R.id.lblProfileImage);
-                    new DownloadImageAsyncTask(profileImageView)
-                            .execute((String) dataSnapshot.child("profileImageUrl").getValue());
+                   // new DownloadImageAsyncTask(profileImageView)
+                     //       .execute((String) dataSnapshot.child("profileImageUrl").getValue());
+     //               Picasso.with(mContext).load(getItemURL(position).toString()).into(profileImageView);
+
                     TextView squadNameView = (TextView) findViewById(R.id.lblSquadName);
                     squadNameView.setText(getIntent().getStringExtra("Squad"));
                 }
