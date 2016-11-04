@@ -43,8 +43,10 @@ import com.google.firebase.storage.StorageReference;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import cs490.breakfastclub.Classes.Squad;
@@ -139,8 +141,9 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
         });
 
         // Populate the list view
+        /*
         ArrayList<User> userList = new ArrayList<>();
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 2; i++)
         {
             User u = new User("Name " + i, "[url_here]", null);
             userList.add(u);
@@ -150,7 +153,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
 
         ListView lView = (ListView) findViewById(R.id.lstSquadMembers);
         lView.setAdapter(uAdapter);
-
+        */
 
 
         // Get user's last known location
@@ -163,6 +166,13 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                     .build();
         }
 
+/*
+        final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+        final LinkedHashMap<String, URL> linkedHashMap = ((MyApplication) getApplication()).getCurrentPhotos().getUserPhotos();
+        final ArrayList<URL> currentPhotos = new ArrayList<URL>(linkedHashMap.values());
+        final ArrayList<String> photoids = new ArrayList<String>(linkedHashMap.keySet());
+        final ImageView imgView = (ImageView) findViewById(R.id.squadPhoto);
+*/
 
     }
 
@@ -268,15 +278,15 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // System.out.println("In the Yes function");
                         // If leaver is captain, ask to change captain or delete squad
                         if (currentUser.getSquadRole().equals("captain")) {
-                            // System.out.println("CUrrent user equals captain");
                             // Captain is the only user in here. Delete the squad
                             if (currentUser.getSquad().getUserList().size() == 1) {
-                                mDatabase.child("Users/" + currentUser.getUserId()).child("Squad").removeValue();
+                                currentUser.setPartOfSquad(false);
+                                mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
+                                mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
                                 mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).removeValue();
-                                System.out.println("Leaving squad");
+//                                System.out.println("Leaving squad");
                                 finish();
                             }
                             // Captain is not the only user. Ask to change captain or delete squad
@@ -288,7 +298,9 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                         else
                         {
                             // Delete user from Squad
-                            mDatabase.child("Users/" + currentUser.getUserId()).child("Squad").removeValue();
+                            currentUser.setPartOfSquad(false);
+                            mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
+                            mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
                             mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(currentUser.getUserId()).removeValue();
                             finish();
                         }

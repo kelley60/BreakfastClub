@@ -1,15 +1,19 @@
 package cs490.breakfastclub;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -21,12 +25,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import cs490.breakfastclub.Classes.User;
 
 public class SquadLocationActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private ArrayList<User> mSquad;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,33 @@ public class SquadLocationActivity extends AppCompatActivity implements OnMapRea
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
+        Button btnAddMarkers = (Button) findViewById(R.id.btnAddMarkers);
+        btnAddMarkers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: Add marker on map for each member
+                Random rand = new Random();
+                double latBase = 40.427608;
+                double lngBase = -86.917040;
+                latBase += rand.nextDouble() / 1000;
+                lngBase += rand.nextDouble() / 10000;
+
+                Log.d("Location", "Sizeof mSquad is " + mSquad.size() + "\n");
+                for(int i = 0; i < mSquad.size(); i++)
+                {
+                    mSquad.get(i).updateLocation(latBase, lngBase);
+                    Log.d("Location", "SquadMember + " + mSquad.get(i).getName() + "\n");
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(mSquad.get(i).getLat(), mSquad.get(i).getLng()))
+                            .title(mSquad.get(i).getName())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    Log.d("SquadLocation", "loop iteration: " + i + "\n");
+                }
+            }
+        });
+
+
     }
 
     @Override
@@ -51,20 +84,70 @@ public class SquadLocationActivity extends AppCompatActivity implements OnMapRea
         /*map.addMarker(new MarkerOptions()
                 .position(new LatLng(42.000, -87.000))
                 .title("Trevor Edris"));*/
+        mMap = map;
 
         mSquad = new ArrayList<>();
         final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
 
+        //==================================================================
+        //              Hard coded map markers
+        //==================================================================
+        // Purdue
         map.addMarker(new MarkerOptions()
-                .position(new LatLng(40.4237, -86.9100))
-                .title("Purdue"));
+                .position(new LatLng(40.428569, -86.913852))
+                .title("Purdue")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+        // Brothers
+        map.addMarker(new MarkerOptions()
+                .position(new LatLng(40.424060, -86.908379))
+                .title("Brothers")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+        // Harry's
+        map.addMarker(new MarkerOptions()
+                .position(new LatLng(40.423879, -86.909072))
+                .title("Harry's")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+        // 308
+        map.addMarker(new MarkerOptions()
+                .position(new LatLng(40.424076, -86.908487))
+                .title("308")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+        // Jakes
+        map.addMarker(new MarkerOptions()
+                .position(new LatLng(40.423399, -86.908000))
+                .title("Jakes")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+        // Cactus
+        map.addMarker(new MarkerOptions()
+                .position(new LatLng(40.423374, -86.900683))
+                .title("Neon Cactus")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+        // Where Else
+        map.addMarker(new MarkerOptions()
+                .position(new LatLng(40.422978, -86.907973))
+                .title("Where Else")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+
 
         // TODO: Get current location somehow
-        currentUser.updateLocation(40.427608, -86.917040);
+        Random rand = new Random();
+        double latBase = 40.427608;
+        double lngBase = -86.917040;
+        latBase += rand.nextDouble() / 1000;
+        lngBase += rand.nextDouble() / 10000;
+        currentUser.updateLocation(latBase, lngBase);
         //Log.d("SquadLocation", "currentUserLocation: " + currentUser.getName() + "  (" + currentUser.getLat() + ", " + currentUser.getLng() + ")\n");
         map.addMarker(new MarkerOptions()
                 .position(new LatLng(currentUser.getLat(), currentUser.getLng()))
-                .title(currentUser.getName()));
+                .title(currentUser.getName())
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 
 
         // TODO: Grab squad members from the database
@@ -107,14 +190,7 @@ public class SquadLocationActivity extends AppCompatActivity implements OnMapRea
             });
         }
 
-        // TODO: Add marker on map for each member
-        for(int i = 0; i < mSquad.size(); i++)
-        {
-            /*map.addMarker(new MarkerOptions()
-            .position(new LatLng(mSquad.get(i).getLat(), mSquad.get(i).getLng()))
-            .title(mSquad.get(i).getName()));*/
-            Log.d("SquadLocation", "loop iteration: " + i + "\n");
-        }
+
     }
 
     @Override

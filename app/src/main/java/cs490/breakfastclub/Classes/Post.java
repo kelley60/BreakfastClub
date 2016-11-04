@@ -17,14 +17,25 @@ public class Post {
     private String imgURL;
     private Date date;
     private int score;
-    private String userId;
+    private String senderID;
+    private String senderName;
+
+    public Post()
+    {
+        message = null;
+        imgURL = null;
+        date = null;
+        score = 0;
+        senderID = null;
+        senderName = null;
+    }
 
     public Post(String message, String imgURL, Date date){
         this.message = message;
         this.imgURL = imgURL;
         this.date = date;
-        this.score = 0;
-        this.userId = null;
+        senderID = null;
+        senderName = null;
     }
 
 
@@ -86,5 +97,33 @@ public class Post {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public String getSenderID() {
+        return senderID;
+    }
+
+    public void setSenderID(String senderID) {
+        this.senderID = senderID;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "message='" + message + '\'' +
+                ", imgURL='" + imgURL + '\'' +
+                ", date=" + date +
+                ", score=" + score +
+                ", senderID='" + senderID + '\'' +
+                ", senderName='" + senderName + '\'' +
+                '}';
     }
 }

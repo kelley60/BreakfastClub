@@ -49,6 +49,7 @@
 
             <!-- Put all other UI elements below this comment! -->
 
+
             <ScrollView
                 android:id="@+id/scrollView"
                 android:layout_width="match_parent"
@@ -70,7 +71,9 @@
                             android:id="@+id/txtSquadName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
                             android:text="[Squad_Name_Here]"
+                            android:textSize="18sp"
                             android:textColor="@color/Purdue_White"/>
 
                     </RelativeLayout>
@@ -145,6 +148,7 @@
                     </RelativeLayout>
 
 
+                    <!--
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -156,16 +160,18 @@
                             android:textColor="@color/Purdue_White"
                             android:textSize="14sp"/>
                     </RelativeLayout>
-
+                    -->
 
 
 
              <!-- TODO: Fix scrolling issue -->
+                    <!--
             <ListView
                 android:id="@+id/lstSquadMembers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
             </ListView>
+            -->
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -184,7 +190,6 @@
         </LinearLayout>
 
     </ScrollView>
-
 
         </RelativeLayout>
         <!-- The navigation drawer -->

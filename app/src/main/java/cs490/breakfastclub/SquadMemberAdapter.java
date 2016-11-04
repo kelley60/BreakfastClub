@@ -1,8 +1,6 @@
 package cs490.breakfastclub;
 
-/**
- * Created by Kenny on 10/17/2015.
- */
+
 
 import android.content.Context;
 import android.graphics.Bitmap;
