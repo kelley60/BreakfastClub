@@ -154,12 +154,13 @@ public class SquadMessageAdapter extends BaseAdapter implements ListAdapter {
         String time;
         if (hour > 12)
         {
-            time = (hour - 12) + ":" + minutes + "PM";
+            time = String.format("%02d", hour - 12) + ":" + String.format("%02d", minutes) + "PM";
         }
         else
         {
-            time = hour + ":" + minutes + "AM";
+            time = String.format("%02d", hour) + ":" + String.format("%02d", minutes) + "AM";
         }
+
         return time;
     }
 

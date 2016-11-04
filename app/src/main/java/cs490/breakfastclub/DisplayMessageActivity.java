@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import cs490.breakfastclub.Classes.Post;
 import cs490.breakfastclub.Classes.User;
@@ -91,10 +92,12 @@ public class DisplayMessageActivity extends AppCompatActivity {
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
-                        messageListAdapter.notifyDataSetChanged();
+                        //messageListAdapter.notifyDataSetChanged();
 
-                        messagesRef.child(Long.toString(time)).child("message").setValue(message);
-                        messagesRef.child(Long.toString(time)).child("sender").setValue(senderID);
+                        HashMap<String, String> messageToFirebase = new HashMap<String, String>();
+                        messageToFirebase.put("message", message);
+                        messageToFirebase.put("sender", senderID);
+                        messagesRef.child(Long.toString(time)).setValue(messageToFirebase);
 
 
                     }
@@ -108,18 +111,19 @@ public class DisplayMessageActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
+                        messagePosts.clear();
                         int i = 0;
                         for (DataSnapshot messageSnapShot : dataSnapshot.getChildren())
                         {
 
-                            if (i < messagePosts.size())
+                            /*if (i < messagePosts.size())
                             {
                                 i++;
                             }
-                            else
+                            else*/
                             {
                                 final Post newPost = new Post();
-                                Log.v("Snapshot", messageSnapShot.toString());
+                                Log.v("SnapshotOutUser", messageSnapShot.toString());
                                 String message = (String) messageSnapShot.child("message").getValue();
                                 String senderID = (String) messageSnapShot.child("sender").getValue();
                                 Date date = new Date(Long.parseLong(messageSnapShot.getKey()));
@@ -138,7 +142,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
                                     userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
-                                            Log.v("Snapshot", newPost.toString());
+                                            Log.v("SnapshotInUser", newPost.toString());
                                             String senderName = (String) dataSnapshot.child("name").getValue();
                                             newPost.setSenderName(senderName);
                                             messagePosts.add(newPost);
