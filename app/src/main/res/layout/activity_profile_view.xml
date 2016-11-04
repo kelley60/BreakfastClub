@@ -67,6 +67,7 @@
 
 
                 <TextView
+                    android:id="@+id/lblSquadName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="[Squad]"
@@ -84,8 +85,9 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/lblProfileImage"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
                     app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
                     android:padding="5dp"
                     android:layout_centerInParent="true" />
@@ -95,14 +97,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/lblAboutMe"
+                <Button
+                    android:id="@+id/btn_addToSqaud"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="[FB About Me Section]"
-                    android:textColor="@color/Purdue_White"
-                    android:textSize="16sp"
-                    android:layout_centerInParent="true"/>
+                    android:layout_centerHorizontal="true"
+                    android:text="Add To Squad"
+                    android:visibility="gone"/>
             </RelativeLayout>
 
 

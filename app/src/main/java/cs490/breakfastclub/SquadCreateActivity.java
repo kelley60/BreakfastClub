@@ -65,6 +65,7 @@ public class SquadCreateActivity extends AppCompatActivity {
                     mDatabase.child("Squads/" + currentSquadKey).child("name").setValue(squadName.getText().toString());
                     mDatabase.child("Squads/" + currentSquadKey).child("description").setValue(squadDesc.getText().toString());
                     mDatabase.child("Squads/" + currentSquadKey).child("Members").child(currentUser.getUserId()).setValue("captain");
+                    mDatabase.child("Squads/" + currentSquadKey).child("Members").child(currentUser.getUserId()).setPriority(0);
                     mDatabase.child("Users/" + currentUser.getUserId()).child("squad").setValue(currentSquadKey);
                     mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").setValue("captain");
                     StorageReference squadRef = mStorage.child("Squads/" + currentSquadKey);
@@ -87,10 +88,11 @@ public class SquadCreateActivity extends AppCompatActivity {
                             Uri downloadUrl = taskSnapshot.getDownloadUrl();
                             Log.v("Image Upload", "SuccessFul Image Upload " + downloadUrl.toString());
                             Squad currentSquad = new Squad(squadName.getText().toString(),
-                                    currentSquadKey, squadPhoto, squadDesc.getText().toString());
+                                    currentSquadKey, ((BitmapDrawable) squadPhoto.getDrawable()).getBitmap(), squadDesc.getText().toString());
                             currentUser.setSquad(currentSquad);
                             currentUser.setSquadRole("captain");
                             currentUser.setPartOfSquad(true);
+                            finish();
                         }
                     });
 

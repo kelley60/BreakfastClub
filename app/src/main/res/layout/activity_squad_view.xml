@@ -83,7 +83,6 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
                             android:layout_centerHorizontal="true"
                             android:cropToPadding="false"
                             android:layout_centerInParent="true"

@@ -1,5 +1,6 @@
 package cs490.breakfastclub.Classes;
 
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import java.security.acl.Group;
@@ -14,7 +15,7 @@ public class Squad {
     private String squadName;
     private String squadID;
     private String squadDesc;
-    private ImageView squadPhoto;
+    private Bitmap squadPhoto;
     private ArrayList<User> userList;
     private GroupFeed groupFeed;
 
@@ -25,7 +26,7 @@ public class Squad {
     }
 
 
-    public Squad(String squadName, String squadID, ImageView squadPhoto, String squadDesc){
+    public Squad(String squadName, String squadID, Bitmap squadPhoto, String squadDesc){
         this.squadName = squadName;
         this.squadID = squadID;
         this.squadPhoto = squadPhoto;
@@ -105,11 +106,11 @@ public class Squad {
         this.squadDesc = squadDesc;
     }
 
-    public ImageView getSquadPhoto() {
+    public Bitmap getSquadPhoto() {
         return squadPhoto;
     }
 
-    public void setSquadPhoto(ImageView squadPhoto) {
+    public void setSquadPhoto(Bitmap squadPhoto) {
         this.squadPhoto = squadPhoto;
     }
 }

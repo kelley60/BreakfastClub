@@ -41,6 +41,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -98,73 +99,6 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
         mDrawerList = (ListView) findViewById(R.id.right_drawer);
         mDrawerTitle = (TextView) findViewById(R.id.drawerTitle);
 
-
-        final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
-        if (currentUser.isPartOfSquad()) {
-            final DatabaseReference squadRef = FirebaseDatabase.getInstance().getReference("Squads/" + currentUser.getSquad().getSquadID());
-            squadRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    // If squad is empty, delete it
-                    if (!dataSnapshot.child("Members").exists())
-                    {
-                        squadRef.removeEventListener(this);
-                        mDatabase = FirebaseDatabase.getInstance().getReference();
-                        mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).removeValue();
-                    }
-
-                    HashMap<String, String> members = (HashMap) dataSnapshot.child("Members").getValue();
-                    Log.v("Members", members.toString());
-
-                    for (Map.Entry<String, String> member : members.entrySet()) {
-                        Log.v("Member", member.getKey() + " " + member.getValue());
-                        DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + member.getKey());
-                        memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                User currentMember = new User();
-                                currentMember.setName((String) dataSnapshot.child("name").getValue());
-                                currentMember.setProfileImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
-                                currentMember.setUserId((String) dataSnapshot.getKey());
-                                mMemberNames.add(currentMember);
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                    //DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + member.)
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
-
-        for (int i = 0; i < currentUser.getFriends().size(); i++) {
-            DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + currentUser.getFriends().get(i).getUserId());
-            memberRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    User currentMember = new User();
-                    currentMember.setName((String) dataSnapshot.child("name").getValue());
-                    currentMember.setProfileImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
-                    currentMember.setUserId((String) dataSnapshot.getKey());
-                    mFriends.add(currentMember);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
 
         /*
         Button btnSearch = (Button) findViewById(R.id.btnInviteMember);
@@ -246,7 +180,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
     @Override
     public void onConnected(Bundle connectionHint) {
         Log.d("LocationServices", "Tryna locate dat user, nah wuh ahm sayun?\n");
-        User currentUser = User.getCurrentUser();
+        User currentUser = ((MyApplication) getApplication()).getCurrentUser();
         Location loc = null;
         try {
             loc = LocationServices.FusedLocationApi.getLastLocation(
@@ -272,6 +206,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
         if (item.getItemId() == android.R.id.home) {
             finish();
         }
@@ -287,7 +222,10 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                 mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                        Intent intent = new Intent(SquadViewActivity.this, ProfileViewActivity.class);
+                        intent.putExtra("MemberFromSquadView", ((User)parent.getItemAtPosition(position)).getUserId());
+                        intent.putExtra("Squad", currentUser.getSquad().getSquadName());
+                        startActivity(intent);
                     }
                 });
                 mDrawerLayout.openDrawer(Gravity.RIGHT);
@@ -305,7 +243,9 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                 mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                        Intent intent = new Intent(SquadViewActivity.this, ProfileViewActivity.class);
+                        intent.putExtra("AddMemberFromSquadView", ((User)parent.getItemAtPosition(position)).getUserId());
+                        startActivity(intent);
                     }
                 });
                 mDrawerLayout.openDrawer(Gravity.RIGHT);
@@ -377,6 +317,113 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
 //        }
     }
 
+    @Override
+    protected void onResume() {
+        final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+        if (currentUser.isPartOfSquad()) {
+            DatabaseReference squadRef = FirebaseDatabase.getInstance().getReference("Squads/" + currentUser.getSquad().getSquadID());
+            squadRef.orderByPriority().addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    mMemberNames.clear();
+                    Log.v("Cleared Members", "Cleared Members");
+                    HashMap<String, String> members = (HashMap) dataSnapshot.child("Members").getValue();
+                    TextView squadNameView = (TextView) findViewById(R.id.txtSquadName);
+                    currentUser.getSquad().setSquadName((String) dataSnapshot.child("name").getValue());
+                    squadNameView.setText((String) dataSnapshot.child("name").getValue());
+                    TextView squadDescView = (TextView) findViewById(R.id.txtSquadDesc);
+                    currentUser.getSquad().setSquadDesc((String) dataSnapshot.child("description").getValue());
+                    squadDescView.setText((String) dataSnapshot.child("description").getValue());
+
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference storageRef = storage.getReferenceFromUrl("gs://breakfastclubapp-437bd.appspot.com");
+                    StorageReference squadImageRef = storageRef.child("Squads/" + dataSnapshot.getKey());
+
+                    final long ONE_MEGABYTE = 1024 * 1024;
+                    squadImageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            // Data for "images/island.jpg" is returns, use this as needed
+                            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            ImageView squadImageView = (ImageView) findViewById(R.id.squadPhoto);
+
+                            squadImageView.setImageBitmap(bmp);
+                            currentUser.getSquad().setSquadPhoto(bmp);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle any errors
+                        }
+                    });
+
+
+
+                    for (Map.Entry<String, String> member : members.entrySet()) {
+                        DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + member.getKey());
+                        memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Log.v("Member", (String) dataSnapshot.child("name").getValue());
+                                User currentMember = new User();
+                                currentMember.setName((String) dataSnapshot.child("name").getValue());
+                                currentMember.setProfileImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
+                                currentMember.setUserId((String) dataSnapshot.getKey());
+                                mMemberNames.add(currentMember);
+                                currentUser.getSquad().setUserList(mMemberNames);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                    //DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + member.)
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        mFriends.clear();
+        for (int i = 0; i < currentUser.getFriends().size(); i++) {
+            boolean friendInSquad = false;
+            for (int j = 0; j < mMemberNames.size(); j++)
+            {
+                if (mMemberNames.get(j).getUserId().equals(currentUser.getFriends().get(i).getUserId()))
+                {
+                    friendInSquad = true;
+                    break;
+                }
+            }
+            if (!friendInSquad) {
+                DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + currentUser.getFriends().get(i).getUserId());
+                memberRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User currentMember = new User();
+                        if (!dataSnapshot.child("squad").exists()) {
+                            currentMember.setName((String) dataSnapshot.child("name").getValue());
+                            currentMember.setProfileImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
+                            currentMember.setUserId((String) dataSnapshot.getKey());
+                            mFriends.add(currentMember);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }
+        super.onResume();
+    }
 
 
 
