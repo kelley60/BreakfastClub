@@ -43,8 +43,10 @@ import com.google.firebase.storage.StorageReference;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import cs490.breakfastclub.Classes.Squad;
@@ -164,6 +166,13 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                     .build();
         }
 
+/*
+        final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+        final LinkedHashMap<String, URL> linkedHashMap = ((MyApplication) getApplication()).getCurrentPhotos().getUserPhotos();
+        final ArrayList<URL> currentPhotos = new ArrayList<URL>(linkedHashMap.values());
+        final ArrayList<String> photoids = new ArrayList<String>(linkedHashMap.keySet());
+        final ImageView imgView = (ImageView) findViewById(R.id.squadPhoto);
+*/
 
     }
 
