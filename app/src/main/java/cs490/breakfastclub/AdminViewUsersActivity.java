@@ -26,6 +26,7 @@ public class AdminViewUsersActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("[SQUAD_NAME]");
 
 
+        // TODO: Populate with actual data
         // Populate the list view
         ArrayList<User> userList = new ArrayList<>();
         for(int i = 0; i < 10; i++)

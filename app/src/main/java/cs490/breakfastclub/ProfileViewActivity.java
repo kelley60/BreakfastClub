@@ -8,6 +8,9 @@ import android.view.MenuItem;
 
 public class ProfileViewActivity extends AppCompatActivity {
 
+    // TODO: Populate UI with data from database
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

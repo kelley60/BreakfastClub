@@ -33,6 +33,8 @@ import cs490.breakfastclub.Classes.User;
 
 public class SquadCreateActivity extends AppCompatActivity {
 
+    // TODO: On successful creation, redirect user to different page
+
     private DatabaseReference mDatabase;
     private StorageReference mStorage;
 

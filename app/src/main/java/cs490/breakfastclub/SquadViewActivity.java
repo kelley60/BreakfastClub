@@ -53,7 +53,10 @@ import cs490.breakfastclub.Classes.User;
 import cs490.breakfastclub.Classes.UserAdapter;
 
 public class SquadViewActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
-    // User currentUser;
+
+    // TODO: Populate UI with information from database
+
+
     private ArrayList<User> mMemberNames;
     private ArrayList<User> mFriends;
     private DrawerLayout mDrawerLayout;
@@ -68,13 +71,13 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
     @Override
     public void onConnectionSuspended(int s)
     {
-
+        // Empty
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult c)
     {
-
+        // Empty
     }
 
     @Override
@@ -173,6 +176,15 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
             }
         });
         */
+
+        Button btnMsgs = (Button) findViewById(R.id.btnViewSquadMsgs);
+        btnMsgs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SquadViewActivity.this, DisplayMessageActivity.class);
+                startActivity(intent);
+            }
+        });
 
         Button btnLocate = (Button) findViewById(R.id.btnLocation);
         btnLocate.setOnClickListener(new View.OnClickListener() {
