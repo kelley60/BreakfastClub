@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -25,6 +26,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -47,7 +52,8 @@ import java.util.ArrayList;
 import cs490.breakfastclub.Classes.User;
 import cs490.breakfastclub.Classes.UserAdapter;
 
-public class SquadViewActivity extends AppCompatActivity{
+public class SquadViewActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+    // User currentUser;
     private ArrayList<User> mMemberNames;
     private ArrayList<User> mFriends;
     private DrawerLayout mDrawerLayout;
@@ -55,6 +61,21 @@ public class SquadViewActivity extends AppCompatActivity{
     private TextView mDrawerTitle;
 
     private DatabaseReference mDatabase;
+
+    private GoogleApiClient mGoogleApiClient = null;
+
+
+    @Override
+    public void onConnectionSuspended(int s)
+    {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult c)
+    {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,6 +207,49 @@ public class SquadViewActivity extends AppCompatActivity{
 
 
 
+        // Get user's last known location
+        // Create an instance of GoogleAPIClient.
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+
+
+    }
+
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    // TODO: Test with an actual device
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        Log.d("LocationServices", "Tryna locate dat user, nah wuh ahm sayun?\n");
+        User currentUser = User.getCurrentUser();
+        Location loc = null;
+        try {
+            loc = LocationServices.FusedLocationApi.getLastLocation(
+                    mGoogleApiClient);
+        }catch(SecurityException e){
+            Log.d("LocationServices", "Ah ah ah! Mudduhsukka you cant do that.\n");
+        }
+        if (loc != null) {
+            //mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
+            //mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+            currentUser.updateLocation(new LatLng(loc.getLatitude(), loc.getLongitude()));
+            Log.d("LocationServices", "GOT LOCATION: (" + loc.getLatitude() + ", " + loc.getLongitude() + ")\n");
+        }else{
+            Log.d("LocationServices", "SHIT BRUH, could not locate\n");
+        }
     }
 
     @Override

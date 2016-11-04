@@ -57,8 +57,9 @@ public class SquadLocationActivity extends AppCompatActivity implements OnMapRea
                 .position(new LatLng(40.4237, -86.9100))
                 .title("Purdue"));
 
-        currentUser.updateLocation(40.5000, -87.000);
-        Log.d("SquadLocation", "currentUserLocation: " + currentUser.getName() + "  (" + currentUser.getLat() + ", " + currentUser.getLng() + ")\n");
+        // TODO: Get current location somehow
+        currentUser.updateLocation(40.427608, -86.917040);
+        //Log.d("SquadLocation", "currentUserLocation: " + currentUser.getName() + "  (" + currentUser.getLat() + ", " + currentUser.getLng() + ")\n");
         map.addMarker(new MarkerOptions()
                 .position(new LatLng(currentUser.getLat(), currentUser.getLng()))
                 .title(currentUser.getName()));

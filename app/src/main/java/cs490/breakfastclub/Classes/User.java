@@ -1,5 +1,7 @@
 package cs490.breakfastclub.Classes;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 /**
@@ -29,6 +31,7 @@ public class User {
     private String squadRole;
     private boolean partOfSquad;
     private double lat, lng;
+    private LatLng location;
 
     public User(String name, String userId, String profileImageUrl, ArrayList<User> friends){
         this.name = name;
@@ -160,8 +163,15 @@ public class User {
     }
 
     public void updateLocation(double lt, double lg) { lat = lt; lng = lg; }
+    public void updateLocation(LatLng loc) { location = loc; }
     public double getLat() { return lat; }
     public double getLng() { return lng; }
+    public LatLng getLocation() {
+
+
+
+        return location;
+    }
 
     public int getNumberOfOffensives() {
         return numberOfOffensives;
