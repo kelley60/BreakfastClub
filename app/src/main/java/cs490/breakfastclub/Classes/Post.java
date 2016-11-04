@@ -17,12 +17,14 @@ public class Post {
     private String imgURL;
     private Date date;
     private int score;
+    private String userId;
 
     public Post(String message, String imgURL, Date date){
         this.message = message;
         this.imgURL = imgURL;
         this.date = date;
         this.score = 0;
+        this.userId = null;
     }
 
 

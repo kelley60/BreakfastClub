@@ -1,5 +1,7 @@
 package cs490.breakfastclub.Classes;
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,18 +13,18 @@ import java.util.Date;
 public class Breakfast {
 
     private Date date;
-    private String eventInfo;
+    private String description;
     private ArrayList<Post> campusFeed;
     private Post topPhoto;
     private boolean currentBreakfast;
+    private String breakfastId;
 
-    public Breakfast(Date date, String eventInfo){
+    public Breakfast(Date date, String description){
         this.date = date;
-        this.eventInfo = eventInfo;
+        this.description = description;
         campusFeed = new ArrayList<Post>();
         topPhoto = null;
         currentBreakfast = true;
-
     }
 
 
@@ -38,7 +40,13 @@ public class Breakfast {
         //LOAD 10 PICTURES INTO CURRENTBREAKFAST
     }
 
-
+    private void writeNewBreakfast(DatabaseReference mDatabase) {
+        /*
+        mDatabase.child("Breakfast").child(this.getBreakfastId()).child("Description").setValue(description);
+        mDatabase.child("Breakfast").child(this.getBreakfastId()).child("").setValue(user.getProfileImageUrl());
+        mDatabase.child("Breakfast").child(this.getBreakfastId()).child("receivesPushNotifications").setValue(user.isReceivesPushNotifications());
+        */
+    }
 
 
 
@@ -72,12 +80,12 @@ public class Breakfast {
         this.date = date;
     }
 
-    public String getEventInfo() {
-        return eventInfo;
+    public String getDescription() {
+        return description;
     }
 
-    public void setEventInfo(String eventInfo) {
-        this.eventInfo = eventInfo;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public ArrayList<Post> getCampusFeed() {
@@ -94,5 +102,21 @@ public class Breakfast {
 
     public void setTopPhoto(Post topPhoto) {
         this.topPhoto = topPhoto;
+    }
+
+    public boolean isCurrentBreakfast() {
+        return currentBreakfast;
+    }
+
+    public void setCurrentBreakfast(boolean currentBreakfast) {
+        this.currentBreakfast = currentBreakfast;
+    }
+
+    public String getBreakfastId() {
+        return breakfastId;
+    }
+
+    public void setBreakfastId(String breakfastId) {
+        this.breakfastId = breakfastId;
     }
 }

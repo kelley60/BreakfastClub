@@ -1,5 +1,8 @@
 package cs490.breakfastclub;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -14,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import org.w3c.dom.Text;
 
 import java.util.Calendar;
@@ -25,7 +30,9 @@ import cs490.breakfastclub.Classes.Post;
 import cs490.breakfastclub.Classes.TimeFunctions;
 import cs490.breakfastclub.Classes.User;
 
+import static cs490.breakfastclub.Classes.Breakfast.getCurrentBreakfast;
 import static cs490.breakfastclub.Classes.TimeFunctions.isDuringBreakfast;
+import static cs490.breakfastclub.GeofenceTransitionsIntentService.MYPREFERENCES;
 
 public class CampusFeedActivity extends AppCompatActivity {
 
@@ -39,6 +46,7 @@ public class CampusFeedActivity extends AppCompatActivity {
     User currentUser;
     Post currentPost;
     ImageView image;
+    int tempScore;
 
 
     @Override
@@ -110,14 +118,14 @@ public class CampusFeedActivity extends AppCompatActivity {
         upArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //increaseCurrentPostScore();
+                increaseCurrentPostScore();
             }
         });
 
         downArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //decreaseCurrentPostScore();
+                decreaseCurrentPostScore();
             }
         });
 
@@ -143,7 +151,7 @@ public class CampusFeedActivity extends AppCompatActivity {
         removePictureButton.setVisibility(View.INVISIBLE);
 
         /*
-        currentUser = User.getCurrentUser();
+        currentUser = ((MyApplication) getApplication()).getCurrentUser();
         currentBreakfast = Breakfast.getCurrentBreakfast();
         currentPost = currentBreakfast.getCampusFeed().get(currentUser.getCurrentPositionInFeed());
         pictureScore.setText(currentPost.getScore());
@@ -154,11 +162,9 @@ public class CampusFeedActivity extends AppCompatActivity {
         if (Permission == User.Permissions.Developer || Permission == User.Permissions.Moderator){
             removePictureButton.setVisibility(View.VISIBLE);
         }
-
         */
 
-
-
+        tempScore = 0;
 
     }
 
@@ -176,21 +182,34 @@ public class CampusFeedActivity extends AppCompatActivity {
     }
 
     private void decreaseCurrentPostScore() {
+
+        /*
         boolean hasVotedOnThisPic = currentUser.getHasVoted().get(currentUser.getCurrentPositionInFeed());
         if (hasVotedOnThisPic == false){
             currentPost.setScore(currentPost.getScore() - 1);
             currentUser.getHasVoted().set(currentUser.getCurrentPositionInFeed() ,true);
+            pictureScore.setText(currentPost.getScore());
             //TODO save to DB
+        }
+        */
+        if (tempScore > -5) {
+            tempScore -= 1;
+            pictureScore.setText(tempScore + "");
         }
     }
 
     private void increaseCurrentPostScore() {
+        /*
         boolean hasVotedOnThisPic = currentUser.getHasVoted().get(currentUser.getCurrentPositionInFeed());
         if (hasVotedOnThisPic == false){
             currentPost.setScore(currentPost.getScore() + 1);
             currentUser.getHasVoted().set(currentUser.getCurrentPositionInFeed() ,true);
+            pictureScore.setText(currentPost.getScore());
             //TODO save to DB
         }
+        */
+        tempScore += 1;
+        pictureScore.setText(tempScore + "");
     }
 
     @Override
@@ -204,6 +223,30 @@ public class CampusFeedActivity extends AppCompatActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static Intent chooseCampusFeedActivity(Context context) {
+        Intent intent = new Intent(context, CampusFeedActivity.class);
+
+        SharedPreferences sharedpreferences = context.getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        boolean onCampus = sharedpreferences.getBoolean("IsInGeofence", true);
+        boolean isDuringBreakfast = sharedpreferences.getBoolean("isDuringBreakfast", true);
+
+        Breakfast currentBreakfast = getCurrentBreakfast();
+
+        if (onCampus == false) {
+            intent.putExtra("Layout Type", "Not on Campus");
+        }
+        else if (1 == 1){
+        //else if (TimeFunctions.isDuringVotingPeriod() == true){
+            //not breakfast club time
+            intent.putExtra("Layout Type", "Not Time");
+        }
+        else{
+            intent.putExtra("Layout Type", "Campus Feed");
+        }
+        return intent;
     }
 
 }

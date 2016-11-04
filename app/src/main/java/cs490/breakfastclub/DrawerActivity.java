@@ -87,7 +87,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         int id = item.getItemId();
 
         if (id == R.id.nav_campusFeed) {
-            Intent intent = chooseCampusFeedActivity();
+            Intent intent = CampusFeedActivity.chooseCampusFeedActivity(this);
             startActivity(intent);
         } else if (id == R.id.nav_createBreakfast) {
             Intent intent = new Intent(DrawerActivity.this, CreateBreakfastActivity.class);
@@ -132,30 +132,6 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private Intent chooseCampusFeedActivity() {
-        Intent intent = new Intent(DrawerActivity.this, CampusFeedActivity.class);
-
-        SharedPreferences sharedpreferences = getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        boolean onCampus = sharedpreferences.getBoolean("IsInGeofence", true);
-        boolean isDuringBreakfast = sharedpreferences.getBoolean("isDuringBreakfast", true);
-
-        Breakfast currentBreakfast = getCurrentBreakfast();
-
-        if (onCampus == false) {
-            intent.putExtra("Layout Type", "Not on Campus");
-        }
-        //else if (1 == 1){
-        else if (TimeFunctions.isDuringVotingPeriod() == true){
-            //not breakfast club time
-            intent.putExtra("Layout Type", "Not Time");
-        }
-        else{
-            intent.putExtra("Layout Type", "Campus Feed");
-        }
-        return intent;
     }
 
     //TODO get current breakfast from the database
