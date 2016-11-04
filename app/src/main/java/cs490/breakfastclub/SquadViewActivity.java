@@ -278,15 +278,15 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // System.out.println("In the Yes function");
                         // If leaver is captain, ask to change captain or delete squad
                         if (currentUser.getSquadRole().equals("captain")) {
-                            // System.out.println("CUrrent user equals captain");
                             // Captain is the only user in here. Delete the squad
                             if (currentUser.getSquad().getUserList().size() == 1) {
-                                mDatabase.child("Users/" + currentUser.getUserId()).child("Squad").removeValue();
+                                currentUser.setPartOfSquad(false);
+                                mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
+                                mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
                                 mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).removeValue();
-                                System.out.println("Leaving squad");
+//                                System.out.println("Leaving squad");
                                 finish();
                             }
                             // Captain is not the only user. Ask to change captain or delete squad
@@ -298,7 +298,9 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                         else
                         {
                             // Delete user from Squad
-                            mDatabase.child("Users/" + currentUser.getUserId()).child("Squad").removeValue();
+                            currentUser.setPartOfSquad(false);
+                            mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
+                            mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
                             mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(currentUser.getUserId()).removeValue();
                             finish();
                         }
