@@ -26,4 +26,9 @@
     <string name="title_activity_drawer_layout">DrawerLayout</string>
     <string name="title_activity_drawer">DrawerActivity</string>
     <string name="title_activity_squad_location">SquadLocationActivity</string>
+    <string name="request_permission">This app needs camera and read/write to external storage permission.</string>
+    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+    <string name="picture">Picture</string>
+    <string name="description_info">Info</string>
+
 </resources>

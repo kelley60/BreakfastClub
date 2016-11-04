@@ -8,4 +8,6 @@
     <color name="Purdue_White">#FFFFFF</color>
     <color name="Gray">#AAAAAA</color>
     <color name="Red">#FF0000</color>
+    <color name="control_background">#cc4285f4</color>
+    <color name="black_overlay">#66000000</color>
 </resources>

@@ -26,8 +26,9 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:multidex:1.0.0'    // TODO:
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:multidex:1.0.0'
+    // TODO:
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
 
@@ -42,6 +43,7 @@ dependencies {
     compile 'com.google.firebase:firebase-storage:9.6.1'
     compile 'com.google.android.gms:play-services-location:9.6.1'
     compile 'com.google.android.gms:play-services:9.6.1'
+    compile 'com.android.support:support-v13:25.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

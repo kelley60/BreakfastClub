@@ -1,5 +1,6 @@
 package cs490.breakfastclub;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,13 +13,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 
+import cs490.breakfastclub.Camera.CameraActivity;
 import cs490.breakfastclub.Classes.Breakfast;
 import cs490.breakfastclub.Classes.GeofenceManager;
-import cs490.breakfastclub.Classes.User;
 import cs490.breakfastclub.Classes.TimeFunctions;
+import cs490.breakfastclub.Classes.User;
 import cs490.breakfastclub.CreateBreakfastActivities.CreateBreakfastActivity;
 
 import static cs490.breakfastclub.GeofenceTransitionsIntentService.MYPREFERENCES;
@@ -122,6 +122,10 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             }
         }else if (id == R.id.nav_adminViewUsers) {
             Intent intent = new Intent(DrawerActivity.this, AdminViewUsersActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.nav_camera) {
+            Intent intent = new Intent(DrawerActivity.this, CameraActivity.class);
             startActivity(intent);
         }
 
