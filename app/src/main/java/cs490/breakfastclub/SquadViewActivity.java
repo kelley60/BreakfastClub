@@ -139,8 +139,9 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
         });
 
         // Populate the list view
+        /*
         ArrayList<User> userList = new ArrayList<>();
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 2; i++)
         {
             User u = new User("Name " + i, "[url_here]", null);
             userList.add(u);
@@ -150,7 +151,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
 
         ListView lView = (ListView) findViewById(R.id.lstSquadMembers);
         lView.setAdapter(uAdapter);
-
+        */
 
 
         // Get user's last known location
