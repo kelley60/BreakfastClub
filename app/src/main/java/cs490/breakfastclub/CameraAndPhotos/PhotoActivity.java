@@ -1,4 +1,4 @@
-package cs490.breakfastclub.Camera;
+package cs490.breakfastclub.CameraAndPhotos;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,8 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import cs490.breakfastclub.Classes.Photo;
-import cs490.breakfastclub.Classes.User;
+import cs490.breakfastclub.UserFiles.User;
 import cs490.breakfastclub.MyApplication;
 import cs490.breakfastclub.R;
 

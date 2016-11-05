@@ -1,6 +1,5 @@
-package cs490.breakfastclub;
+package cs490.breakfastclub.SquadFiles;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -27,7 +26,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import cs490.breakfastclub.Classes.User;
+import cs490.breakfastclub.UserFiles.User;
+import cs490.breakfastclub.MyApplication;
+import cs490.breakfastclub.R;
 
 public class SquadLocationActivity extends AppCompatActivity implements OnMapReadyCallback {
 

@@ -1,4 +1,4 @@
-package cs490.breakfastclub.Camera;
+package cs490.breakfastclub.CameraAndPhotos;
 
 /**
  * Created by Emma on 10/30/2016.
@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 import java.net.URL;
 import java.util.ArrayList;
 
-import cs490.breakfastclub.Classes.User;
+import cs490.breakfastclub.UserFiles.User;
 
 public class ImageAdapter extends BaseAdapter {
     static private Context mContext;

@@ -1,11 +1,8 @@
-package cs490.breakfastclub;
+package cs490.breakfastclub.SquadFiles;
 
 
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,20 +10,17 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 import cs490.breakfastclub.Classes.Post;
-import cs490.breakfastclub.Classes.User;
+import cs490.breakfastclub.UserFiles.User;
+import cs490.breakfastclub.DisplayMessageActivity;
+import cs490.breakfastclub.MyApplication;
+import cs490.breakfastclub.R;
 
 public class SquadMessageAdapter extends BaseAdapter implements ListAdapter {
     ArrayList<Post> messages;

@@ -1,11 +1,9 @@
-package cs490.breakfastclub;
+package cs490.breakfastclub.BreakfastFiles;
 
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -17,23 +15,19 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-
-import org.w3c.dom.Text;
-
 import java.util.Calendar;
 
-import cs490.breakfastclub.Camera.CameraActivity;
-import cs490.breakfastclub.Classes.Breakfast;
+import cs490.breakfastclub.CameraAndPhotos.CameraActivity;
 import cs490.breakfastclub.Classes.Post;
 import cs490.breakfastclub.Classes.TimeFunctions;
-import cs490.breakfastclub.Classes.User;
+import cs490.breakfastclub.UserFiles.User;
+import cs490.breakfastclub.R;
 
-import static cs490.breakfastclub.Classes.Breakfast.getCurrentBreakfast;
+import static cs490.breakfastclub.BreakfastFiles.Breakfast.getCurrentBreakfast;
 import static cs490.breakfastclub.Classes.TimeFunctions.isDuringBreakfast;
-import static cs490.breakfastclub.GeofenceTransitionsIntentService.MYPREFERENCES;
+import static cs490.breakfastclub.GeofenceFiles.GeofenceTransitionsIntentService.MYPREFERENCES;
 
-public class CampusFeedActivity extends AppCompatActivity {
+public class BreakfastFeedActivity extends AppCompatActivity {
 
     ImageButton upArrow;
     ImageButton downArrow;
@@ -177,7 +171,7 @@ public class CampusFeedActivity extends AppCompatActivity {
 
     //TODO for Emma
     private void launchCameraActivity() {
-        Intent intent = new Intent(CampusFeedActivity.this, CameraActivity.class);
+        Intent intent = new Intent(BreakfastFeedActivity.this, CameraActivity.class);
         startActivity(intent);
     }
 
@@ -226,7 +220,7 @@ public class CampusFeedActivity extends AppCompatActivity {
     }
 
     public static Intent chooseCampusFeedActivity(Context context) {
-        Intent intent = new Intent(context, CampusFeedActivity.class);
+        Intent intent = new Intent(context, BreakfastFeedActivity.class);
 
         SharedPreferences sharedpreferences = context.getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();

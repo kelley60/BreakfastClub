@@ -17,7 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import cs490.breakfastclub.Classes.User;
+import cs490.breakfastclub.UserFiles.User;
 
 public class ProfileViewActivity extends AppCompatActivity {
 

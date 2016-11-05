@@ -1,4 +1,4 @@
-package cs490.breakfastclub.Classes;
+package cs490.breakfastclub.GeofenceFiles;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -17,8 +17,6 @@ import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.UUID;
-
-import cs490.breakfastclub.GeofenceTransitionsIntentService;
 
 /**
  * Created by Sean on 11/2/16.

@@ -1,4 +1,4 @@
-package cs490.breakfastclub;
+package cs490.breakfastclub.GeofenceFiles;
 
 import android.app.IntentService;
 import android.content.Context;

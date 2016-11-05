@@ -1,10 +1,11 @@
-package cs490.breakfastclub.Classes;
+package cs490.breakfastclub.BreakfastFiles;
 
 import com.google.firebase.database.DatabaseReference;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
+
+import cs490.breakfastclub.Classes.Post;
 
 /**
  * Created by Sean on 10/17/16.

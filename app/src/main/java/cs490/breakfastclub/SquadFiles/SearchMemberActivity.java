@@ -1,4 +1,4 @@
-package cs490.breakfastclub;
+package cs490.breakfastclub.SquadFiles;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,8 +9,9 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import cs490.breakfastclub.Classes.User;
-import cs490.breakfastclub.Classes.UserAdapter;
+import cs490.breakfastclub.UserFiles.User;
+import cs490.breakfastclub.UserFiles.UserAdapter;
+import cs490.breakfastclub.R;
 
 public class SearchMemberActivity extends AppCompatActivity {
 

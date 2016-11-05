@@ -64,30 +64,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
         <activity android:name=".DisplayMessageActivity" />
-        <activity android:name=".CampusFeedActivity" />
-        <activity android:name=".CreateBreakfastActivities.CreateBreakfastActivity" />
-        <activity android:name=".SquadCreateActivity" />
-        <activity android:name=".SquadViewActivity" />
+        <activity android:name=".BreakfastFiles.BreakfastFeedActivity" />
+        <activity android:name=".BreakfastFiles.CreateBreakfastActivity" />
+        <activity android:name=".SquadFiles.SquadCreateActivity" />
+        <activity android:name=".SquadFiles.SquadViewActivity" />
         <activity android:name=".ProfileViewActivity" />
         <activity
             android:name=".DrawerActivity"
             android:label="@string/title_activity_drawer"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".SquadGalleryActivity" />
+        <activity android:name=".SquadFiles.SquadGalleryActivity" />
 
         <service
-            android:name=".GeofenceTransitionsIntentService"
+            android:name=".GeofenceFiles.GeofenceTransitionsIntentService"
             android:exported="false" />
 
         <activity android:name=".AdminViewUsersActivity" />
-        <activity android:name=".SearchMemberActivity" />
-        <activity android:name=".CreateBreakfastActivities.CreateBreakfastActivity2" />
-        <activity android:name=".CreateBreakfastActivities.CreateBreakfastActivity3" />
-        <activity android:name=".SquadLocationActivity"></activity>
-        <activity android:name=".Camera.CameraActivity"></activity>
-        <activity android:name=".Camera.PhotoActivity"></activity>
+        <activity android:name=".SquadFiles.SearchMemberActivity" />
+        <activity android:name=".BreakfastFiles.CreateBreakfastActivity2" />
+        <activity android:name=".BreakfastFiles.CreateBreakfastActivity3" />
+        <activity android:name=".SquadFiles.SquadLocationActivity"></activity>
+        <activity android:name=".CameraAndPhotos.CameraActivity"></activity>
+        <activity android:name=".CameraAndPhotos.PhotoActivity"></activity>
     </application>
 
 </manifest>

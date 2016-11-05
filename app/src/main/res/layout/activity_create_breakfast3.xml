@@ -10,7 +10,7 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     android:background="@drawable/gradient_background"
-    tools:context="cs490.breakfastclub.CreateBreakfastActivities.CreateBreakfastActivity">
+    tools:context="cs490.breakfastclub.BreakfastFiles.CreateBreakfastActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"

@@ -1,4 +1,4 @@
-package cs490.breakfastclub.CreateBreakfastActivities;
+package cs490.breakfastclub.BreakfastFiles;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
