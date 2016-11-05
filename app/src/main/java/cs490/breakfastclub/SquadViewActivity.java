@@ -57,7 +57,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
 
     // TODO: Populate UI with information from database
 
-
+    private boolean captainDeletingSquad = false;
     private ArrayList<User> mMemberNames;
     private ArrayList<User> mFriends;
     private DrawerLayout mDrawerLayout;
@@ -257,7 +257,6 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
 
     //@Override
     public void leaveSquadConf(View view) {
-//        final boolean captCheck = false;
         mDatabase = FirebaseDatabase.getInstance().getReference();
         final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
 
@@ -277,13 +276,27 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                                 mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
                                 mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
                                 mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).removeValue();
-//                                System.out.println("Leaving squad");
                                 finish();
                             }
                             // Captain is not the only user. Ask to change captain or delete squad
-                            else {
-
-//                                captCheck = true;
+                            else
+                            {
+                                new AlertDialog.Builder(SquadViewActivity.this)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setTitle("Dun dun dunnnnnnn")
+                                .setMessage("Would you like to delete your squad or change ownership?")
+                                .setPositiveButton("Change Owner", null)
+                                .setNegativeButton("Delete Squad", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        currentUser.setPartOfSquad(false);
+                                        captainDeletingSquad = true;
+                                        mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
+                                        mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
+                                        mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).removeValue();
+                                    }
+                                })
+                                .show();
                             }
                         }
                         else
@@ -300,24 +313,6 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                 })  // end of setPositiveButton
                 .setNegativeButton("No", null)
                 .show();
-
-//        if (captCheck)
-//        {
-//            new AlertDialog.Builder(this)
-//                    .setIcon(android.R.drawable.ic_dialog_alert)
-//                    .setTitle("Dun dun dunnnnnnn")
-//                    .setMessage("Would you like to delete your squad or change ownership?")
-//                    .setPositiveButton("Change Owner", null)
-//                    .setNegativeButton("Delete Squad", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//
-//
-//                            finish();
-//                        }
-//                    })
-//                    .show();
-//        }
     }
 
     @Override
