@@ -1,4 +1,4 @@
-package cs490.breakfastclub;
+package cs490.breakfastclub.SquadFiles;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -14,9 +14,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-import cs490.breakfastclub.Camera.ImageAdapter;
-import cs490.breakfastclub.Camera.PhotoViewerActivity;
-import cs490.breakfastclub.Classes.User;
+import cs490.breakfastclub.CameraAndPhotos.ImageAdapter;
+import cs490.breakfastclub.CameraAndPhotos.PhotoViewerActivity;
+import cs490.breakfastclub.UserFiles.User;
+import cs490.breakfastclub.MyApplication;
+import cs490.breakfastclub.R;
 
 public class SquadGalleryActivity extends AppCompatActivity {
 

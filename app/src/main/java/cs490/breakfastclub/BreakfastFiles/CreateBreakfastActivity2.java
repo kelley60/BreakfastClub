@@ -1,4 +1,4 @@
-package cs490.breakfastclub.CreateBreakfastActivities;
+package cs490.breakfastclub.BreakfastFiles;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,51 +8,52 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TimePicker;
+import android.widget.DatePicker;
 
-import cs490.breakfastclub.LoginActivity;
 import cs490.breakfastclub.R;
 
-public class CreateBreakfastActivity extends AppCompatActivity {
+public class CreateBreakfastActivity2 extends AppCompatActivity {
 
-    EditText description;
+    DatePicker datePicker;
     Button nextButton;
-    ImageView image;
 
+    String descriptionString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_breakfast1);
+        setContentView(R.layout.activity_create_breakfast2);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("Create Breakfast");
 
+        Bundle bundle = getIntent().getExtras();
+        descriptionString = bundle.getString("Description");
+
         UIInit();
     }
 
     private void UIInit() {
-        description = (EditText) findViewById(R.id.createBreakfastDescriptionEditTextId);
-        image = (ImageView) findViewById(R.id.createBreakfastImageId);
-        nextButton = (Button) findViewById(R.id.createBreakfastNextButton1Id);
+        datePicker = (DatePicker) findViewById(R.id.createBreakfastDatePickerId);
+        nextButton = (Button) findViewById(R.id.createBreakfastNextButton2Id);
+
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CreateBreakfastActivity.this, CreateBreakfastActivity2.class);
-                String descriptionString = description.getText().toString();
+                int day = datePicker.getDayOfMonth();
+                int year = datePicker.getYear();
+                int month = datePicker.getMonth();
+                Intent intent = new Intent(CreateBreakfastActivity2.this, CreateBreakfastActivity3.class);
                 intent.putExtra("description", descriptionString);
+                intent.putExtra("day", day);
+                intent.putExtra("month", month);
+                intent.putExtra("year", year);
                 startActivity(intent);
             }
         });
-    }
-
-    void changeBrkfstPic()
-    {
 
     }
 

@@ -5,8 +5,8 @@ package cs490.breakfastclub;
  */
 import android.app.Application;
 
-import cs490.breakfastclub.Classes.Photos;
-import cs490.breakfastclub.Classes.User;
+import cs490.breakfastclub.CameraAndPhotos.Photos;
+import cs490.breakfastclub.UserFiles.User;
 
 public class MyApplication extends Application {
 

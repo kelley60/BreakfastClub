@@ -34,7 +34,6 @@ public class Post {
         this.message = message;
         this.imgURL = imgURL;
         this.date = date;
-        this.score = 0;
         senderID = null;
         senderName = null;
     }

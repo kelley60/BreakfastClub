@@ -13,7 +13,7 @@ public class TimeFunctions {
     public TimeFunctions(){
     }
 
-    private static final int NINE_HOURS_IN_SECONDS = 32400;
+    private static final int TWELVE_HOURS_IN_SECONDS = 43200;
     private static final int TWENTYONE_HOURS_IN_SECONDS = 75600;
 
     public static String timeUntilEventString(Calendar breakfastTime) {
@@ -77,7 +77,7 @@ public class TimeFunctions {
         long breakfastStartTimeSeconds = (breakfastCalendar.getTimeInMillis() / 1000);
         int difference = (int)(currentTimeSeconds - breakfastStartTimeSeconds);
 
-        if (difference > 0 && difference <= NINE_HOURS_IN_SECONDS) {
+        if (difference > 0 && difference <= TWELVE_HOURS_IN_SECONDS) {
             return true;
         }
         else{

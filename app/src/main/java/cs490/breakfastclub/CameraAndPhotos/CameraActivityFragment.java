@@ -1,4 +1,4 @@
-package cs490.breakfastclub.Camera;
+package cs490.breakfastclub.CameraAndPhotos;
 
 import android.Manifest;
 import android.app.Activity;

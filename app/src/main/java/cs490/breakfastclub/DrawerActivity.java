@@ -1,9 +1,7 @@
 package cs490.breakfastclub;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,14 +12,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import cs490.breakfastclub.Camera.CameraActivity;
-import cs490.breakfastclub.Classes.Breakfast;
-import cs490.breakfastclub.Classes.GeofenceManager;
-import cs490.breakfastclub.Classes.TimeFunctions;
-import cs490.breakfastclub.Classes.User;
-import cs490.breakfastclub.CreateBreakfastActivities.CreateBreakfastActivity;
-
-import static cs490.breakfastclub.GeofenceTransitionsIntentService.MYPREFERENCES;
+import cs490.breakfastclub.BreakfastFiles.BreakfastFeedActivity;
+import cs490.breakfastclub.CameraAndPhotos.CameraActivity;
+import cs490.breakfastclub.BreakfastFiles.Breakfast;
+import cs490.breakfastclub.GeofenceFiles.GeofenceManager;
+import cs490.breakfastclub.UserFiles.User;
+import cs490.breakfastclub.BreakfastFiles.CreateBreakfastActivity;
+import cs490.breakfastclub.SquadFiles.SquadCreateActivity;
+import cs490.breakfastclub.SquadFiles.SquadViewActivity;
 
 public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -87,7 +85,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         int id = item.getItemId();
 
         if (id == R.id.nav_campusFeed) {
-            Intent intent = chooseCampusFeedActivity();
+            Intent intent = BreakfastFeedActivity.chooseCampusFeedActivity(this);
             startActivity(intent);
         } else if (id == R.id.nav_createBreakfast) {
             Intent intent = new Intent(DrawerActivity.this, CreateBreakfastActivity.class);
@@ -132,30 +130,6 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private Intent chooseCampusFeedActivity() {
-        Intent intent = new Intent(DrawerActivity.this, CampusFeedActivity.class);
-
-        SharedPreferences sharedpreferences = getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        boolean onCampus = sharedpreferences.getBoolean("IsInGeofence", true);
-        boolean isDuringBreakfast = sharedpreferences.getBoolean("isDuringBreakfast", true);
-
-        Breakfast currentBreakfast = getCurrentBreakfast();
-
-        if (onCampus == false) {
-            intent.putExtra("Layout Type", "Not on Campus");
-        }
-        //else if (1 == 1){
-        else if (TimeFunctions.isDuringVotingPeriod() == true){
-            //not breakfast club time
-            intent.putExtra("Layout Type", "Not Time");
-        }
-        else{
-            intent.putExtra("Layout Type", "Campus Feed");
-        }
-        return intent;
     }
 
     //TODO get current breakfast from the database

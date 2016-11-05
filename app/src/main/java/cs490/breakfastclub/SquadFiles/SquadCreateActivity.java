@@ -1,4 +1,4 @@
-package cs490.breakfastclub;
+package cs490.breakfastclub.SquadFiles;
 
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -28,8 +27,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 
-import cs490.breakfastclub.Classes.Squad;
-import cs490.breakfastclub.Classes.User;
+import cs490.breakfastclub.UserFiles.User;
+import cs490.breakfastclub.MyApplication;
+import cs490.breakfastclub.R;
 
 public class SquadCreateActivity extends AppCompatActivity {
 

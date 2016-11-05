@@ -1,4 +1,4 @@
-package cs490.breakfastclub;
+package cs490.breakfastclub.SquadFiles;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,12 +24,16 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
-import cs490.breakfastclub.Classes.User;
+import cs490.breakfastclub.UserFiles.User;
+import cs490.breakfastclub.MyApplication;
+import cs490.breakfastclub.R;
 
 public class SquadLocationActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private ArrayList<User> mSquad;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,33 @@ public class SquadLocationActivity extends AppCompatActivity implements OnMapRea
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
+        Button btnAddMarkers = (Button) findViewById(R.id.btnAddMarkers);
+        btnAddMarkers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: Add marker on map for each member
+                Random rand = new Random();
+                double latBase = 40.427608;
+                double lngBase = -86.917040;
+                latBase += rand.nextDouble() / 1000;
+                lngBase += rand.nextDouble() / 10000;
+
+                Log.d("Location", "Sizeof mSquad is " + mSquad.size() + "\n");
+                for(int i = 0; i < mSquad.size(); i++)
+                {
+                    mSquad.get(i).updateLocation(latBase, lngBase);
+                    Log.d("Location", "SquadMember + " + mSquad.get(i).getName() + "\n");
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(mSquad.get(i).getLat(), mSquad.get(i).getLng()))
+                            .title(mSquad.get(i).getName())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    Log.d("SquadLocation", "loop iteration: " + i + "\n");
+                }
+            }
+        });
+
+
     }
 
     @Override
@@ -52,6 +85,7 @@ public class SquadLocationActivity extends AppCompatActivity implements OnMapRea
         /*map.addMarker(new MarkerOptions()
                 .position(new LatLng(42.000, -87.000))
                 .title("Trevor Edris"));*/
+        mMap = map;
 
         mSquad = new ArrayList<>();
         final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
@@ -104,7 +138,12 @@ public class SquadLocationActivity extends AppCompatActivity implements OnMapRea
 
 
         // TODO: Get current location somehow
-        currentUser.updateLocation(40.427608, -86.917040);
+        Random rand = new Random();
+        double latBase = 40.427608;
+        double lngBase = -86.917040;
+        latBase += rand.nextDouble() / 1000;
+        lngBase += rand.nextDouble() / 10000;
+        currentUser.updateLocation(latBase, lngBase);
         //Log.d("SquadLocation", "currentUserLocation: " + currentUser.getName() + "  (" + currentUser.getLat() + ", " + currentUser.getLng() + ")\n");
         map.addMarker(new MarkerOptions()
                 .position(new LatLng(currentUser.getLat(), currentUser.getLng()))
@@ -152,15 +191,7 @@ public class SquadLocationActivity extends AppCompatActivity implements OnMapRea
             });
         }
 
-        // TODO: Add marker on map for each member
-        for(int i = 0; i < mSquad.size(); i++)
-        {
-            /*map.addMarker(new MarkerOptions()
-            .position(new LatLng(mSquad.get(i).getLat(), mSquad.get(i).getLng()))
-            .title(mSquad.get(i).getName())
-            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));*/
-            Log.d("SquadLocation", "loop iteration: " + i + "\n");
-        }
+
     }
 
     @Override

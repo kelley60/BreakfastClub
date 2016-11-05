@@ -1,4 +1,4 @@
-package cs490.breakfastclub.Classes;
+package cs490.breakfastclub.CameraAndPhotos;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

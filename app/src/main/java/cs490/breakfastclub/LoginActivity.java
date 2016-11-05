@@ -53,8 +53,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import cs490.breakfastclub.Classes.Photos;
-import cs490.breakfastclub.Classes.User;
+import cs490.breakfastclub.CameraAndPhotos.Photos;
+import cs490.breakfastclub.UserFiles.User;
 
 
 /**

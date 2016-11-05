@@ -1,6 +1,9 @@
-package cs490.breakfastclub;
+package cs490.breakfastclub.BreakfastFiles;
 
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -14,15 +17,17 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
-import cs490.breakfastclub.Camera.CameraActivity;
-import cs490.breakfastclub.Classes.Breakfast;
+import cs490.breakfastclub.CameraAndPhotos.CameraActivity;
 import cs490.breakfastclub.Classes.Post;
 import cs490.breakfastclub.Classes.TimeFunctions;
-import cs490.breakfastclub.Classes.User;
+import cs490.breakfastclub.UserFiles.User;
+import cs490.breakfastclub.R;
 
+import static cs490.breakfastclub.BreakfastFiles.Breakfast.getCurrentBreakfast;
 import static cs490.breakfastclub.Classes.TimeFunctions.isDuringBreakfast;
+import static cs490.breakfastclub.GeofenceFiles.GeofenceTransitionsIntentService.MYPREFERENCES;
 
-public class CampusFeedActivity extends AppCompatActivity {
+public class BreakfastFeedActivity extends AppCompatActivity {
 
     ImageButton upArrow;
     ImageButton downArrow;
@@ -34,6 +39,7 @@ public class CampusFeedActivity extends AppCompatActivity {
     User currentUser;
     Post currentPost;
     ImageView image;
+    int tempScore;
 
 
     @Override
@@ -105,14 +111,14 @@ public class CampusFeedActivity extends AppCompatActivity {
         upArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //increaseCurrentPostScore();
+                increaseCurrentPostScore();
             }
         });
 
         downArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //decreaseCurrentPostScore();
+                decreaseCurrentPostScore();
             }
         });
 
@@ -138,7 +144,7 @@ public class CampusFeedActivity extends AppCompatActivity {
         removePictureButton.setVisibility(View.INVISIBLE);
 
         /*
-        currentUser = User.getCurrentUser();
+        currentUser = ((MyApplication) getApplication()).getCurrentUser();
         currentBreakfast = Breakfast.getCurrentBreakfast();
         currentPost = currentBreakfast.getCampusFeed().get(currentUser.getCurrentPositionInFeed());
         pictureScore.setText(currentPost.getScore());
@@ -149,11 +155,9 @@ public class CampusFeedActivity extends AppCompatActivity {
         if (Permission == User.Permissions.Developer || Permission == User.Permissions.Moderator){
             removePictureButton.setVisibility(View.VISIBLE);
         }
-
         */
 
-
-
+        tempScore = 0;
 
     }
 
@@ -167,26 +171,39 @@ public class CampusFeedActivity extends AppCompatActivity {
 
     //TODO for Emma
     private void launchCameraActivity() {
-        Intent intent = new Intent(CampusFeedActivity.this, CameraActivity.class);
+        Intent intent = new Intent(BreakfastFeedActivity.this, CameraActivity.class);
         startActivity(intent);
     }
 
     private void decreaseCurrentPostScore() {
+
+        /*
         boolean hasVotedOnThisPic = currentUser.getHasVoted().get(currentUser.getCurrentPositionInFeed());
         if (hasVotedOnThisPic == false){
             currentPost.setScore(currentPost.getScore() - 1);
             currentUser.getHasVoted().set(currentUser.getCurrentPositionInFeed() ,true);
+            pictureScore.setText(currentPost.getScore());
             //TODO save to DB
+        }
+        */
+        if (tempScore > -5) {
+            tempScore -= 1;
+            pictureScore.setText(tempScore + "");
         }
     }
 
     private void increaseCurrentPostScore() {
+        /*
         boolean hasVotedOnThisPic = currentUser.getHasVoted().get(currentUser.getCurrentPositionInFeed());
         if (hasVotedOnThisPic == false){
             currentPost.setScore(currentPost.getScore() + 1);
             currentUser.getHasVoted().set(currentUser.getCurrentPositionInFeed() ,true);
+            pictureScore.setText(currentPost.getScore());
             //TODO save to DB
         }
+        */
+        tempScore += 1;
+        pictureScore.setText(tempScore + "");
     }
 
     @Override
@@ -200,6 +217,30 @@ public class CampusFeedActivity extends AppCompatActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static Intent chooseCampusFeedActivity(Context context) {
+        Intent intent = new Intent(context, BreakfastFeedActivity.class);
+
+        SharedPreferences sharedpreferences = context.getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        boolean onCampus = sharedpreferences.getBoolean("IsInGeofence", true);
+        boolean isDuringBreakfast = sharedpreferences.getBoolean("isDuringBreakfast", true);
+
+        Breakfast currentBreakfast = getCurrentBreakfast();
+
+        if (onCampus == false) {
+            intent.putExtra("Layout Type", "Not on Campus");
+        }
+        else if (1 == 1){
+        //else if (TimeFunctions.isDuringVotingPeriod() == true){
+            //not breakfast club time
+            intent.putExtra("Layout Type", "Not Time");
+        }
+        else{
+            intent.putExtra("Layout Type", "Campus Feed");
+        }
+        return intent;
     }
 
 }

@@ -9,8 +9,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import cs490.breakfastclub.Classes.User;
-import cs490.breakfastclub.Classes.UserAdapter;
+import cs490.breakfastclub.UserFiles.User;
+import cs490.breakfastclub.UserFiles.UserAdapter;
 
 public class AdminViewUsersActivity extends AppCompatActivity {
 

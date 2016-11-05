@@ -9,7 +9,7 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    tools:context="cs490.breakfastclub.SquadLocationActivity"
+    tools:context="cs490.breakfastclub.SquadFiles.SquadLocationActivity"
     android:background="@drawable/gradient_background">
 
     <android.support.v7.widget.Toolbar
@@ -32,11 +32,20 @@
                 android:text="Countdown: [XXh XXm]"
                 android:layout_alignParentEnd="true"
                 android:layout_margin="5dp"/>
+
+            <Button
+                android:id="@+id/btnAddMarkers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Find Members"
+                android:layout_centerHorizontal="true"/>
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
 
     <!-- Put all other UI elements below this comment! -->
+
+
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
@@ -53,7 +62,8 @@
         map:uiScrollGestures="true"
         map:uiTiltGestures="true"
         map:uiZoomControls="true"
-        map:uiZoomGestures="true"/>
+        map:uiZoomGestures="true"
+        />
 
 
 </RelativeLayout>

@@ -1,5 +1,6 @@
-package cs490.breakfastclub.CreateBreakfastActivities;
+package cs490.breakfastclub.BreakfastFiles;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +13,7 @@ import android.widget.TimePicker;
 import java.util.Calendar;
 
 import cs490.breakfastclub.Classes.TimeFunctions;
+import cs490.breakfastclub.DrawerActivity;
 import cs490.breakfastclub.R;
 
 public class CreateBreakfastActivity3 extends AppCompatActivity {
@@ -53,6 +55,8 @@ public class CreateBreakfastActivity3 extends AppCompatActivity {
                 int hour = timePicker.getCurrentHour();
                 int minute = timePicker.getCurrentMinute();
                 createBreakfastEvent(hour, minute);
+                Intent intent = new Intent(CreateBreakfastActivity3.this, DrawerActivity.class);
+                startActivity(intent);
             }
         });
     }

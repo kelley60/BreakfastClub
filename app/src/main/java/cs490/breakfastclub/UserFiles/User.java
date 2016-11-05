@@ -1,8 +1,10 @@
-package cs490.breakfastclub.Classes;
+package cs490.breakfastclub.UserFiles;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+
+import cs490.breakfastclub.SquadFiles.Squad;
 
 /**
  * Created by Sean on 10/17/16.

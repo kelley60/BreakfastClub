@@ -1,4 +1,4 @@
-package cs490.breakfastclub.Classes;
+package cs490.breakfastclub.UserFiles;
 
 import android.content.Context;
 import android.view.LayoutInflater;

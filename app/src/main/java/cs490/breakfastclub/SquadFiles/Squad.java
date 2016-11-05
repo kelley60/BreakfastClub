@@ -1,10 +1,10 @@
-package cs490.breakfastclub.Classes;
+package cs490.breakfastclub.SquadFiles;
 
 import android.graphics.Bitmap;
-import android.widget.ImageView;
 
-import java.security.acl.Group;
 import java.util.ArrayList;
+
+import cs490.breakfastclub.UserFiles.User;
 
 /**
  * Created by Sean on 10/17/16.
@@ -17,12 +17,12 @@ public class Squad {
     private String squadDesc;
     private Bitmap squadPhoto;
     private ArrayList<User> userList;
-    private GroupFeed groupFeed;
+    private SquadFeed squadFeed;
 
     public Squad()
     {
         this.userList = new ArrayList<User>();
-        this.groupFeed = new GroupFeed();
+        this.squadFeed = new SquadFeed();
     }
 
 
@@ -32,7 +32,7 @@ public class Squad {
         this.squadPhoto = squadPhoto;
         this.squadDesc = squadDesc;
         userList = new ArrayList<User>();
-        groupFeed = new GroupFeed();
+        squadFeed = new SquadFeed();
     }
 
 
@@ -74,12 +74,12 @@ public class Squad {
         this.userList = userList;
     }
 
-    public GroupFeed getGroupFeed() {
-        return groupFeed;
+    public SquadFeed getSquadFeed() {
+        return squadFeed;
     }
 
-    public void setGroupFeed(GroupFeed groupFeed) {
-        this.groupFeed = groupFeed;
+    public void setSquadFeed(SquadFeed squadFeed) {
+        this.squadFeed = squadFeed;
     }
 
     public String getSquadName() {

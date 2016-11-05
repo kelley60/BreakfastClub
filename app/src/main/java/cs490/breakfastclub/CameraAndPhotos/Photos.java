@@ -1,4 +1,4 @@
-package cs490.breakfastclub.Classes;
+package cs490.breakfastclub.CameraAndPhotos;
 
 import android.util.Log;
 
@@ -13,6 +13,8 @@ import org.w3c.dom.Comment;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedHashMap;
+
+import cs490.breakfastclub.UserFiles.User;
 
 
 /**

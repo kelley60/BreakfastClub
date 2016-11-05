@@ -1,4 +1,4 @@
-package cs490.breakfastclub;
+package cs490.breakfastclub.SquadFiles;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -17,14 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.app.AlertDialog;
-import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -40,18 +36,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import cs490.breakfastclub.Classes.Squad;
-import cs490.breakfastclub.Classes.User;
-import java.util.ArrayList;
-import cs490.breakfastclub.Classes.User;
-import cs490.breakfastclub.Classes.UserAdapter;
+import cs490.breakfastclub.UserFiles.User;
+import cs490.breakfastclub.DisplayMessageActivity;
+import cs490.breakfastclub.MyApplication;
+import cs490.breakfastclub.ProfileViewActivity;
+import cs490.breakfastclub.R;
 
 public class SquadViewActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
@@ -164,6 +157,13 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                     .build();
         }
 
+/*
+        final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+        final LinkedHashMap<String, URL> linkedHashMap = ((MyApplication) getApplication()).getCurrentPhotos().getUserPhotos();
+        final ArrayList<URL> currentPhotos = new ArrayList<URL>(linkedHashMap.values());
+        final ArrayList<String> photoids = new ArrayList<String>(linkedHashMap.keySet());
+        final ImageView imgView = (ImageView) findViewById(R.id.squadPhoto);
+*/
 
     }
 
