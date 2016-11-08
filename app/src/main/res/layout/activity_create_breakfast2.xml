@@ -53,8 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignStart="@+id/relativeLayout2"
-            android:id="@+id/createBreakfastNextButton2Id"
-            android:text="next" />
+            android:id="@+id/createBreakfastCreateButton"
+            android:text="Create" />
 
         <DatePicker
             android:layout_width="wrap_content"

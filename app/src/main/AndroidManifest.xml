@@ -83,7 +83,6 @@
         <activity android:name=".AdminViewUsersActivity" />
         <activity android:name=".SquadFiles.SearchMemberActivity" />
         <activity android:name=".BreakfastFiles.CreateBreakfastActivity2" />
-        <activity android:name=".BreakfastFiles.CreateBreakfastActivity3" />
         <activity android:name=".SquadFiles.SquadLocationActivity"></activity>
         <activity android:name=".CameraAndPhotos.CameraActivity"></activity>
         <activity android:name=".CameraAndPhotos.PhotoActivity"></activity>
