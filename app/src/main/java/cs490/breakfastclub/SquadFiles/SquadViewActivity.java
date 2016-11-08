@@ -50,8 +50,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
 
     // TODO: Populate UI with information from database
 
-    private boolean captainDeletingSquad = false;
-    private ArrayList<User> mMemberNames;
+    private ArrayList<User> member;
     private ArrayList<User> mFriends;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -85,7 +84,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("[SQUAD_NAME]");
 
-        mMemberNames = new ArrayList<User>();
+        member = new ArrayList<User>();
         mFriends = new ArrayList<User>();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -218,7 +217,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
             } else {
                 mDrawerTitle.setText("Squad Members");
                 mDrawerList.setAdapter(new SquadMemberAdapter(SquadViewActivity.this,
-                        R.layout.squad_member_list_item, mMemberNames));
+                        R.layout.squad_member_list_item, member));
                 // Set the list's click listener
                 mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -276,6 +275,8 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                                 mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
                                 mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
                                 mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).removeValue();
+                                currentUser.setSquad(null);
+                                currentUser.setSquadRole("");
                                 finish();
                             }
                             // Captain is not the only user. Ask to change captain or delete squad
@@ -289,11 +290,24 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                                 .setNegativeButton("Delete Squad", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        currentUser.setPartOfSquad(false);
-                                        captainDeletingSquad = true;
-                                        mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
-                                        mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
-                                        mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).removeValue();
+                                        DatabaseReference squadRef = FirebaseDatabase.getInstance().getReference("Squads/" + currentUser.getSquad().getSquadID());
+                                        squadRef.orderByPriority().addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                HashMap<String, String> members = (HashMap) dataSnapshot.child("Members").getValue();
+                                                for (Map.Entry<String, String> mem : members.entrySet()) {
+                                                    mDatabase.child("Users/" + mem.getKey()).child("squad").removeValue();
+                                                    mDatabase.child("Users/" + mem.getKey()).child("squadRole").removeValue();
+                                                }
+                                                mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).removeValue();
+                                                currentUser.setPartOfSquad(false);
+                                                currentUser.setSquad(null);
+                                                currentUser.setSquadRole("");
+                                                finish();
+                                            }
+
+                                            @Override public void onCancelled(DatabaseError databaseError) {}
+                                        });  // end of squadRed
                                     }
                                 })
                                 .show();
@@ -323,7 +337,9 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
             squadRef.orderByPriority().addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    mMemberNames.clear();
+                    member.clear();
+
+                    // Sets properties for current user and UI
                     Log.v("Cleared Members", "Cleared Members");
                     HashMap<String, String> members = (HashMap) dataSnapshot.child("Members").getValue();
                     TextView squadNameView = (TextView) findViewById(R.id.txtSquadName);
@@ -333,10 +349,12 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                     currentUser.getSquad().setSquadDesc((String) dataSnapshot.child("description").getValue());
                     squadDescView.setText((String) dataSnapshot.child("description").getValue());
 
+                    // Gets a firebase reference ready to access a picture
                     FirebaseStorage storage = FirebaseStorage.getInstance();
                     StorageReference storageRef = storage.getReferenceFromUrl("gs://breakfastclubapp-437bd.appspot.com");
                     StorageReference squadImageRef = storageRef.child("Squads/" + dataSnapshot.getKey());
 
+                    // Get picture from db
                     final long ONE_MEGABYTE = 1024 * 1024;
                     squadImageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                         @Override
@@ -355,10 +373,9 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                         }
                     });
 
-
-
-                    for (Map.Entry<String, String> member : members.entrySet()) {
-                        DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + member.getKey());
+                    // Getting every member's info from database from THIS squad
+                    for (Map.Entry<String, String> mem : members.entrySet()) {
+                        DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + mem.getKey());
                         memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -367,8 +384,8 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                                 currentMember.setName((String) dataSnapshot.child("name").getValue());
                                 currentMember.setProfileImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
                                 currentMember.setUserId((String) dataSnapshot.getKey());
-                                mMemberNames.add(currentMember);
-                                currentUser.getSquad().setUserList(mMemberNames);
+                                member.add(currentMember);
+                                currentUser.getSquad().setUserList(member);
                             }
 
                             @Override
@@ -391,9 +408,9 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
         mFriends.clear();
         for (int i = 0; i < currentUser.getFriends().size(); i++) {
             boolean friendInSquad = false;
-            for (int j = 0; j < mMemberNames.size(); j++)
+            for (int j = 0; j < member.size(); j++)
             {
-                if (mMemberNames.get(j).getUserId().equals(currentUser.getFriends().get(i).getUserId()))
+                if (member.get(j).getUserId().equals(currentUser.getFriends().get(i).getUserId()))
                 {
                     friendInSquad = true;
                     break;
