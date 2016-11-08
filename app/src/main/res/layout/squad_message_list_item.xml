@@ -6,8 +6,8 @@
                 android:id="@+id/page">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/rightSide" >
 
         <TextView
@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="MSG_CONTENTS"
+            android:text=""
             android:textSize="18sp"
             android:textColor="@color/Purdue_Black"/>
 
@@ -37,7 +37,7 @@
             android:layout_toLeftOf="@+id/msg_contentsRight"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="10dp"
-            android:text="MSG_SENDER"
+            android:text=""
             android:textSize="9sp"
             android:textColor="@color/Gray"/>
 
@@ -50,7 +50,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="10dp"
-            android:text=" - 12:34pm"
+            android:text=""
             android:textSize="9sp"
             android:textColor="@color/Gray"/>
 
@@ -67,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="MSG_CONTENTS"
+            android:text=""
             android:textSize="18sp"
             android:textColor="@color/Purdue_Black"/>
 
@@ -89,7 +89,7 @@
             android:layout_toRightOf="@+id/msg_contentsLeft"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="10dp"
-            android:text="MSG_SENDER"
+            android:text=""
             android:textSize="9sp"
             android:textColor="@color/Gray"/>
 
@@ -101,7 +101,7 @@
             android:layout_below="@id/msg_senderLeft"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="10dp"
-            android:text=" - 12:34pm"
+            android:text=""
             android:textSize="9sp"
             android:textColor="@color/Gray"/>
 
