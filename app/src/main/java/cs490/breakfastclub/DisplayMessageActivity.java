@@ -95,7 +95,8 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
                         HashMap<String, String> messageToFirebase = new HashMap<String, String>();
                         messageToFirebase.put("message", message);
-                        messageToFirebase.put("sender", senderID);
+                        messageToFirebase.put("senderID", senderID);
+                        messageToFirebase.put("senderName", senderName);
                         messagesRef.child(Long.toString(time)).setValue(messageToFirebase);
 
 
@@ -124,42 +125,21 @@ public class DisplayMessageActivity extends AppCompatActivity {
                                 final Post newPost = new Post();
                                 Log.v("SnapshotOutUser", messageSnapShot.toString());
                                 String message = (String) messageSnapShot.child("message").getValue();
-                                String senderID = (String) messageSnapShot.child("sender").getValue();
+                                String senderID = (String) messageSnapShot.child("senderID").getValue();
+                                String senderName = (String) messageSnapShot.child("senderName").getValue();
                                 Date date = new Date(Long.parseLong(messageSnapShot.getKey()));
                                 newPost.setMessage(message);
                                 newPost.setSenderID(senderID);
+                                newPost.setSenderName(senderName);
                                 newPost.setDate(date);
-                                /*if (senderID == currentUser.getUserId())
-                                {
-                                    String senderName = currentUser.getName();
-                                    newPost.setSenderName(senderName);
-                                    messagePosts.add(newPost);
-                                    messageListAdapter.notifyDataSetChanged();
-                                }
-                                else */{
-                                    final DatabaseReference userRef = mDatabase.child("Users/" + senderID);
-                                    userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                            Log.v("SnapshotInUser", newPost.toString());
-                                            String senderName = (String) dataSnapshot.child("name").getValue();
-                                            newPost.setSenderName(senderName);
-                                            messagePosts.add(newPost);
-                                            Log.v("MessagePostsSnapshot", messagePosts.toString());
-                                            messageListAdapter.notifyDataSetChanged();
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-
-                                        }
-                                    });
-                                }
-
+                                messagePosts.add(newPost);
                             }
+
                         }
+                        messageListAdapter.notifyDataSetChanged();
                     }
                 }
+
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
