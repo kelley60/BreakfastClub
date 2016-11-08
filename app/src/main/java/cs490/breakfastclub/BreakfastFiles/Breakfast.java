@@ -13,19 +13,20 @@ import cs490.breakfastclub.Classes.Post;
 
 public class Breakfast {
 
-    private Date date;
     private String description;
     private ArrayList<Post> campusFeed;
     private Post topPhoto;
     private boolean currentBreakfast;
     private String breakfastId;
+    private int year;
+    private int month;
+    private int day;
 
-    public Breakfast(Date date, String description){
-        this.date = date;
-        this.description = description;
-        campusFeed = new ArrayList<Post>();
-        topPhoto = null;
-        currentBreakfast = true;
+    public Breakfast(int year, int month, int day, String descriptionString) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
+        this.description = descriptionString;
     }
 
 
@@ -73,14 +74,6 @@ public class Breakfast {
 
 
     //GETTERS AND SETTERS --------------------------------------------------------------
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -119,5 +112,29 @@ public class Breakfast {
 
     public void setBreakfastId(String breakfastId) {
         this.breakfastId = breakfastId;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
     }
 }

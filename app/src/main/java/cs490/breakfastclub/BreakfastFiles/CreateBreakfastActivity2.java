@@ -10,14 +10,29 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Calendar;
+
+import cs490.breakfastclub.Classes.TimeFunctions;
+import cs490.breakfastclub.DrawerActivity;
 import cs490.breakfastclub.R;
 
 public class CreateBreakfastActivity2 extends AppCompatActivity {
 
-    DatePicker datePicker;
-    Button nextButton;
+    private static final int BREAKFAST_START_HOUR = 3;
+    private static final int BREAKFAST_START_MINUTE = 0;
+    private static final int BREAKFAST_START_SECOND = 0;
 
+    DatePicker datePicker;
+    Button createButton;
     String descriptionString;
+
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,29 +46,30 @@ public class CreateBreakfastActivity2 extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         descriptionString = bundle.getString("Description");
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         UIInit();
     }
 
     private void UIInit() {
         datePicker = (DatePicker) findViewById(R.id.createBreakfastDatePickerId);
-        nextButton = (Button) findViewById(R.id.createBreakfastNextButton2Id);
+        createButton = (Button) findViewById(R.id.createBreakfastCreateButton);
 
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
+        createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int day = datePicker.getDayOfMonth();
                 int year = datePicker.getYear();
                 int month = datePicker.getMonth();
-                Intent intent = new Intent(CreateBreakfastActivity2.this, CreateBreakfastActivity3.class);
-                intent.putExtra("description", descriptionString);
-                intent.putExtra("day", day);
-                intent.putExtra("month", month);
-                intent.putExtra("year", year);
+                createBreakfastEvent(year, month, day);
+                Intent intent = new Intent(CreateBreakfastActivity2.this, DrawerActivity.class);
                 startActivity(intent);
             }
         });
+
+
 
     }
 
@@ -69,4 +85,21 @@ public class CreateBreakfastActivity2 extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //TODO
+    //when this is pushed, breakfast event is added to the database
+    private void createBreakfastEvent(int year, int month, int day) {
+        Calendar calendar = TimeFunctions.getCurrentTime();
+        calendar.set(year, month, day, BREAKFAST_START_HOUR, BREAKFAST_START_MINUTE, BREAKFAST_START_SECOND);
+        String breakfastKey = mDatabase.child("Breakfasts").push().getKey();
+
+        mDatabase.child("Breakfasts").child(breakfastKey).child("year").setValue(year);
+        mDatabase.child("Breakfasts").child(breakfastKey).child("month").setValue(month);
+        mDatabase.child("Breakfasts").child(breakfastKey).child("day").setValue(day);
+        mDatabase.child("Breakfasts").child(breakfastKey).child("description").setValue(descriptionString);
+        mDatabase.child("Breakfasts").child(breakfastKey).child("isCurrentBreakfast").setValue("true");
+        //mDatabase.child("Breakfasts").child(breakfastKey).child("");
+
+    }
+
 }
