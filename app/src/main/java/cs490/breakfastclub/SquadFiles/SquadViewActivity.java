@@ -56,7 +56,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private TextView mDrawerTitle;
-    private ArrayList<Integer> arr = new ArrayList<Integer>();
+    CharSequence[] items = {"foo ", "bar"};
 
     private DatabaseReference mDatabase;
 
@@ -289,7 +289,6 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                             // Captain is not the only user. Ask to change captain or delete squad
                             else
                             {
-                                arr.add(37);
                                 new AlertDialog.Builder(SquadViewActivity.this)
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .setTitle("Dun dun dunnnnnnn")
@@ -299,13 +298,14 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                                     public void onClick(DialogInterface dialog, int which) {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(SquadViewActivity.this);
                                         builder.setTitle("Pick a new captain")
-                                                .setItems(arr, new DialogInterface.OnClickListener() {
+                                                .setItems(items, new DialogInterface.OnClickListener() {
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         // The 'which' argument contains the index position of the selected item
-                                                        System.out.println("\nTHISSSSSSSSSSSS" + which + " \n\n");
+                                                        Log.d("Change squad ownership","\nIndex " + which + " was selected - Kunal.\n");
                                                     }
                                                 });
-                                        return builder.create();
+                                        builder.create();
+                                        builder.show();
                                     }
                                 })
                                 .setNegativeButton("Delete Squad", new DialogInterface.OnClickListener() {
