@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import java.util.Calendar;
 import cs490.breakfastclub.CameraAndPhotos.CameraActivity;
 import cs490.breakfastclub.Classes.Post;
 import cs490.breakfastclub.Classes.TimeFunctions;
+import cs490.breakfastclub.MyApplication;
 import cs490.breakfastclub.UserFiles.User;
 import cs490.breakfastclub.R;
 
@@ -103,8 +105,22 @@ public class BreakfastFeedActivity extends AppCompatActivity {
 
         upArrow = (ImageButton) findViewById(R.id.upArrowId);
         downArrow = (ImageButton) findViewById(R.id.downArrowId);
-        cameraButton = (ImageButton) findViewById(R.id.cameraButtonId);
+
+
         removePictureButton = (ImageButton) findViewById(R.id.removePhotoButtonId);
+        /*removePictureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO:
+                // currentPost.getSenderId();
+                // ^ Use that to retrieve User info from firebase
+                // Increase numberOffensive by 1
+                // Update User in database
+                // Remove picture from BreakfastFeed
+                // Update database with picture removed
+            }
+        });*/
+
         pictureScore = (TextView) findViewById(R.id.pictureScoreId);
         image = (ImageView) findViewById(R.id.campusFeedImageId);
 
@@ -141,9 +157,7 @@ public class BreakfastFeedActivity extends AppCompatActivity {
             cameraButton.setVisibility(View.INVISIBLE);
         }
 
-        removePictureButton.setVisibility(View.INVISIBLE);
 
-        /*
         currentUser = ((MyApplication) getApplication()).getCurrentUser();
         currentBreakfast = Breakfast.getCurrentBreakfast();
         currentPost = currentBreakfast.getCampusFeed().get(currentUser.getCurrentPositionInFeed());
@@ -155,7 +169,7 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         if (Permission == User.Permissions.Developer || Permission == User.Permissions.Moderator){
             removePictureButton.setVisibility(View.VISIBLE);
         }
-        */
+
 
         tempScore = 0;
 
