@@ -61,12 +61,14 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
         // TODO: Figure out why this breaks the build...
         ListView messagesListView = (ListView) findViewById(R.id.messagesList);
-        final SquadMessageAdapter messageListAdapter = new SquadMessageAdapter(this, R.layout.squad_message_list_item, messagePosts);
+        final SquadMessageAdapter messageListAdapter = new SquadMessageAdapter(this, messagePosts);
         messagesListView.setAdapter(messageListAdapter);
 
         final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference messagesRef = mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Messages");
+
+
 
         if (currentUser.isPartOfSquad()) {
             Button send = (Button) findViewById(R.id.btnSend);
@@ -74,8 +76,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     EditText sendText = (EditText) findViewById(R.id.txt_msg);
-                    if (!sendText.getText().toString().trim().isEmpty())
-                    {
+                    if (!sendText.getText().toString().trim().isEmpty()) {
                         Post newPost = new Post();
                         String message = sendText.getText().toString().trim();
                         String senderID = currentUser.getUserId();
@@ -111,16 +112,16 @@ public class DisplayMessageActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        messagePosts.clear();
+                        //messagePosts.clear();
                         int i = 0;
-                        for (DataSnapshot messageSnapShot : dataSnapshot.getChildren())
-                        {
+                        int postsSize = messagePosts.size();
+                        for (DataSnapshot messageSnapShot : dataSnapshot.getChildren()) {
 
-                            /*if (i < messagePosts.size())
+                            if (i < postsSize)
                             {
                                 i++;
                             }
-                            else*/
+                            else
                             {
                                 final Post newPost = new Post();
                                 Log.v("SnapshotOutUser", messageSnapShot.toString());

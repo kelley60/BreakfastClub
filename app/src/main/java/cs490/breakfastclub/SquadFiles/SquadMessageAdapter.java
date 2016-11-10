@@ -25,12 +25,10 @@ import cs490.breakfastclub.R;
 public class SquadMessageAdapter extends BaseAdapter implements ListAdapter {
     ArrayList<Post> messages;
     Context context;
-    int layout;
 
-    public SquadMessageAdapter(Context context, int layout, ArrayList<Post> messages) {
+    public SquadMessageAdapter(Context context, ArrayList<Post> messages) {
         this.messages = messages;
         this.context = context;
-        this.layout = layout;
     }
 
     @Override
@@ -48,62 +46,71 @@ public class SquadMessageAdapter extends BaseAdapter implements ListAdapter {
         return 0;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        // Define a way to determine which layout to use, (chere it's just evens and odds.
+        User currentUser = ((MyApplication) ((DisplayMessageActivity)context).getApplication()).getCurrentUser();
+        if (messages.get(position).getSenderID().equals(currentUser.getUserId()))
+        {
+            return 0;
+        }
+        else
+        {
+            return 1;
+        }
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 2; // Count of different layouts
+    }
+
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(layout, null);
+            if (getItemViewType(position) == 0)
+            {
+                view = inflater.inflate(R.layout.squad_message_list_item_right, null);
+            }
+            else
+            {
+                view = inflater.inflate(R.layout.squad_message_list_item_left, null);
+            }
+
+            // Try inflating
         }
 
         //Handle TextView and display string from your list
 
-        User currentUser = ((MyApplication) ((DisplayMessageActivity)context).getApplication()).getCurrentUser();
 
         Log.v("MessageAdapter", Integer.toString(getCount()));
         Log.v("MessageAdapter", Integer.toString(position));
         Log.v("MessageAdapter", messages.get(position).getMessage());
         Log.v("MessagePostsAdapter", messages.toString());
-        if (messages.get(position).getSenderID().equals(currentUser.getUserId())) {
-            view.findViewById(R.id.leftSide).setVisibility(View.GONE);
 
-            TextView contentTextView = (TextView) view.findViewById(R.id.msg_contentsRight);
-            TextView senderTextView = (TextView) view.findViewById(R.id.msg_senderRight);
-            TextView dateTextView = (TextView) view.findViewById(R.id.msg_timestampRight);
-            ImageView imageView = (ImageView) view.findViewById(R.id.msg_prof_picRight);
 
-            imageView.setVisibility(View.GONE);
-            contentTextView.setText(messages.get(position).getMessage());
-            senderTextView.setText(messages.get(position).getSenderName());
-            Date date = messages.get(position).getDate();
-            String month = convertMonth(date.getMonth());
-            int day = date.getDate();
-            int year = date.getYear() + 1900;
-            String time = convertTime(date.getHours(), date.getMinutes());
-            String dateText = month + " " + day + ", " + year + " " + time;
-            dateTextView.setText(dateText);
-        }
-        else
-        {
-            view.findViewById(R.id.rightSide).setVisibility(View.GONE);
 
-            TextView contentTextView = (TextView) view.findViewById(R.id.msg_contentsLeft);
-            TextView senderTextView = (TextView) view.findViewById(R.id.msg_senderLeft);
-            TextView dateTextView = (TextView) view.findViewById(R.id.msg_timestampLeft);
-            ImageView imageView = (ImageView) view.findViewById(R.id.msg_prof_picLeft);
 
-            imageView.setVisibility(View.GONE);
-            contentTextView.setText(messages.get(position).getMessage());
-            senderTextView.setText(messages.get(position).getSenderName());
-            Date date = messages.get(position).getDate();
-            String month = convertMonth(date.getMonth());
-            int day = date.getDate();
-            int year = date.getYear() + 1900;
-            String time = convertTime(date.getHours(), date.getMinutes());
-            String dateText = month + " " + day + ", " + year + " " + time;
-            dateTextView.setText(dateText);
-        }
+        TextView contentTextView = (TextView) view.findViewById(R.id.msg_contents);
+        TextView senderTextView = (TextView) view.findViewById(R.id.msg_sender);
+        TextView dateTextView = (TextView) view.findViewById(R.id.msg_timestamp);
+        ImageView imageView = (ImageView) view.findViewById(R.id.msg_prof_pic);
+
+        imageView.setVisibility(View.GONE);
+        contentTextView.setText(messages.get(position).getMessage());
+        senderTextView.setText(messages.get(position).getSenderName());
+        Date date = messages.get(position).getDate();
+        String month = convertMonth(date.getMonth());
+        int day = date.getDate();
+        int year = date.getYear() + 1900;
+        String time = convertTime(date.getHours(), date.getMinutes());
+        String dateText = month + " " + day + ", " + year + " " + time;
+        dateTextView.setText(dateText);
+
+
 
         return view;
 

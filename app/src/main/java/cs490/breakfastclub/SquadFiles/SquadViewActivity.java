@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -226,6 +227,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                         Intent intent = new Intent(SquadViewActivity.this, ProfileViewActivity.class);
                         intent.putExtra("MemberFromSquadView", ((User)parent.getItemAtPosition(position)).getUserId());
                         intent.putExtra("Squad", currentUser.getSquad().getSquadName());
+                        mDrawerLayout.closeDrawer(GravityCompat.END);
                         startActivity(intent);
                     }
                 });
@@ -246,6 +248,10 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent intent = new Intent(SquadViewActivity.this, ProfileViewActivity.class);
                         intent.putExtra("AddMemberFromSquadView", ((User)parent.getItemAtPosition(position)).getUserId());
+                        intent.putExtra("MemberToAddName", ((User)parent.getItemAtPosition(position)).getName());
+                        intent.putExtra("MemberToAddImageUrl", ((User)parent.getItemAtPosition(position)).getProfileImageUrl());
+                        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        mDrawerLayout.closeDrawer(GravityCompat.END);
                         startActivity(intent);
                     }
                 });
@@ -356,7 +362,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
 
                     // Sets properties for current user and UI
                     Log.v("Cleared Members", "Cleared Members");
-                    HashMap<String, String> members = (HashMap) dataSnapshot.child("Members").getValue();
+                    HashMap<String, HashMap> members = (HashMap) dataSnapshot.child("Members").getValue();
                     TextView squadNameView = (TextView) findViewById(R.id.txtSquadName);
                     currentUser.getSquad().setSquadName((String) dataSnapshot.child("name").getValue());
                     squadNameView.setText((String) dataSnapshot.child("name").getValue());
@@ -388,28 +394,18 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                         }
                     });
 
-                    // Getting every member's info from database from THIS squad
-                    for (Map.Entry<String, String> mem : members.entrySet()) {
-                        DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + mem.getKey());
-                        memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Log.v("Member", (String) dataSnapshot.child("name").getValue());
-                                User currentMember = new User();
-                                currentMember.setName((String) dataSnapshot.child("name").getValue());
-                                currentMember.setProfileImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
-                                currentMember.setUserId((String) dataSnapshot.getKey());
-                                member.add(currentMember);
-                                currentUser.getSquad().setUserList(member);
-                            }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        });
+                    for (Map.Entry<String, HashMap> memberEntry : members.entrySet()) {
+                        Log.v("Each Member", memberEntry.toString());
+                        HashMap<String, String> memberInfo = memberEntry.getValue();
+                        User currentMember = new User();
+                        currentMember.setName(memberInfo.get("name"));
+                        currentMember.setProfileImageUrl(memberInfo.get("profileImageUrl"));
+                        currentMember.setUserId(memberEntry.getKey());
+                        member.add(currentMember);
                     }
-                    //DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + member.)
+                    currentUser.getSquad().setUserList(member);
 
                 }
 
@@ -422,35 +418,24 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
 
         mFriends.clear();
         for (int i = 0; i < currentUser.getFriends().size(); i++) {
-            boolean friendInSquad = false;
-            for (int j = 0; j < member.size(); j++)
-            {
-                if (member.get(j).getUserId().equals(currentUser.getFriends().get(i).getUserId()))
-                {
-                    friendInSquad = true;
-                    break;
+            DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + currentUser.getFriends().get(i).getUserId());
+            memberRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User currentMember = new User();
+                    if (!dataSnapshot.child("squad").exists()) {
+                        currentMember.setName((String) dataSnapshot.child("name").getValue());
+                        currentMember.setProfileImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
+                        currentMember.setUserId((String) dataSnapshot.getKey());
+                        mFriends.add(currentMember);
+                    }
                 }
-            }
-            if (!friendInSquad) {
-                DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + currentUser.getFriends().get(i).getUserId());
-                memberRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        User currentMember = new User();
-                        if (!dataSnapshot.child("squad").exists()) {
-                            currentMember.setName((String) dataSnapshot.child("name").getValue());
-                            currentMember.setProfileImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
-                            currentMember.setUserId((String) dataSnapshot.getKey());
-                            mFriends.add(currentMember);
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
-            }
+                }
+            });
         }
         super.onResume();
     }
