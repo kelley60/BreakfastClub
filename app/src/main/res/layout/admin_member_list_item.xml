@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:text="Member Name"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/imgProfilePic"
+            android:layout_centerHorizontal="true"
             />
 
 
@@ -51,11 +51,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/lblMemberName"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_alignParentEnd="true">
 
 
-            <!-- TODO: Add functionality -->
             <Button
                 android:id="@+id/btnAddPermissions"
                 android:layout_width="wrap_content"
@@ -64,7 +63,7 @@
                 android:textSize="20sp"/>
             <Button
                 android:id="@+id/btnRemovePermissions"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="-"
                 android:textSize="20sp"/>
