@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical" android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/Purdue_White"
+                android:id="@+id/page">
+
+    <TextView
+        android:id="@+id/msg_contents"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text=""
+        android:textSize="18sp"
+        android:textColor="@color/Purdue_Black"/>
+
+    <ImageView
+        android:id="@+id/msg_prof_pic"
+        android:layout_above="@id/msg_contents"
+        android:layout_alignParentRight="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:src="@mipmap/bars"/>
+
+
+
+    <TextView
+        android:id="@+id/msg_sender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/msg_contents"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:text=""
+        android:textSize="9sp"
+        android:textColor="@color/Gray"/>
+
+    <TextView
+        android:id="@+id/msg_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/msg_contents"
+        android:layout_below="@id/msg_sender"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:text=""
+        android:textSize="9sp"
+        android:textColor="@color/Gray"/>
+
+
+</RelativeLayout>
+
+
+
+

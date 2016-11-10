@@ -75,7 +75,9 @@ public class ProfileViewActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     mDatabase.child("Users/" + userID).child("squad").setValue(currentUser.getSquad().getSquadID());
                     mDatabase.child("Users/" + userID).child("squadRole").setValue("regular");
-                    mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(userID).setValue("regular");
+                    mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(userID).child("squadRole").setValue("regular");
+                    mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(userID).child("name").setValue(getIntent().getStringExtra("MemberToAddName"));
+                    mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(userID).child("profileImageUrl").setValue(getIntent().getStringExtra("MemberToAddImageUrl"));
                     mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(userID).setPriority(2);
                     finish();
                 }
