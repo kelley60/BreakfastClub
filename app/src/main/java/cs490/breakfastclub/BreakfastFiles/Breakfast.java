@@ -1,6 +1,10 @@
 package cs490.breakfastclub.BreakfastFiles;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,24 +34,46 @@ public class Breakfast {
     }
 
 
-    //TODO
-    //gets current breakfast from database
-    public static Breakfast getCurrentBreakfast(){
-        Breakfast breakfast = null;
-        //LOAD FIRST 10 OR LESS PICTURES FROM DB
-        return breakfast;
+    public static Breakfast getCurrentBreakfast(DatabaseReference mDatabase){
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
+                    String name = (String) messageSnapshot.child("name").getValue();
+                    String message = (String) messageSnapshot.child("message").getValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        return null;
     }
 
-    public static void loadPictures(){
-        //LOAD 10 PICTURES INTO CURRENTBREAKFAST
+    public static void endCurrentBreakfast(){
+        final DatabaseReference breakfastReference = FirebaseDatabase.getInstance().getReference("Breakfasts/");
+        breakfastReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String isCurrentBreakfast = (String) dataSnapshot.child("name").getValue();
+                if (isCurrentBreakfast.equals("true")){
+                    //
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void writeNewBreakfast(DatabaseReference mDatabase) {
-        /*
-        mDatabase.child("Breakfast").child(this.getBreakfastId()).child("Description").setValue(description);
-        mDatabase.child("Breakfast").child(this.getBreakfastId()).child("").setValue(user.getProfileImageUrl());
-        mDatabase.child("Breakfast").child(this.getBreakfastId()).child("receivesPushNotifications").setValue(user.isReceivesPushNotifications());
-        */
+
     }
 
 
