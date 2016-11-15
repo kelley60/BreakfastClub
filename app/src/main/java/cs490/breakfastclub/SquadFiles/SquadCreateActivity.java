@@ -64,7 +64,9 @@ public class SquadCreateActivity extends AppCompatActivity {
                     final ImageView squadPhoto = (ImageView) findViewById(R.id.squadPhoto);
                     mDatabase.child("Squads/" + currentSquadKey).child("name").setValue(squadName.getText().toString());
                     mDatabase.child("Squads/" + currentSquadKey).child("description").setValue(squadDesc.getText().toString());
-                    mDatabase.child("Squads/" + currentSquadKey).child("Members").child(currentUser.getUserId()).setValue("captain");
+                    mDatabase.child("Squads/" + currentSquadKey).child("Members").child(currentUser.getUserId()).child("squadRole").setValue("captain");
+                    mDatabase.child("Squads/" + currentSquadKey).child("Members").child(currentUser.getUserId()).child("name").setValue(currentUser.getName());
+                    mDatabase.child("Squads/" + currentSquadKey).child("Members").child(currentUser.getUserId()).child("profileImageUrl").setValue(currentUser.getProfileImageUrl());
                     mDatabase.child("Squads/" + currentSquadKey).child("Members").child(currentUser.getUserId()).setPriority(0);
                     mDatabase.child("Users/" + currentUser.getUserId()).child("squad").setValue(currentSquadKey);
                     mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").setValue("captain");

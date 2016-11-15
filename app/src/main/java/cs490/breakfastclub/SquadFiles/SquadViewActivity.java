@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,6 +39,8 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 import cs490.breakfastclub.UserFiles.User;
@@ -55,6 +58,9 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private TextView mDrawerTitle;
+    CharSequence[] items;
+    List<CharSequence> userNames = new ArrayList<>();
+
 
     private DatabaseReference mDatabase;
 
@@ -225,6 +231,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                         Intent intent = new Intent(SquadViewActivity.this, ProfileViewActivity.class);
                         intent.putExtra("MemberFromSquadView", ((User)parent.getItemAtPosition(position)).getUserId());
                         intent.putExtra("Squad", currentUser.getSquad().getSquadName());
+                        mDrawerLayout.closeDrawer(GravityCompat.END);
                         startActivity(intent);
                     }
                 });
@@ -245,6 +252,10 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent intent = new Intent(SquadViewActivity.this, ProfileViewActivity.class);
                         intent.putExtra("AddMemberFromSquadView", ((User)parent.getItemAtPosition(position)).getUserId());
+                        intent.putExtra("MemberToAddName", ((User)parent.getItemAtPosition(position)).getName());
+                        intent.putExtra("MemberToAddImageUrl", ((User)parent.getItemAtPosition(position)).getProfileImageUrl());
+                        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        mDrawerLayout.closeDrawer(GravityCompat.END);
                         startActivity(intent);
                     }
                 });
@@ -286,7 +297,44 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .setTitle("Dun dun dunnnnnnn")
                                 .setMessage("Would you like to delete your squad or change ownership?")
-                                .setPositiveButton("Change Owner", null)
+                                .setPositiveButton("Change Owner", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        // Start listener
+                                        DatabaseReference squadRef = FirebaseDatabase.getInstance().getReference("Squads/" + currentUser.getSquad().getSquadID());
+                                        squadRef.orderByPriority().addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                                // Build radio button list for user to click
+                                                ListIterator<User> iter = currentUser.getSquad().getUserList().listIterator();
+                                                while(iter.hasNext()) {
+                                                    String name = iter.next().getName();
+                                                    if (!name.equals(currentUser.getName()))
+                                                        userNames.add(name);
+                                                }
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(SquadViewActivity.this);
+                                                builder.setTitle("Pick a new captain")
+                                                        .setItems(userNames.toArray(new CharSequence[userNames.size()]), new DialogInterface.OnClickListener() {
+                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                // The 'which' argument contains the index position of the selected item
+                                                                Log.d("Change squad ownership","\nIndex " + which + " was selected - Kunal.\n");
+
+                                                                // TODO - Make that user Owner - Change all that data locally and in db
+                                                                // TODO - delete current user from Squad, locally and in db. Can probably copy code from below
+
+                                                                finish();
+                                                            }
+                                                        });
+                                                builder.create();
+                                                builder.show();
+                                                // end of radio button list
+                                            }
+                                            @Override public void onCancelled(DatabaseError databaseError) {}
+                                        });  // end of listener
+                                    }
+                                })
                                 .setNegativeButton("Delete Squad", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -307,7 +355,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                                             }
 
                                             @Override public void onCancelled(DatabaseError databaseError) {}
-                                        });  // end of squadRed
+                                        });  // end of listener on squad
                                     }
                                 })
                                 .show();
@@ -341,7 +389,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
 
                     // Sets properties for current user and UI
                     Log.v("Cleared Members", "Cleared Members");
-                    HashMap<String, String> members = (HashMap) dataSnapshot.child("Members").getValue();
+                    HashMap<String, HashMap> members = (HashMap) dataSnapshot.child("Members").getValue();
                     TextView squadNameView = (TextView) findViewById(R.id.txtSquadName);
                     currentUser.getSquad().setSquadName((String) dataSnapshot.child("name").getValue());
                     squadNameView.setText((String) dataSnapshot.child("name").getValue());
@@ -373,28 +421,18 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                         }
                     });
 
-                    // Getting every member's info from database from THIS squad
-                    for (Map.Entry<String, String> mem : members.entrySet()) {
-                        DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + mem.getKey());
-                        memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Log.v("Member", (String) dataSnapshot.child("name").getValue());
-                                User currentMember = new User();
-                                currentMember.setName((String) dataSnapshot.child("name").getValue());
-                                currentMember.setProfileImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
-                                currentMember.setUserId((String) dataSnapshot.getKey());
-                                member.add(currentMember);
-                                currentUser.getSquad().setUserList(member);
-                            }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        });
+                    for (Map.Entry<String, HashMap> memberEntry : members.entrySet()) {
+                        Log.v("Each Member", memberEntry.toString());
+                        HashMap<String, String> memberInfo = memberEntry.getValue();
+                        User currentMember = new User();
+                        currentMember.setName(memberInfo.get("name"));
+                        currentMember.setProfileImageUrl(memberInfo.get("profileImageUrl"));
+                        currentMember.setUserId(memberEntry.getKey());
+                        member.add(currentMember);
                     }
-                    //DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + member.)
+                    currentUser.getSquad().setUserList(member);
 
                 }
 
@@ -407,35 +445,24 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
 
         mFriends.clear();
         for (int i = 0; i < currentUser.getFriends().size(); i++) {
-            boolean friendInSquad = false;
-            for (int j = 0; j < member.size(); j++)
-            {
-                if (member.get(j).getUserId().equals(currentUser.getFriends().get(i).getUserId()))
-                {
-                    friendInSquad = true;
-                    break;
+            DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + currentUser.getFriends().get(i).getUserId());
+            memberRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User currentMember = new User();
+                    if (!dataSnapshot.child("squad").exists()) {
+                        currentMember.setName((String) dataSnapshot.child("name").getValue());
+                        currentMember.setProfileImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
+                        currentMember.setUserId((String) dataSnapshot.getKey());
+                        mFriends.add(currentMember);
+                    }
                 }
-            }
-            if (!friendInSquad) {
-                DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + currentUser.getFriends().get(i).getUserId());
-                memberRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        User currentMember = new User();
-                        if (!dataSnapshot.child("squad").exists()) {
-                            currentMember.setName((String) dataSnapshot.child("name").getValue());
-                            currentMember.setProfileImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
-                            currentMember.setUserId((String) dataSnapshot.getKey());
-                            mFriends.add(currentMember);
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
-            }
+                }
+            });
         }
         super.onResume();
     }
