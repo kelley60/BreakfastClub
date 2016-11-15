@@ -22,10 +22,6 @@ import cs490.breakfastclub.R;
 
 public class CreateBreakfastActivity2 extends AppCompatActivity {
 
-    private static final int BREAKFAST_START_HOUR = 3;
-    private static final int BREAKFAST_START_MINUTE = 0;
-    private static final int BREAKFAST_START_SECOND = 0;
-
     DatePicker datePicker;
     Button createButton;
     String descriptionString;
@@ -45,7 +41,8 @@ public class CreateBreakfastActivity2 extends AppCompatActivity {
         getSupportActionBar().setTitle("Create Breakfast");
 
         Bundle bundle = getIntent().getExtras();
-        descriptionString = bundle.getString("Description");
+        descriptionString = bundle.getString("description");
+
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -63,7 +60,8 @@ public class CreateBreakfastActivity2 extends AppCompatActivity {
                 int day = datePicker.getDayOfMonth();
                 int year = datePicker.getYear();
                 int month = datePicker.getMonth();
-                createBreakfastEvent(year, month, day);
+
+                Breakfast.createBreakfastEvent(year, month, day, descriptionString);
                 Intent intent = new Intent(CreateBreakfastActivity2.this, DrawerActivity.class);
                 startActivity(intent);
             }
@@ -86,20 +84,6 @@ public class CreateBreakfastActivity2 extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //TODO
-    //when this is pushed, breakfast event is added to the database
-    private void createBreakfastEvent(int year, int month, int day) {
-        Calendar calendar = TimeFunctions.getCurrentTime();
-        calendar.set(year, month, day, BREAKFAST_START_HOUR, BREAKFAST_START_MINUTE, BREAKFAST_START_SECOND);
-        String breakfastKey = mDatabase.child("Breakfasts").push().getKey();
 
-        mDatabase.child("Breakfasts").child(breakfastKey).child("year").setValue(year);
-        mDatabase.child("Breakfasts").child(breakfastKey).child("month").setValue(month);
-        mDatabase.child("Breakfasts").child(breakfastKey).child("day").setValue(day);
-        mDatabase.child("Breakfasts").child(breakfastKey).child("description").setValue(descriptionString);
-        mDatabase.child("Breakfasts").child(breakfastKey).child("isCurrentBreakfast").setValue("true");
-        //mDatabase.child("Breakfasts").child(breakfastKey).child("");
-
-    }
 
 }
