@@ -39,6 +39,8 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 import cs490.breakfastclub.UserFiles.User;
@@ -56,7 +58,9 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private TextView mDrawerTitle;
-    CharSequence[] items = {"foo ", "bar"};
+    CharSequence[] items;
+    List<CharSequence> userNames = new ArrayList<>();
+
 
     private DatabaseReference mDatabase;
 
@@ -296,16 +300,39 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                                 .setPositiveButton("Change Owner", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(SquadViewActivity.this);
-                                        builder.setTitle("Pick a new captain")
-                                                .setItems(items, new DialogInterface.OnClickListener() {
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        // The 'which' argument contains the index position of the selected item
-                                                        Log.d("Change squad ownership","\nIndex " + which + " was selected - Kunal.\n");
-                                                    }
-                                                });
-                                        builder.create();
-                                        builder.show();
+
+                                        // Start listener
+                                        DatabaseReference squadRef = FirebaseDatabase.getInstance().getReference("Squads/" + currentUser.getSquad().getSquadID());
+                                        squadRef.orderByPriority().addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                                // Build radio button list for user to click
+                                                ListIterator<User> iter = currentUser.getSquad().getUserList().listIterator();
+                                                while(iter.hasNext()) {
+                                                    String name = iter.next().getName();
+                                                    if (!name.equals(currentUser.getName()))
+                                                        userNames.add(name);
+                                                }
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(SquadViewActivity.this);
+                                                builder.setTitle("Pick a new captain")
+                                                        .setItems(userNames.toArray(new CharSequence[userNames.size()]), new DialogInterface.OnClickListener() {
+                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                // The 'which' argument contains the index position of the selected item
+                                                                Log.d("Change squad ownership","\nIndex " + which + " was selected - Kunal.\n");
+
+                                                                // TODO - Make that user Owner - Change all that data locally and in db
+                                                                // TODO - delete current user from Squad, locally and in db. Can probably copy code from below
+
+                                                                finish();
+                                                            }
+                                                        });
+                                                builder.create();
+                                                builder.show();
+                                                // end of radio button list
+                                            }
+                                            @Override public void onCancelled(DatabaseError databaseError) {}
+                                        });  // end of listener
                                     }
                                 })
                                 .setNegativeButton("Delete Squad", new DialogInterface.OnClickListener() {
@@ -328,7 +355,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                                             }
 
                                             @Override public void onCancelled(DatabaseError databaseError) {}
-                                        });  // end of squadRed
+                                        });  // end of listener on squad
                                     }
                                 })
                                 .show();
