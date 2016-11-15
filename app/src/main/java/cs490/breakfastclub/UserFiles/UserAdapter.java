@@ -15,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import cs490.breakfastclub.AdminViewUsersActivity;
 import cs490.breakfastclub.DownloadImageAsyncTask;
 import cs490.breakfastclub.R;
 
@@ -42,7 +43,10 @@ public class UserAdapter extends ArrayAdapter<User>
             // TODO: Check what the parent view is in order to determine which list is trying to
             // access this array adapter
             // Will either be admin_member_list_item OR squad_member_list_item
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.admin_member_list_item, parent, false);
+            if(getContext().getClass() == AdminViewUsersActivity.class)
+            {
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.admin_member_list_item, parent, false);
+            }
         }
 
         // Lookup view for data population
