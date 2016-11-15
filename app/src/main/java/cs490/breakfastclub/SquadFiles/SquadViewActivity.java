@@ -56,6 +56,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private TextView mDrawerTitle;
+    CharSequence[] items = {"foo ", "bar"};
 
     private DatabaseReference mDatabase;
 
@@ -292,7 +293,21 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .setTitle("Dun dun dunnnnnnn")
                                 .setMessage("Would you like to delete your squad or change ownership?")
-                                .setPositiveButton("Change Owner", null)
+                                .setPositiveButton("Change Owner", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(SquadViewActivity.this);
+                                        builder.setTitle("Pick a new captain")
+                                                .setItems(items, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        // The 'which' argument contains the index position of the selected item
+                                                        Log.d("Change squad ownership","\nIndex " + which + " was selected - Kunal.\n");
+                                                    }
+                                                });
+                                        builder.create();
+                                        builder.show();
+                                    }
+                                })
                                 .setNegativeButton("Delete Squad", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
