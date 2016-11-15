@@ -132,11 +132,6 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         return true;
     }
 
-    //TODO get current breakfast from the database
-    private Breakfast getCurrentBreakfast() {
-
-        return null;
-    }
 
 
 }
