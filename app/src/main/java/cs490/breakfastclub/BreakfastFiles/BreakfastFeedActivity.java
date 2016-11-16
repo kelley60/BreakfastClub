@@ -109,28 +109,13 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("Campus Feed");
 
-        Log.d("BreakfastFeedActivity", currentBreakfast.getDescription());
-
         upArrow = (ImageButton) findViewById(R.id.upArrowId);
         downArrow = (ImageButton) findViewById(R.id.downArrowId);
-
-
         removePictureButton = (ImageButton) findViewById(R.id.removePhotoButtonId);
-        /*removePictureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO:
-                // currentPost.getSenderId();
-                // ^ Use that to retrieve User info from firebase
-                // Increase numberOffensive by 1
-                // Update User in database
-                // Remove picture from BreakfastFeed
-                // Update database with picture removed
-            }
-        });*/
-
+        cameraButton = (ImageButton) findViewById(R.id.cameraButtonId);
         pictureScore = (TextView) findViewById(R.id.pictureScoreId);
         image = (ImageView) findViewById(R.id.campusFeedImageId);
+
 
         upArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,6 +128,19 @@ public class BreakfastFeedActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 decreaseCurrentPostScore();
+            }
+        });
+
+        removePictureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO:
+                // currentPost.getSenderId();
+                // ^ Use that to retrieve User info from firebase
+                // Increase numberOffensive by 1
+                // Update User in database
+                // Remove picture from BreakfastFeed
+                // Update database with picture removed
             }
         });
 
@@ -162,22 +160,20 @@ public class BreakfastFeedActivity extends AppCompatActivity {
 
         cameraButton.setVisibility(View.VISIBLE);
         if (isDuringBreakfast() == false || currentUser.getNumberOfOffensives() >= 3){
-            cameraButton.setVisibility(View.INVISIBLE);
+            //cameraButton.setVisibility(View.INVISIBLE);
         }
 
 
         currentUser = ((MyApplication) getApplication()).getCurrentUser();
-        currentBreakfast = Breakfast.getCurrentBreakfast();
-        currentPost = currentBreakfast.getCampusFeed().get(currentUser.getCurrentPositionInFeed());
-        pictureScore.setText(currentPost.getScore());
-        String imgUrl = currentPost.getImgURL();
-        image.setImageDrawable(null);
+        //currentPost = currentBreakfast.getCampusFeed().get(currentUser.getCurrentPositionInFeed());
+        //pictureScore.setText(currentPost.getScore());
+        //String imgUrl = currentPost.getImgURL();
+        //image.setImageDrawable(null);
 
         User.Permissions Permission = currentUser.getPermissions();
         if (Permission == User.Permissions.Developer || Permission == User.Permissions.Moderator){
             removePictureButton.setVisibility(View.VISIBLE);
         }
-
 
         tempScore = 0;
 
@@ -191,7 +187,6 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         //save users position in campusfeed to db
     }
 
-    //TODO for Emma
     private void launchCameraActivity() {
         Intent intent = new Intent(BreakfastFeedActivity.this, CameraActivity.class);
         startActivity(intent);
