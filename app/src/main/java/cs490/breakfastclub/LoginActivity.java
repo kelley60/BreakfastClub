@@ -342,6 +342,8 @@ public class LoginActivity extends AppCompatActivity {
         mDatabase.child("Users").child(user.getUserId()).child("name").setValue(user.getName());
         mDatabase.child("Users").child(user.getUserId()).child("profileImageUrl").setValue(user.getProfileImageUrl());
         mDatabase.child("Users").child(user.getUserId()).child("receivesPushNotifications").setValue(user.isReceivesPushNotifications());
+        mDatabase.child("Users").child(user.getUserId()).child("numberOfOffensives").setValue(0);
+        mDatabase.child("Users").child(user.getUserId()).child("permissions").setValue(User.Permissions.Member);
     }
 
     @Override
