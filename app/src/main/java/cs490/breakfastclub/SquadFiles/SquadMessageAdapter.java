@@ -2,6 +2,7 @@ package cs490.breakfastclub.SquadFiles;
 
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,7 +50,7 @@ public class SquadMessageAdapter extends BaseAdapter implements ListAdapter {
     @Override
     public int getItemViewType(int position) {
         // Define a way to determine which layout to use, (chere it's just evens and odds.
-        User currentUser = ((MyApplication) ((DisplayMessageActivity)context).getApplication()).getCurrentUser();
+        User currentUser = ((MyApplication) ((Activity)context).getApplication()).getCurrentUser();
         if (messages.get(position).getSenderID().equals(currentUser.getUserId()))
         {
             return 0;

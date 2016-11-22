@@ -309,6 +309,7 @@ public class LoginActivity extends AppCompatActivity {
                                 else {
                                     Log.v("User already exists", "User already exists");
                                     currentUser.setReceivesPushNotifications((boolean) dataSnapshot.child("receivesPushNotifications").getValue());
+                                    currentUser.setPermissions(User.Permissions.valueOf((String) dataSnapshot.child("permissions").getValue()));
                                     ((MyApplication)getApplication()).setCurrentPhotos(new Photos(currentUser));
                                     HashMap<String, URL> photos = ((MyApplication)getApplication()).getCurrentPhotos().getUserPhotos();
 

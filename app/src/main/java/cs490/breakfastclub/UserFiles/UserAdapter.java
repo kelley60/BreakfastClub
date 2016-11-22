@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import cs490.breakfastclub.AdminViewUsersActivity;
@@ -60,6 +62,7 @@ public class UserAdapter extends ArrayAdapter<User>
         // Lookup view for data population
         TextView lblName = (TextView) convertView.findViewById(R.id.lblMemberName);
         final TextView lblTitle = (TextView) convertView.findViewById(R.id.lblTitle);
+        TextView lblPermissions = (TextView) convertView.findViewById(R.id.lblPermissions);
 
         // Populate the data into the template view using the data object
         if(user != null)
@@ -82,16 +85,15 @@ public class UserAdapter extends ArrayAdapter<User>
         // Set title according to parent activity
         if(getContext().getClass() == AdminViewUsersActivity.class)
         {
-            switch(user.getPermissions())
-            {
+            switch(user.getPermissions()) {
                 case Moderator:
-                    lblTitle.setText("Moderator");
+                    lblPermissions.setText("Moderator");
                     break;
                 case Member:
-                    lblTitle.setText("Member");
+                    lblPermissions.setText("Member");
                     break;
                 default:
-                    lblTitle.setText("Member");
+                    lblPermissions.setText("Member");
             }
         }
         else if(getContext().getClass() == RepeatOffendersActivity.class)
@@ -99,15 +101,13 @@ public class UserAdapter extends ArrayAdapter<User>
             lblTitle.setText("Posting Privelages");
         }
 
-
         Button addButton = (Button) convertView.findViewById(R.id.btnAdd);
         Button removeButton = (Button) convertView.findViewById(R.id.btnRemove);
 
-        // TODO: Check class here and set btn text
-        if(getContext().getClass() == AdminViewUsersActivity.class)
-        {
-            addButton.setText("+");
-            removeButton.setText("-");
+        // Cache user object inside the button using `setTag`
+        if(user != null) {
+            addButton.setTag(user);
+            removeButton.setTag(user);
         }
         else if(getContext().getClass() == RepeatOffendersActivity.class)
         {
