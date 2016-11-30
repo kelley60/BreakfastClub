@@ -4,6 +4,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
+import cs490.breakfastclub.CameraAndPhotos.Photos;
 import cs490.breakfastclub.SquadFiles.Squad;
 
 /**
@@ -34,6 +35,8 @@ public class User {
     private boolean partOfSquad;
     private double lat, lng;
     private LatLng location;
+
+    private Photos currentPhotos;
 
     public User(String name, String userId, String profileImageUrl, ArrayList<User> friends){
         this.name = name;
@@ -72,6 +75,7 @@ public class User {
     public void setSquad(Squad squad)
     {
         this.squad = squad;
+        getCurrentPhotos().setUserSquadPhotos(this.squad.getSquadID());
     }
 
     public Squad getSquad()
@@ -181,5 +185,13 @@ public class User {
 
     public void setNumberOfOffensives(int numberOfOffensives) {
         this.numberOfOffensives = numberOfOffensives;
+    }
+
+    public Photos getCurrentPhotos() {
+        return currentPhotos;
+    }
+
+    public void setCurrentPhotos(Photos currentPhotos) {
+        this.currentPhotos = currentPhotos;
     }
 }

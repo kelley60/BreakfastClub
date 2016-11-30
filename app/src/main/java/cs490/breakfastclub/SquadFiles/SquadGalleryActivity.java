@@ -35,7 +35,7 @@ public class SquadGalleryActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
-        final LinkedHashMap<String, URL> linkedHashMap = ((MyApplication) getApplication()).getCurrentPhotos().getUserPhotos();
+        final LinkedHashMap<String, URL> linkedHashMap = currentUser.getCurrentPhotos().getSquadPhotos();
         final ArrayList<URL> currentPhotos = new ArrayList<URL>(linkedHashMap.values());
         final ArrayList<String> photoids = new ArrayList<String>(linkedHashMap.keySet());
         final GridView squadGallery = (GridView) findViewById(R.id.squadGallery);

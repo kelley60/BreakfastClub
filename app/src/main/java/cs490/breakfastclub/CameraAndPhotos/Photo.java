@@ -33,7 +33,7 @@ public class Photo implements Parcelable {
     private String photoSquadId;
     private boolean isBreakfastFeed;
     private boolean isSquadFeed;
-
+    private boolean isProfilePhoto = false;
 
     public Photo(String photoName, Bitmap bMap, String photoUserId, String photoSquadId, boolean isBreakfastFeed, boolean isSquadFeed){
         this.photoName = photoName;
@@ -181,7 +181,7 @@ public class Photo implements Parcelable {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bMap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] bytes = baos.toByteArray();
-      //  String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
+        //  String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
         // we finally have our base64 string version of the image, save it.
 
 
@@ -213,11 +213,15 @@ public class Photo implements Parcelable {
 
                 mDatabase.child("Users/").child(String.valueOf(getPhotoUserId())).child("Breakfast1/Photos").child(getPhotoName()).setValue(downloadUrl.toString());
 
+                //  if(isProfilePhoto)
+                //        ((MyApplication) context.getApplication()).getCurrentUser()
+
                 if(isBreakfastFeed())
                     mDatabase.child("Breakfast/Breakfast1/Photos/").child(getPhotoName()).setValue(downloadUrl.toString());
 
                 if(isSquadFeed())
-                    mDatabase.child("Squads/" + getPhotoSquadId() +  "/Breakfast1/Photos").child(getPhotoName()).setValue(downloadUrl.toString());
+                    // mDatabase.child("Squads/" + getPhotoSquadId() +  "/Breakfast1/Photos").child(getPhotoName()).setValue(downloadUrl.toString());
+                    mDatabase.child("Squads").child(getPhotoSquadId()).child("Breakfast1/Photos").child(getPhotoName()).setValue(downloadUrl.toString());
 
             }
         });
@@ -270,5 +274,13 @@ public class Photo implements Parcelable {
 
     public void setIsSquadFeed(boolean isSquadFeed) {
         this.isSquadFeed = isSquadFeed;
+    }
+
+    public boolean isProfilePhoto() {
+        return isProfilePhoto;
+    }
+
+    public void setIsProfilePhoto(boolean isProfilePhoto) {
+        this.isProfilePhoto = isProfilePhoto;
     }
 }

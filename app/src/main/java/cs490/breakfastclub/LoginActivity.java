@@ -260,6 +260,7 @@ public class LoginActivity extends AppCompatActivity {
                         JSONObject object = response.getJSONObject();
                         JSONObject profileImageObject = null;
                         JSONArray friendsObject = null;
+
                         try {
                             profileImageObject = object.getJSONObject("picture").getJSONObject("data");
                             friendsObject = object.getJSONObject("friends").getJSONArray("data");
@@ -267,6 +268,7 @@ public class LoginActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         Log.v("Public Profile Object: " , object.toString());
+                        
                         Log.v("Image Object: ", profileImageObject.toString());
                         Log.v("Friends Object: ", friendsObject.toString());
 
@@ -300,8 +302,8 @@ public class LoginActivity extends AppCompatActivity {
                                 if (!dataSnapshot.exists()) {
                                     Log.v("User does not exisit", "User does not already exists");
                                     writeNewUser(currentUser);
-                                    ((MyApplication)getApplication()).setCurrentPhotos(new Photos(currentUser));
-                                    HashMap<String, URL> photos = ((MyApplication)getApplication()).getCurrentPhotos().getUserPhotos();
+                                    currentUser.setCurrentPhotos(new Photos(currentUser));
+                                    HashMap<String, URL> photos = currentUser.getCurrentPhotos().getUserPhotos();
 
 
                                 }
@@ -309,8 +311,6 @@ public class LoginActivity extends AppCompatActivity {
                                 else {
                                     Log.v("User already exists", "User already exists");
                                     currentUser.setReceivesPushNotifications((boolean) dataSnapshot.child("receivesPushNotifications").getValue());
-                                    ((MyApplication)getApplication()).setCurrentPhotos(new Photos(currentUser));
-                                    HashMap<String, URL> photos = ((MyApplication)getApplication()).getCurrentPhotos().getUserPhotos();
 
                                     if(dataSnapshot.child("squad").exists()) {
                                         currentUser.createSquad((String) dataSnapshot.child("squad").getValue());
@@ -322,6 +322,7 @@ public class LoginActivity extends AppCompatActivity {
                                         currentUser.setPartOfSquad(false);
                                     }
 
+                                    currentUser.setCurrentPhotos(new Photos(currentUser));
 
                                 }
                             }

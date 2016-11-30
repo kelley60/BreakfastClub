@@ -11,7 +11,7 @@ import cs490.breakfastclub.UserFiles.User;
 public class MyApplication extends Application {
 
     private User currentUser;
-    private Photos currentPhotos;
+
 
     // Use to get the application's current student
     public User getCurrentUser()
@@ -26,12 +26,6 @@ public class MyApplication extends Application {
     }
 
 
-    public Photos getCurrentPhotos() {
-        return currentPhotos;
-    }
 
-    public void setCurrentPhotos(Photos currentPhotos) {
-        this.currentPhotos = currentPhotos;
-    }
 
 }

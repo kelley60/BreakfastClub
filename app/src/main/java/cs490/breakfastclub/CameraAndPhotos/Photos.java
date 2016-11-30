@@ -36,7 +36,7 @@ public class Photos {
     private LinkedHashMap<String, URL> userPhotos;
     private LinkedHashMap<String, URL> squadPhotos;
     private LinkedHashMap<String, URL> breakfastPhotos;
-    private DatabaseReference ref;
+    private DatabaseReference ref1, ref2, ref3;
     private ChildEventListener userChildEventListener;
     private ChildEventListener squadChildEventListener;
     private ChildEventListener breakfastChildEventListener;
@@ -46,10 +46,17 @@ public class Photos {
         squadPhotos = new LinkedHashMap<String, URL>();
         breakfastPhotos = new LinkedHashMap<String, URL>();
 
-        ref = FirebaseDatabase.getInstance().getReference("Users").child(currentUser.getUserId()).child("Breakfast1/Photos");
+        ref1 = FirebaseDatabase.getInstance().getReference("Users").child(currentUser.getUserId()).child("Breakfast1/Photos");
         initPhotosRef(userChildEventListener, USER_PHOTOS);
-        initPhotosRef(userChildEventListener, SQUAD_PHOTOS);
-        initPhotosRef(userChildEventListener, BREAKFAST_PHOTOS);
+        //ref2 = FirebaseDatabase.getInstance().getReference("Squad").child(currentUser.getSquad().getSquadID()).child("Breakfast1/Photos");
+
+        if(currentUser.isPartOfSquad() == true) {
+           setUserSquadPhotos(currentUser.getSquad().getSquadID());
+        }
+
+        ref3 = FirebaseDatabase.getInstance().getReference("Breakfast/Breakfast1/Photos");
+        initPhotosRef(breakfastChildEventListener, BREAKFAST_PHOTOS);
+
     }
 
     private void initPhotosRef( ChildEventListener childEventListener, final int code) {
@@ -57,56 +64,22 @@ public class Photos {
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
-
-                // A new comment has been added, add it to the displayed list
-
-                String key = dataSnapshot.getKey();
-
-                try {
-                    URL url = new URL(dataSnapshot.getValue().toString());
-                    getPhotoSet(code).put(key, url);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-
+                childAdded(dataSnapshot, code);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
-
-                // A new comment has been added, add it to the displayed list
-
-                String key = dataSnapshot.getKey();
-
-                try {
-                    URL url = new URL(dataSnapshot.getValue().toString());
-                    getPhotoSet(code).put(key, url);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-
+                childChanged(dataSnapshot, code);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
-
-                String key = dataSnapshot.getKey();
-                getPhotoSet(code).remove(key);
+                childRemoved(dataSnapshot, code);
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
-
-                // A comment has changed position, use the key to determine if we are
-                // displaying this comment and if so move it.
-                Comment movedComment = dataSnapshot.getValue(Comment.class);
-                String commentKey = dataSnapshot.getKey();
-
-                // ...
+                childMoved(dataSnapshot, code);
             }
 
             @Override
@@ -115,10 +88,75 @@ public class Photos {
 
             }
         };
-        ref.addChildEventListener(childEventListener);
-
+        getRefSet(code).addChildEventListener(childEventListener);
     }
+    /*
 
+        private void initSquadPhotosRef( ChildEventListener childEventListener, final int code) {
+
+            childEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                    childAdded(dataSnapshot, code);
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    childChanged(dataSnapshot, code);
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    childRemoved(dataSnapshot, code);
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+                    childMoved(dataSnapshot, code);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "postComments:onCancelled", databaseError.toException());
+
+                }
+            };
+            ref2.addChildEventListener(squadChildEventListener);
+        }
+
+
+        private void initBreakfastPhotosRef( ChildEventListener childEventListener, final int code) {
+
+            childEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                    childAdded(dataSnapshot, code);
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    childChanged(dataSnapshot, code);
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    childRemoved(dataSnapshot, code);
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+                    childMoved(dataSnapshot, code);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "postComments:onCancelled", databaseError.toException());
+
+                }
+            };
+            ref3.addChildEventListener(breakfastChildEventListener);
+        }
+    */
     private LinkedHashMap<String, URL> getPhotoSet( int code )
     {
         switch (code)
@@ -133,7 +171,84 @@ public class Photos {
         return null;
     }
 
+    private DatabaseReference getRefSet( int code )
+    {
+        switch (code)
+        {
+            case USER_PHOTOS:
+                return ref1;
+            case SQUAD_PHOTOS:
+                return ref2;
+            case BREAKFAST_PHOTOS:
+                return ref3;
+        }
+        return null;
+    }
 
+    private ChildEventListener getChildSet( int code )
+    {
+        switch (code)
+        {
+            case USER_PHOTOS:
+                return userChildEventListener;
+            case SQUAD_PHOTOS:
+                return squadChildEventListener;
+            case BREAKFAST_PHOTOS:
+                return breakfastChildEventListener;
+        }
+        return null;
+    }
+
+    private void childAdded(DataSnapshot dataSnapshot, final int code)
+    {
+        Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
+
+        // A new comment has been added, add it to the displayed list
+
+        String key = dataSnapshot.getKey();
+
+        try {
+            URL url = new URL(dataSnapshot.getValue().toString());
+            getPhotoSet(code).put(key, url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void childChanged(DataSnapshot dataSnapshot, final int code)
+    {
+        Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
+
+        // A new comment has been added, add it to the displayed list
+
+        String key = dataSnapshot.getKey();
+
+        try {
+            URL url = new URL(dataSnapshot.getValue().toString());
+            getPhotoSet(code).put(key, url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void childRemoved(DataSnapshot dataSnapshot, final int code)
+    {
+        Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
+
+        String key = dataSnapshot.getKey();
+        getPhotoSet(code).remove(key);
+    }
+
+    private void childMoved(DataSnapshot dataSnapshot, final int code)
+    {
+        Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
+
+        // A comment has changed position, use the key to determine if we are
+        // displaying this comment and if so move it.
+        Comment movedComment = dataSnapshot.getValue(Comment.class);
+        String commentKey = dataSnapshot.getKey();
+
+    }
 
 
 
@@ -196,29 +311,10 @@ public class Photos {
         return breakfastPhotos.get(name);
     }
 
-/*
-    //todo:get image from download url and use the iamges to fill the imageView
-    public BitMap getBitmapFromUrl( URL url)
+    public void setUserSquadPhotos(String squadId)
     {
+        ref2 = FirebaseDatabase.getInstance().getReference("Squads").child(squadId).child("/Breakfast1/Photos");
+        initPhotosRef(squadChildEventListener, SQUAD_PHOTOS);
+    }
 
-        StorageReference islandRef = storageRef.child(url);
-
-        File localFile = File.createTempFile("images", "jpg");
-
-        islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                // Local temp file has been created
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        });
-
-
-        byte[] decodedString = Base64.decode(value, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-    }*/
 }

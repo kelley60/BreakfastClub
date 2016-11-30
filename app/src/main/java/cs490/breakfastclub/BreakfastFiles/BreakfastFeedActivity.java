@@ -15,13 +15,19 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedHashMap;
 
 import cs490.breakfastclub.CameraAndPhotos.CameraActivity;
 import cs490.breakfastclub.Classes.Post;
 import cs490.breakfastclub.Classes.TimeFunctions;
-import cs490.breakfastclub.UserFiles.User;
+import cs490.breakfastclub.MyApplication;
 import cs490.breakfastclub.R;
+import cs490.breakfastclub.UserFiles.User;
 
 import static cs490.breakfastclub.BreakfastFiles.Breakfast.getCurrentBreakfast;
 import static cs490.breakfastclub.Classes.TimeFunctions.isDuringBreakfast;
@@ -40,6 +46,10 @@ public class BreakfastFeedActivity extends AppCompatActivity {
     Post currentPost;
     ImageView image;
     int tempScore;
+    private ArrayList<URL> photos;
+    private ArrayList<String> photoids;
+    int mSize;
+    int position;
 
 
     @Override
@@ -49,6 +59,12 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         String layout = bundle.getString("Layout Type");
         setLayoutFromIntentString(layout);
+
+        final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+        final LinkedHashMap<String, URL> linkedHashMap = currentUser.getCurrentPhotos().getBreakfastPhotos();
+        photos = new ArrayList<URL>(linkedHashMap.values());
+        photoids = new ArrayList<String>(linkedHashMap.keySet());
+        mSize = photos.size();
 
     }
 
@@ -101,12 +117,14 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("Campus Feed");
 
+        position = 0;
         upArrow = (ImageButton) findViewById(R.id.upArrowId);
         downArrow = (ImageButton) findViewById(R.id.downArrowId);
         cameraButton = (ImageButton) findViewById(R.id.cameraButtonId);
         removePictureButton = (ImageButton) findViewById(R.id.removePhotoButtonId);
         pictureScore = (TextView) findViewById(R.id.pictureScoreId);
         image = (ImageView) findViewById(R.id.campusFeedImageId);
+        setNextImage();
 
         upArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +150,7 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //setNextImage();
+                setNextImage();
             }
         });
 
@@ -160,13 +178,35 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         tempScore = 0;
 
     }
-
+/*
     private void setNextImage() {
         currentUser.setCurrentPositionInFeed(currentUser.getCurrentPositionInFeed()+1);
         currentPost = currentBreakfast.getCampusFeed().get(currentUser.getCurrentPositionInFeed());
         String nextImageUrl = currentPost.getImgURL();
         //image.setImageDrawable
         //save users position in campusfeed to db
+    }
+*/
+    private void setNextImage() {
+        if(position < mSize) {
+            Picasso.with(getApplicationContext()).load(getItemURL(position).toString()).into(image);
+            position++;
+            position = position%mSize;
+        }
+    }
+
+    public URL getItemURL(int position) {
+        return photos.get(position);
+    }
+
+    public URL getPrevItemURL(int position) {
+        if(--position<0) position = mSize - 1;
+        return photos.get(position);
+    }
+
+    public URL getNextItemURL(int position) {
+        if(++position>mSize-1) position = 0;
+        return photos.get(position);
     }
 
     //TODO for Emma
