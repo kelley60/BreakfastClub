@@ -312,6 +312,12 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.v("User already exists", "User already exists");
                                     currentUser.setReceivesPushNotifications((boolean) dataSnapshot.child("receivesPushNotifications").getValue());
 
+                                    // Load the current application photos from firebase
+                                    currentUser.setPermissions(User.Permissions.valueOf((String) dataSnapshot.child("permissions").getValue()));
+                                    ((MyApplication)getApplication()).setCurrentPhotos(new Photos(currentUser));
+                                    HashMap<String, URL> photos = ((MyApplication)getApplication()).getCurrentPhotos().getUserPhotos();
+
+
                                     if(dataSnapshot.child("squad").exists()) {
                                         currentUser.createSquad((String) dataSnapshot.child("squad").getValue());
                                         currentUser.setPartOfSquad(true);
@@ -343,6 +349,8 @@ public class LoginActivity extends AppCompatActivity {
         mDatabase.child("Users").child(user.getUserId()).child("name").setValue(user.getName());
         mDatabase.child("Users").child(user.getUserId()).child("profileImageUrl").setValue(user.getProfileImageUrl());
         mDatabase.child("Users").child(user.getUserId()).child("receivesPushNotifications").setValue(user.isReceivesPushNotifications());
+        mDatabase.child("Users").child(user.getUserId()).child("numberOfOffensives").setValue(0);
+        mDatabase.child("Users").child(user.getUserId()).child("permissions").setValue(User.Permissions.Member);
     }
 
     @Override

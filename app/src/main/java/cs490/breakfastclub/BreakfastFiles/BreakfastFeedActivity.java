@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,10 +16,19 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+<<<<<<< HEAD
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
 import java.util.ArrayList;
+=======
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+>>>>>>> 017c42d06a4284b4cca6dba9790ac0f9422c4d15
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 
@@ -26,10 +36,14 @@ import cs490.breakfastclub.CameraAndPhotos.CameraActivity;
 import cs490.breakfastclub.Classes.Post;
 import cs490.breakfastclub.Classes.TimeFunctions;
 import cs490.breakfastclub.MyApplication;
+<<<<<<< HEAD
+=======
+import cs490.breakfastclub.UserFiles.User;
+>>>>>>> 017c42d06a4284b4cca6dba9790ac0f9422c4d15
 import cs490.breakfastclub.R;
 import cs490.breakfastclub.UserFiles.User;
 
-import static cs490.breakfastclub.BreakfastFiles.Breakfast.getCurrentBreakfast;
+
 import static cs490.breakfastclub.Classes.TimeFunctions.isDuringBreakfast;
 import static cs490.breakfastclub.GeofenceFiles.GeofenceTransitionsIntentService.MYPREFERENCES;
 
@@ -71,7 +85,7 @@ public class BreakfastFeedActivity extends AppCompatActivity {
     private void setLayoutFromIntentString(String layout) {
         if (layout.equals("Campus Feed")) {
             setContentView(R.layout.activity_campus_feed);
-            campusFeedInit();
+            loadCurrentBreakfast();
         }
         if (layout.equals("Not on Campus")){
             setContentView(R.layout.not_on_campus);
@@ -120,11 +134,12 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         position = 0;
         upArrow = (ImageButton) findViewById(R.id.upArrowId);
         downArrow = (ImageButton) findViewById(R.id.downArrowId);
-        cameraButton = (ImageButton) findViewById(R.id.cameraButtonId);
         removePictureButton = (ImageButton) findViewById(R.id.removePhotoButtonId);
+        cameraButton = (ImageButton) findViewById(R.id.cameraButtonId);
         pictureScore = (TextView) findViewById(R.id.pictureScoreId);
         image = (ImageView) findViewById(R.id.campusFeedImageId);
         setNextImage();
+
 
         upArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,6 +152,19 @@ public class BreakfastFeedActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 decreaseCurrentPostScore();
+            }
+        });
+
+        removePictureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO:
+                // currentPost.getSenderId();
+                // ^ Use that to retrieve User info from firebase
+                // Increase numberOffensive by 1
+                // Update User in database
+                // Remove picture from BreakfastFeed
+                // Update database with picture removed
             }
         });
 
@@ -156,24 +184,20 @@ public class BreakfastFeedActivity extends AppCompatActivity {
 
         cameraButton.setVisibility(View.VISIBLE);
         if (isDuringBreakfast() == false || currentUser.getNumberOfOffensives() >= 3){
-            cameraButton.setVisibility(View.INVISIBLE);
+            //cameraButton.setVisibility(View.INVISIBLE);
         }
 
-        removePictureButton.setVisibility(View.INVISIBLE);
 
-        /*
         currentUser = ((MyApplication) getApplication()).getCurrentUser();
-        currentBreakfast = Breakfast.getCurrentBreakfast();
-        currentPost = currentBreakfast.getCampusFeed().get(currentUser.getCurrentPositionInFeed());
-        pictureScore.setText(currentPost.getScore());
-        String imgUrl = currentPost.getImgURL();
-        image.setImageDrawable(null);
+        //currentPost = currentBreakfast.getCampusFeed().get(currentUser.getCurrentPositionInFeed());
+        //pictureScore.setText(currentPost.getScore());
+        //String imgUrl = currentPost.getImgURL();
+        //image.setImageDrawable(null);
 
         User.Permissions Permission = currentUser.getPermissions();
         if (Permission == User.Permissions.Developer || Permission == User.Permissions.Moderator){
             removePictureButton.setVisibility(View.VISIBLE);
         }
-        */
 
         tempScore = 0;
 
@@ -209,7 +233,6 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         return photos.get(position);
     }
 
-    //TODO for Emma
     private void launchCameraActivity() {
         Intent intent = new Intent(BreakfastFeedActivity.this, CameraActivity.class);
         startActivity(intent);
@@ -267,12 +290,12 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         boolean onCampus = sharedpreferences.getBoolean("IsInGeofence", true);
         boolean isDuringBreakfast = sharedpreferences.getBoolean("isDuringBreakfast", true);
 
-        Breakfast currentBreakfast = getCurrentBreakfast();
+        //Breakfast currentBreakfast = getCurrentBreakfast();
 
         if (onCampus == false) {
             intent.putExtra("Layout Type", "Not on Campus");
         }
-        else if (1 == 1){
+        else if (1 == 0){
         //else if (TimeFunctions.isDuringVotingPeriod() == true){
             //not breakfast club time
             intent.putExtra("Layout Type", "Not Time");
@@ -283,4 +306,41 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         return intent;
     }
 
+
+    public void loadCurrentBreakfast() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Breakfasts");
+        ref.orderByChild("isCurrentBreakfast").equalTo("true").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                int year = Integer.parseInt(dataSnapshot.child("year").getValue().toString());
+                int month = Integer.parseInt(dataSnapshot.child("month").getValue().toString());
+                int day =  Integer.parseInt(dataSnapshot.child("day").getValue().toString());
+                String description = dataSnapshot.child("description").getValue().toString();
+                String breakfastKey = dataSnapshot.getKey();
+                currentBreakfast = new Breakfast(year, month, day, description, breakfastKey);
+                campusFeedInit();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

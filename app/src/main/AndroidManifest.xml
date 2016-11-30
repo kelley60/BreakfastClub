@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
@@ -83,9 +82,10 @@
         <activity android:name=".AdminViewUsersActivity" />
         <activity android:name=".SquadFiles.SearchMemberActivity" />
         <activity android:name=".BreakfastFiles.CreateBreakfastActivity2" />
-        <activity android:name=".SquadFiles.SquadLocationActivity"></activity>
-        <activity android:name=".CameraAndPhotos.CameraActivity"></activity>
-        <activity android:name=".CameraAndPhotos.PhotoActivity"></activity>
+        <activity android:name=".SquadFiles.SquadLocationActivity" />
+        <activity android:name=".CameraAndPhotos.CameraActivity" />
+        <activity android:name=".CameraAndPhotos.PhotoActivity" />
+        <activity android:name=".RepeatOffendersActivity"></activity>
     </application>
 
 </manifest>

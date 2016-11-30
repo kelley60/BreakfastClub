@@ -14,12 +14,12 @@
 
 
         <TextView
-            android:id="@+id/lblPermissions"
+            android:id="@+id/lblTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:text="Moderator"
+            android:text="Some Title"
             android:textSize="20sp"
             android:textStyle="italic"
             android:textColor="@color/Purdue_Black"
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_alignParentStart="true"
-            android:layout_below="@id/lblPermissions"
+            android:layout_below="@id/lblTitle"
             app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"/>
 
         <!-- Member Name -->
@@ -50,19 +50,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:layout_marginTop="5dp"
             android:layout_centerVertical="true"
             android:orientation="vertical"
-            android:layout_alignParentEnd="true">
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/lblTitle">
 
 
             <Button
-                android:id="@+id/btnAddPermissions"
+                android:id="@+id/btnAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="+"
                 android:textSize="20sp"/>
             <Button
-                android:id="@+id/btnRemovePermissions"
+                android:id="@+id/btnRemove"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="-"

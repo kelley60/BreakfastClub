@@ -49,10 +49,6 @@ public class CreateBreakfastActivity extends AppCompatActivity {
         });
     }
 
-    void changeBrkfstPic()
-    {
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
