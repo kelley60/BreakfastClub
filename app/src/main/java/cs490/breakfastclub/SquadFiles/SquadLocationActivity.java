@@ -162,7 +162,7 @@ public class SquadLocationActivity extends AppCompatActivity implements OnMapRea
                     Log.v("Members", members.toString());
 
                     for (Map.Entry<String, String> member : members.entrySet()) {
-                        Log.v("Member", member.getKey() + " " + member.getValue());
+                        //Log.v("Member", member.getKey() + " " + member.getValue());
                         DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + member.getKey());
                         memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
