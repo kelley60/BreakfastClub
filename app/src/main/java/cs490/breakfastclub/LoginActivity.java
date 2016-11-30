@@ -37,6 +37,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,6 +54,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cs490.breakfastclub.BreakfastFiles.Breakfast;
 import cs490.breakfastclub.CameraAndPhotos.Photos;
 import cs490.breakfastclub.UserFiles.User;
 
@@ -69,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
+    private Breakfast currentBreakfast;
 
     @Override
     //provide the onCreate method to apply the Friends layout to the activity
@@ -363,6 +366,46 @@ public class LoginActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void loadPhotos(){
+        //TODO
+        //Emma add your photo loading stuff here
+    }
 
+    public void loadCurrentBreakfast() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Breakfasts");
+        ref.orderByChild("isCurrentBreakfast").equalTo("true").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                int year = Integer.parseInt(dataSnapshot.child("year").getValue().toString());
+                int month = Integer.parseInt(dataSnapshot.child("month").getValue().toString());
+                int day =  Integer.parseInt(dataSnapshot.child("day").getValue().toString());
+                String description = dataSnapshot.child("description").getValue().toString();
+                String breakfastKey = dataSnapshot.getKey();
+                currentBreakfast = new Breakfast(year, month, day, description, breakfastKey);
+                loadPhotos();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 }
