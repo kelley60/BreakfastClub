@@ -26,7 +26,8 @@ public class User {
     private ArrayList<User> friends;
     private Permissions permissions;
 
-    private ArrayList<Boolean> hasVoted;
+    private ArrayList<Boolean> hasVotedUp;
+    private ArrayList<Boolean> hasVotedDown;
     private int currentPositionInFeed;
     private int numberOfOffensives;
 
@@ -45,7 +46,8 @@ public class User {
         this.receivesPushNotifications = true;
         this.friends = friends;
         this.permissions = Permissions.Member;
-        this.hasVoted = new ArrayList<Boolean>();
+        this.hasVotedUp = new ArrayList<Boolean>();
+        this.hasVotedDown = new ArrayList<Boolean>();
         this.currentPositionInFeed = 0;
         numberOfOffensives = 0;
     }
@@ -58,12 +60,6 @@ public class User {
     public User()
     {
         this("DEFAULT", "DEFAULT", "DEFAULT", new ArrayList<User>());
-    }
-
-    //TODO
-    //gets currentuser from session
-    public static User getCurrentUser(){
-        return null;
     }
 
     //TODO
@@ -152,12 +148,20 @@ public class User {
     public void setPermissions(Permissions p) { permissions = p; }
 
 
-    public ArrayList<Boolean> getHasVoted() {
-        return hasVoted;
+    public ArrayList<Boolean> getHasVotedUp() {
+        return hasVotedUp;
     }
 
-    public void setHasVoted(ArrayList<Boolean> hasVoted) {
-        this.hasVoted = hasVoted;
+    public void setHasVotedUp(ArrayList<Boolean> hasVoted) {
+        this.hasVotedUp = hasVoted;
+    }
+
+    public ArrayList<Boolean> getHasVotedDown() {
+        return hasVotedDown;
+    }
+
+    public void setHasVotedDown(ArrayList<Boolean> hasVotedDown) {
+        this.hasVotedDown = hasVotedDown;
     }
 
     public int getCurrentPositionInFeed() {
@@ -173,9 +177,6 @@ public class User {
     public double getLat() { return lat; }
     public double getLng() { return lng; }
     public LatLng getLocation() {
-
-
-
         return location;
     }
 
