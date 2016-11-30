@@ -309,6 +309,7 @@ public class LoginActivity extends AppCompatActivity {
                                 else {
                                     Log.v("User already exists", "User already exists");
                                     currentUser.setReceivesPushNotifications((boolean) dataSnapshot.child("receivesPushNotifications").getValue());
+                                    currentUser.setPermissions(User.Permissions.valueOf((String) dataSnapshot.child("permissions").getValue()));
                                     ((MyApplication)getApplication()).setCurrentPhotos(new Photos(currentUser));
                                     HashMap<String, URL> photos = ((MyApplication)getApplication()).getCurrentPhotos().getUserPhotos();
 
@@ -345,7 +346,8 @@ public class LoginActivity extends AppCompatActivity {
         mDatabase.child("Users").child(user.getUserId()).child("currentPositionInFeed").setValue(0);
         mDatabase.child("Users").child(user.getUserId()).setValue("hasVotedUp");
         mDatabase.child("Users").child(user.getUserId()).setValue("hasVotedDown");
-
+        mDatabase.child("Users").child(user.getUserId()).child("numberOfOffensives").setValue(0);
+        mDatabase.child("Users").child(user.getUserId()).child("permissions").setValue(User.Permissions.Member);
     }
 
     @Override

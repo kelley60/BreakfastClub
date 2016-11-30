@@ -19,7 +19,7 @@
         android:id="@+id/lstAllUsers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/my_toolbar">
+        >
     </ListView>
 
     <android.support.v7.widget.Toolbar
@@ -41,5 +41,115 @@
 
     </android.support.v7.widget.Toolbar>
 
+    <!-- Put all other UI elements below this comment! -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/my_toolbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/adminLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="List of Admins"
+                android:textColor="@color/Purdue_White"
+                android:layout_margin="5dp"/>
+
+            <ListView
+                android:id="@+id/lstAdmins"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/adminLabel">
+            </ListView>
+
+            <View
+                android:id="@+id/adminLine"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="5dp"
+                android:layout_below="@id/lstAdmins"
+                android:background="@android:color/darker_gray"/>
+
+            <TextView
+                android:id="@+id/moderatorLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="List of Moderators"
+                android:layout_below="@+id/adminLine"
+                android:textColor="@color/Purdue_White"
+                android:layout_margin="5dp"/>
+
+            <ListView
+                android:id="@+id/lstModerators"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/moderatorLabel">
+            </ListView>
+
+            <View
+                android:id="@+id/moderatorLine"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="5dp"
+                android:layout_below="@id/lstModerators"
+                android:background="@android:color/darker_gray"/>
+
+            <TextView
+                android:id="@+id/requestAdminLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="List of Admin Requests"
+                android:textColor="@color/Purdue_White"
+                android:layout_below="@id/moderatorLine"
+                android:layout_margin="5dp"/>
+
+            <ListView
+                android:id="@+id/lstRequestAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/requestAdminLabel">
+            </ListView>
+
+            <View
+                android:id="@+id/requestAdminLine"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="5dp"
+                android:layout_below="@id/lstRequestAdmin"
+                android:background="@android:color/darker_gray"/>
+
+            <TextView
+                android:id="@+id/requestModeratorLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="List of Moderator Requests"
+                android:textColor="@color/Purdue_White"
+                android:layout_below="@id/requestAdminLine"
+                android:layout_margin="5dp"/>
+
+            <ListView
+                android:id="@+id/lstRequestModerator"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/requestModeratorLabel">
+            </ListView>
+
+            <View
+                android:id="@+id/requestModeratorLine"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="5dp"
+                android:layout_below="@id/lstRequestModerator"
+                android:background="@android:color/darker_gray"/>
+        </RelativeLayout>
+
+    </ScrollView>
 
 </RelativeLayout>
