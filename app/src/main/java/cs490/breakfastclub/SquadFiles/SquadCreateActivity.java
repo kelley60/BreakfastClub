@@ -90,7 +90,7 @@ public class SquadCreateActivity extends AppCompatActivity {
                             Uri downloadUrl = taskSnapshot.getDownloadUrl();
                             Log.v("Image Upload", "SuccessFul Image Upload " + downloadUrl.toString());
                             Squad currentSquad = new Squad(squadName.getText().toString(),
-                                    currentSquadKey, ((BitmapDrawable) squadPhoto.getDrawable()).getBitmap(), squadDesc.getText().toString());
+                                    currentSquadKey, downloadUrl.toString(), "DEFAULT", squadDesc.getText().toString());
                             currentUser.setSquad(currentSquad);
                             currentUser.setSquadRole("captain");
                             currentUser.setPartOfSquad(true);

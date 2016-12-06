@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import cs490.breakfastclub.BreakfastFiles.Breakfast;
 import cs490.breakfastclub.MyApplication;
 import cs490.breakfastclub.R;
 import cs490.breakfastclub.UserFiles.User;
@@ -36,6 +37,7 @@ public class PhotoActivity extends Activity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
     User currentUser;
+    Breakfast currentBreakfast;
     Photo photo;
     String path;
     String name;
@@ -48,6 +50,7 @@ public class PhotoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
         currentUser = ((MyApplication) getApplication()).getCurrentUser();
+        currentBreakfast = ((MyApplication) getApplication()).getCurrentBreakfast();
         c = this;
         Intent i = getIntent();
 
@@ -76,7 +79,7 @@ public class PhotoActivity extends Activity {
         saveButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 addPhotoToGallery();
-                photo.addPhotoToFirebase();
+                photo.addPhotoToFirebase(currentUser);
                 Toast toast = Toast.makeText(getApplicationContext(), "photo saved", Toast.LENGTH_SHORT);
                 toast.show();
                 //Todo:add to db
@@ -103,35 +106,29 @@ public class PhotoActivity extends Activity {
                         {
                             case R.id.set_profile_pic: {
                                 photo.setIsProfilePhoto(true);
-                                photo.addPhotoToFirebase();
-                                mDatabase.child("Users").child(currentUser.getUserId()).child("profileImageUrl").setValue(photo.getPhotoName());
+                                photo.addPhotoToFirebase(currentUser);
+                               // mDatabase.child("Users").child(currentUser.getUserId()).child("profileImageUrl").setValue(photo.getPhotoName());
                                 break;
                             }
                             case R.id.set_squad_profile_pic: {
-                                photo.addPhotoToFirebase();
-                                //mDatabase.child("Squads").child(currentUser.getSquad().getSquadID()).child("profileImageUrl").setValue(photo.getPhotoName());
-                                mDatabase.child("Squads/Squad1/").child("profileImageUrl").setValue(photo.getPhotoName());
+                                photo.setIsSquadProfilePhoto(true);
+                                photo.setIsSquadFeed(true);
+                                photo.addPhotoToFirebase(currentUser);
+                              //  mDatabase.child("Squads").child(currentUser.getSquad().getSquadID()).child("profileImageUrl").setValue(photo.getPhotoName());
                                 break;
                             }
                             case R.id.squad_post: {
                                 photo.setIsSquadFeed(true);
-                                photo.addPhotoToFirebase();
-                                //  mDatabase.child("Photos/Breakfast1/").child(photo.getPhotoName()).child("isSquadFeed").setValue(true);
-
-
-                                //  mDatabase.child("Squad").child(currentUser.getSquad().getSquadID()).child("Photos").child(photo.getPhotoName()).setValue(photo.getPhotoName());
-                                //Todo: add photoname and url into the squad database
+                                photo.addPhotoToFirebase(currentUser);
                                 break;
                             }
                             case R.id.breakfast_post: {
                                 photo.setIsBreakfastFeed(true);
-                                photo.addPhotoToFirebase();
-                                //    mDatabase.child("Photos/Breakfast1/").child(photo.getPhotoName()).child("isBreakfastFeed").setValue(true);
-                                //Todo: add photoname and url into the breakfast database
+                                photo.addPhotoToFirebase(currentUser);
                                 break;
                             }
                             case R.id.facebook_share: {
-                                photo.addPhotoToFirebase();
+                                photo.addPhotoToFirebase(currentUser);
                                 //todo: get facebook post
                                 break;
                             }

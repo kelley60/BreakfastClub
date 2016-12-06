@@ -1,7 +1,5 @@
 package cs490.breakfastclub.SquadFiles;
 
-import android.graphics.Bitmap;
-
 import java.util.ArrayList;
 
 import cs490.breakfastclub.UserFiles.User;
@@ -15,7 +13,8 @@ public class Squad {
     private String squadName;
     private String squadID;
     private String squadDesc;
-    private Bitmap squadPhoto;
+    private String squadImageUrl;
+    private String squadImageID;
     private ArrayList<User> userList;
     private SquadFeed squadFeed;
 
@@ -26,10 +25,11 @@ public class Squad {
     }
 
 
-    public Squad(String squadName, String squadID, Bitmap squadPhoto, String squadDesc){
+    public Squad(String squadName, String squadID, String squadImageURL, String squadImageID, String squadDesc){
         this.squadName = squadName;
         this.squadID = squadID;
-        this.squadPhoto = squadPhoto;
+        this.squadImageUrl = squadImageURL;
+        this.squadImageID = squadImageID;
         this.squadDesc = squadDesc;
         userList = new ArrayList<User>();
         squadFeed = new SquadFeed();
@@ -106,11 +106,19 @@ public class Squad {
         this.squadDesc = squadDesc;
     }
 
-    public Bitmap getSquadPhoto() {
-        return squadPhoto;
+    public String getSquadImageUrl() {
+        return squadImageUrl;
     }
 
-    public void setSquadPhoto(Bitmap squadPhoto) {
-        this.squadPhoto = squadPhoto;
+    public void setSquadImageUrl(String squadImageUrl) {
+        this.squadImageUrl = squadImageUrl;
+    }
+
+    public String getSquadImageID() {
+        return squadImageID;
+    }
+
+    public void setSquadImageID(String squadImageID) {
+        this.squadImageID = squadImageID;
     }
 }

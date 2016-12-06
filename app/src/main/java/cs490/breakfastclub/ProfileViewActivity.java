@@ -1,7 +1,7 @@
 package cs490.breakfastclub;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import cs490.breakfastclub.UserFiles.User;
 
@@ -53,7 +54,7 @@ public class ProfileViewActivity extends AppCompatActivity {
                     ImageView profileImageView = (ImageView) findViewById(R.id.lblProfileImage);
                    // new DownloadImageAsyncTask(profileImageView)
                      //       .execute((String) dataSnapshot.child("profileImageUrl").getValue());
-     //               Picasso.with(mContext).load(getItemURL(position).toString()).into(profileImageView);
+                    Picasso.with(getApplicationContext()).load(currentUser.getProfileImageUrl().toString()).into(profileImageView);
 
                     TextView squadNameView = (TextView) findViewById(R.id.lblSquadName);
                     squadNameView.setText(getIntent().getStringExtra("Squad"));

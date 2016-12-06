@@ -22,6 +22,8 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import cs490.breakfastclub.UserFiles.User;
+
 /**
  * Created by Emma on 11/1/2016.
  */
@@ -34,6 +36,7 @@ public class Photo implements Parcelable {
     private boolean isBreakfastFeed;
     private boolean isSquadFeed;
     private boolean isProfilePhoto = false;
+    private boolean isSquadProfilePhoto = false;
 
     public Photo(String photoName, Bitmap bMap, String photoUserId, String photoSquadId, boolean isBreakfastFeed, boolean isSquadFeed){
         this.photoName = photoName;
@@ -176,11 +179,12 @@ public class Photo implements Parcelable {
         return bitMap;
     }
 
-    public void addPhotoToFirebase()
+    public void addPhotoToFirebase(final User currentUser)
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bMap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] bytes = baos.toByteArray();
+        final String userId = currentUser.getUserId();
         //  String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
         // we finally have our base64 string version of the image, save it.
 
@@ -209,20 +213,35 @@ public class Photo implements Parcelable {
                 mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("squad id").setValue(getPhotoSquadId());
                 mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("isBreakfast").setValue(isBreakfastFeed());
                 mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("isSquad").setValue(isSquadFeed());
+                mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("isUserProfile").setValue(isProfilePhoto());
+                mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("isSquadProfile").setValue(isSquadProfilePhoto());
                 mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("image url").setValue(downloadUrl.toString());
 
-                mDatabase.child("Users/").child(String.valueOf(getPhotoUserId())).child("Breakfast1/Photos").child(getPhotoName()).setValue(downloadUrl.toString());
+                mDatabase.child("Users/").child(String.valueOf(userId)).child("Breakfast1/Photos").child(getPhotoName()).setValue(downloadUrl.toString());
 
-                //  if(isProfilePhoto)
-                //        ((MyApplication) context.getApplication()).getCurrentUser()
+
+                if (isProfilePhoto()) {
+                    mDatabase.child("Users").child(String.valueOf(userId)).child("profileImageUrl").setValue(downloadUrl.toString());
+                    mDatabase.child("Users").child(String.valueOf(userId)).child("profileImageID").setValue(getPhotoName());
+                    currentUser.setProfileImageID(getPhotoName());
+                    currentUser.setProfileImageUrl(downloadUrl.toString());
+                }
+
+                if (isSquadProfilePhoto()) {
+                    mDatabase.child("Squads").child(getPhotoSquadId()).child("profileImageUrl").setValue(downloadUrl.toString());
+                    mDatabase.child("Squads").child(getPhotoSquadId()).child("profileImageID").setValue(getPhotoName());
+                    currentUser.getSquad().setSquadImageID(getPhotoName());
+                    currentUser.getSquad().setSquadImageUrl(downloadUrl.toString());
+                }
 
                 if(isBreakfastFeed())
+                    //Todo get breakfast club key
                     mDatabase.child("Breakfast/Breakfast1/Photos/").child(getPhotoName()).setValue(downloadUrl.toString());
 
                 if(isSquadFeed())
+                    //Todo get breakfast club key
                     // mDatabase.child("Squads/" + getPhotoSquadId() +  "/Breakfast1/Photos").child(getPhotoName()).setValue(downloadUrl.toString());
                     mDatabase.child("Squads").child(getPhotoSquadId()).child("Breakfast1/Photos").child(getPhotoName()).setValue(downloadUrl.toString());
-
             }
         });
     }
@@ -282,5 +301,14 @@ public class Photo implements Parcelable {
 
     public void setIsProfilePhoto(boolean isProfilePhoto) {
         this.isProfilePhoto = isProfilePhoto;
+    }
+
+
+    public boolean isSquadProfilePhoto() {
+        return isSquadProfilePhoto;
+    }
+
+    public void setIsSquadProfilePhoto(boolean isSquadProfilePhoto) {
+        this.isSquadProfilePhoto = isSquadProfilePhoto;
     }
 }

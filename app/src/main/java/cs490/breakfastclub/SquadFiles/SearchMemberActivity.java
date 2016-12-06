@@ -30,7 +30,7 @@ public class SearchMemberActivity extends AppCompatActivity {
         ArrayList<User> userList = new ArrayList<>();
         for(int i = 0; i < 10; i++)
         {
-            User u = new User("Name " + i, "[url_here]", null);
+            User u = new User("Name " + i, "[url_here]", null, null);
             userList.add(u);
         }
 

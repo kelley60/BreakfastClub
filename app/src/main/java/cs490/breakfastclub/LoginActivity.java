@@ -322,6 +322,8 @@ public class LoginActivity extends AppCompatActivity {
                                         currentUser.createSquad((String) dataSnapshot.child("squad").getValue());
                                         currentUser.setPartOfSquad(true);
                                         currentUser.setSquadRole((String) dataSnapshot.child("squadRole").getValue());
+                                        currentUser.getSquad().setSquadImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
+                                        currentUser.getSquad().setSquadImageID((String) dataSnapshot.child("profileImageID").getValue());
                                     }
                                     else
                                     {
@@ -348,6 +350,7 @@ public class LoginActivity extends AppCompatActivity {
     private void writeNewUser(User user) {
         mDatabase.child("Users").child(user.getUserId()).child("name").setValue(user.getName());
         mDatabase.child("Users").child(user.getUserId()).child("profileImageUrl").setValue(user.getProfileImageUrl());
+        mDatabase.child("Users").child(user.getUserId()).child("profileImageID").setValue(user.getProfileImageID());
         mDatabase.child("Users").child(user.getUserId()).child("receivesPushNotifications").setValue(user.isReceivesPushNotifications());
         mDatabase.child("Users").child(user.getUserId()).child("currentPositionInFeed").setValue(0);
         mDatabase.child("Users").child(user.getUserId()).setValue("hasVotedUp");

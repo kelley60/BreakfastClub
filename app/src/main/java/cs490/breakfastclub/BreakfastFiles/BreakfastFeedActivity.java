@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,19 +15,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-<<<<<<< HEAD
-import com.squareup.picasso.Picasso;
-
-import java.net.URL;
-import java.util.ArrayList;
-=======
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
->>>>>>> 017c42d06a4284b4cca6dba9790ac0f9422c4d15
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 
@@ -36,13 +31,8 @@ import cs490.breakfastclub.CameraAndPhotos.CameraActivity;
 import cs490.breakfastclub.Classes.Post;
 import cs490.breakfastclub.Classes.TimeFunctions;
 import cs490.breakfastclub.MyApplication;
-<<<<<<< HEAD
-=======
-import cs490.breakfastclub.UserFiles.User;
->>>>>>> 017c42d06a4284b4cca6dba9790ac0f9422c4d15
 import cs490.breakfastclub.R;
 import cs490.breakfastclub.UserFiles.User;
-
 
 import static cs490.breakfastclub.Classes.TimeFunctions.isDuringBreakfast;
 import static cs490.breakfastclub.GeofenceFiles.GeofenceTransitionsIntentService.MYPREFERENCES;

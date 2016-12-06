@@ -1,15 +1,13 @@
 package cs490.breakfastclub.SquadFiles;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.support.annotation.NonNull;
+import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,18 +15,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.app.AlertDialog;
-import android.widget.Button;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,11 +39,11 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import cs490.breakfastclub.UserFiles.User;
 import cs490.breakfastclub.DisplayMessageActivity;
 import cs490.breakfastclub.MyApplication;
 import cs490.breakfastclub.ProfileViewActivity;
 import cs490.breakfastclub.R;
+import cs490.breakfastclub.UserFiles.User;
 
 public class SquadViewActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
@@ -397,12 +393,15 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                     currentUser.getSquad().setSquadDesc((String) dataSnapshot.child("description").getValue());
                     squadDescView.setText((String) dataSnapshot.child("description").getValue());
 
+                    ImageView squadImageView = (ImageView) findViewById(R.id.squadPhoto);
+                    Picasso.with(getApplicationContext()).load((String) dataSnapshot.child("profileImageUrl").getValue()).into(squadImageView);
+
                     // Gets a firebase reference ready to access a picture
                     FirebaseStorage storage = FirebaseStorage.getInstance();
                     StorageReference storageRef = storage.getReferenceFromUrl("gs://breakfastclubapp-437bd.appspot.com");
                     StorageReference squadImageRef = storageRef.child("Squads/" + dataSnapshot.getKey());
 
-                    // Get picture from db
+/*                    // Get picture from db
                     final long ONE_MEGABYTE = 1024 * 1024;
                     squadImageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                         @Override
@@ -411,7 +410,11 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                             Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                             ImageView squadImageView = (ImageView) findViewById(R.id.squadPhoto);
 
+
+
+
                             squadImageView.setImageBitmap(bmp);
+
                             currentUser.getSquad().setSquadPhoto(bmp);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -422,7 +425,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                     });
 
 
-
+*/
                     for (Map.Entry<String, HashMap> memberEntry : members.entrySet()) {
                         Log.v("Each Member", memberEntry.toString());
                         HashMap<String, String> memberInfo = memberEntry.getValue();

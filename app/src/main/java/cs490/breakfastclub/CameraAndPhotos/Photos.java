@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedHashMap;
 
+import cs490.breakfastclub.SquadFiles.Squad;
 import cs490.breakfastclub.UserFiles.User;
 
 
@@ -41,19 +42,30 @@ public class Photos {
     private ChildEventListener squadChildEventListener;
     private ChildEventListener breakfastChildEventListener;
 
-    public Photos(User currentUser){
+    public Photos(User currentUser) {
         userPhotos = new LinkedHashMap<String, URL>();
         squadPhotos = new LinkedHashMap<String, URL>();
         breakfastPhotos = new LinkedHashMap<String, URL>();
 
-        ref1 = FirebaseDatabase.getInstance().getReference("Users").child(currentUser.getUserId()).child("Breakfast1/Photos");
-        initPhotosRef(userChildEventListener, USER_PHOTOS);
-        //ref2 = FirebaseDatabase.getInstance().getReference("Squad").child(currentUser.getSquad().getSquadID()).child("Breakfast1/Photos");
+        String userId = currentUser.getUserId();
+        String squadId;
+        Squad squad = currentUser.getSquad();
+        String breakfastId = currentUser.getUserId();
 
-        if(currentUser.isPartOfSquad() == true) {
-           setUserSquadPhotos(currentUser.getSquad().getSquadID());
+
+        ref1 = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Breakfast1/Photos");
+        initPhotosRef(userChildEventListener, USER_PHOTOS);
+
+        if (squad != null)
+        {
+            squadId = currentUser.getSquad().getSquadID();
+            ref2 = FirebaseDatabase.getInstance().getReference("Squads").child(squadId).child(breakfastId).child("Photos");
+            if (currentUser.isPartOfSquad() == true) {
+                setUserSquadPhotos(currentUser.getSquad().getSquadID());
+            }
         }
 
+        //Todo change to be Breakfasts
         ref3 = FirebaseDatabase.getInstance().getReference("Breakfast/Breakfast1/Photos");
         initPhotosRef(breakfastChildEventListener, BREAKFAST_PHOTOS);
 

@@ -6,6 +6,7 @@ package cs490.breakfastclub;
 
 import android.app.Application;
 
+import cs490.breakfastclub.BreakfastFiles.Breakfast;
 import cs490.breakfastclub.CameraAndPhotos.Photos;
 import cs490.breakfastclub.UserFiles.User;
 
@@ -13,6 +14,7 @@ public class MyApplication extends Application {
 
     private User currentUser;
     private Photos currentPhotos;
+    private Breakfast currentBreakfast;
 
 
     // Use to get the application's current student
@@ -37,6 +39,18 @@ public class MyApplication extends Application {
     public void setCurrentPhotos(Photos photos)
     {
         this.currentPhotos = photos;
+    }
+
+    // Use to get the application's current student
+    public Breakfast getCurrentBreakfast()
+    {
+        return currentBreakfast;
+    }
+
+    // Use to set the application's current student
+    public void setCurrentBreakfast(Breakfast breakfast)
+    {
+        this.currentBreakfast = breakfast;
     }
 
 
