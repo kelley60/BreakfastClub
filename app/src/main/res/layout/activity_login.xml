@@ -14,24 +14,6 @@
 
     <!-- Put all other UI elements below this comment! -->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="FB_INFO"
-        android:id="@+id/fb_info"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_below="@id/my_toolbar"
-        android:textColor="@color/Purdue_White"/>
-
-    <Button
-        android:id="@+id/btn_nav"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Go to Navigation"
-        android:layout_below="@id/fb_info"
-        android:visibility="invisible"/>
-
 
     <com.facebook.login.widget.LoginButton
         android:layout_width="match_parent"
@@ -55,12 +37,6 @@
         app:popupTheme="@style/PopupOverlay"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
 </RelativeLayout>
