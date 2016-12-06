@@ -62,7 +62,15 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         String layout = bundle.getString("Layout Type");
         setLayoutFromIntentString(layout);
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Repeat Offenders");
+
     }
+
+
 
     private void setLayoutFromIntentString(String layout) {
         if (layout.equals("Campus Feed")) {

@@ -1,5 +1,6 @@
 package cs490.breakfastclub;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import cs490.breakfastclub.SquadFiles.SquadGalleryActivity;
+import cs490.breakfastclub.SquadFiles.SquadViewActivity;
 import cs490.breakfastclub.UserFiles.User;
 
 public class ProfileViewActivity extends AppCompatActivity {
@@ -39,6 +42,8 @@ public class ProfileViewActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+
+
 
         if (getIntent().hasExtra("MemberFromSquadView"))
         {
@@ -64,6 +69,20 @@ public class ProfileViewActivity extends AppCompatActivity {
 
                 }
             });
+
+            if(userID.equals(currentUser.getUserId())) {
+                Button btnGallery = (Button) findViewById(R.id.btnViewSquadPhotos);
+                btnGallery.setVisibility(View.VISIBLE);
+                btnGallery.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(ProfileViewActivity.this, SquadGalleryActivity.class);
+                        startActivity(intent);
+                    }
+                });
+            }
+
+
         }
         else if (getIntent().hasExtra(("AddMemberFromSquadView")))
         {
@@ -137,6 +156,16 @@ public class ProfileViewActivity extends AppCompatActivity {
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
+                }
+            });
+
+            Button btnGallery = (Button) findViewById(R.id.btnViewSquadPhotos);
+            btnGallery.setVisibility(View.VISIBLE);
+            btnGallery.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ProfileViewActivity.this, SquadGalleryActivity.class);
+                    startActivity(intent);
                 }
             });
         }

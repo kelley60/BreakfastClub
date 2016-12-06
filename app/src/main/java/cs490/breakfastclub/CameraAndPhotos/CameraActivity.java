@@ -3,6 +3,7 @@ package cs490.breakfastclub.CameraAndPhotos;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -28,6 +29,12 @@ public class CameraActivity extends AppCompatActivity {
                     .replace(R.id.container, CameraActivityFragment.newInstance())
                     .commit();
         }
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Repeat Offenders");
     }
 
 
