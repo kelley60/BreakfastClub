@@ -41,7 +41,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
 
         Intent locationService = new Intent(getApplicationContext(), LocationService.class);
-        getApplicationContext().startService(locationService);
+//        getApplicationContext().startService(locationService);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

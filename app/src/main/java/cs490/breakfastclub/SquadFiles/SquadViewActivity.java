@@ -60,6 +60,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
     private TextView mDrawerTitle;
     CharSequence[] items;
     List<CharSequence> userNames = new ArrayList<>();
+    List<CharSequence> userIDs = new ArrayList<>();
 
 
     private DatabaseReference mDatabase;
@@ -285,6 +286,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                             // Captain is the only user in here. Delete the squad
                             if (currentUser.getSquad().getUserList().size() == 1) {
                                 currentUser.setPartOfSquad(false);
+                                Log.d("HI", "deleting the only user in the sq - " + currentUser.getSquad().getSquadID());
                                 mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
                                 mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
                                 mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).removeValue();
@@ -312,9 +314,13 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                                                 // Build radio button list for user to click
                                                 ListIterator<User> iter = currentUser.getSquad().getUserList().listIterator();
                                                 while(iter.hasNext()) {
-                                                    String name = iter.next().getName();
-                                                    if (!name.equals(currentUser.getName()))
+                                                    User temp = iter.next();
+                                                    String name = temp.getName();
+                                                    String ID = temp.getUserId();
+                                                    if (!ID.equals(currentUser.getUserId())) {
                                                         userNames.add(name);
+                                                        userIDs.add(ID);
+                                                    }
                                                 }
                                                 AlertDialog.Builder builder = new AlertDialog.Builder(SquadViewActivity.this);
                                                 builder.setTitle("Pick a new captain")
@@ -323,13 +329,15 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                                                                 // The 'which' argument contains the index position of the selected item
 
                                                                 // TODO - Make that user Owner - Change all that data locally and in db
-                                                                Log.d("User selected as cptn", "" + userNames.get(which).toString());
+                                                                Log.d("User selected as cptn", "" + userNames.get(which).toString() + " " + userIDs.get(which).toString());
+                                                                mDatabase.child("Users/"  + userIDs.get(which).toString()).child("squadRole").setValue("captain");
+                                                                mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(userIDs.get(which).toString()).child("squadRole").setValue("captain");
 
                                                                 // TODO - delete current user from Squad, locally and in db. Can probably copy code from below
                                                                 currentUser.setPartOfSquad(false);
                                                                 mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
                                                                 mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
-                                                                mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).removeValue();
+                                                                mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(currentUser.getUserId()).removeValue();
                                                                 currentUser.setSquad(null);
                                                                 currentUser.setSquadRole("");
 
@@ -377,6 +385,8 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                             mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
                             mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
                             mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(currentUser.getUserId()).removeValue();
+                            currentUser.setSquad(null);
+                            currentUser.setSquadRole("");
                             finish();
                         }
                     }   // end of onclick
