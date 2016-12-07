@@ -22,7 +22,7 @@ import cs490.breakfastclub.R;
 
 public class SquadGalleryActivity extends AppCompatActivity {
 
-    private URL prev, next;
+    private URL prev, next, current;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +48,11 @@ public class SquadGalleryActivity extends AppCompatActivity {
 
                 prev = ImageAdapter.getPrevItemURL(position);
                 next = ImageAdapter.getNextItemURL(position);
+                current = ImageAdapter.getItemURL(position);
 
-                showImage(squadGallery.getAdapter().getItemId(position), position);
+                showImage(position);
+
+                //showImage(squadGallery.getAdapter().getItemId(position), position);
 
 
             }
@@ -73,12 +76,12 @@ public class SquadGalleryActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showImage(long id, int pos){
+    private void showImage(int pos){
         Intent pictureViewer = new Intent(this, PhotoViewerActivity.class);
-        pictureViewer.putExtra("pictureId",id );
+        pictureViewer.putExtra("pictureId",current.toString() );
         pictureViewer.putExtra("picturePosition", pos);
-        pictureViewer.putExtra("picturePrevId", prev);
-        pictureViewer.putExtra("pictureNextId", next);
+        pictureViewer.putExtra("picturePrevId", prev.toString());
+        pictureViewer.putExtra("pictureNextId", next.toString());
 
         startActivityForResult(pictureViewer,0);
 

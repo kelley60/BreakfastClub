@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
@@ -67,7 +69,7 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         String layout = bundle.getString("Layout Type");
         setLayoutFromIntentString(layout);
 
-        final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+        currentUser = ((MyApplication) getApplication()).getCurrentUser();
         final LinkedHashMap<String, URL> linkedHashMap = currentUser.getCurrentPhotos().getBreakfastPhotos();
         photos = new ArrayList<URL>(linkedHashMap.values());
         photoids = new ArrayList<String>(linkedHashMap.keySet());
@@ -152,13 +154,15 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         removePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO:
-                // currentPost.getSenderId();
-                // ^ Use that to retrieve User info from firebase
-                // Increase numberOffensive by 1
-                // Update User in database
-                // Remove picture from BreakfastFeed
-                // Update database with picture removed
+
+
+
+
+                // TODO: Uncomment when functional
+                //removePost();
+
+
+
             }
         });
 
@@ -196,50 +200,22 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         tempScore = 0;
 
     }
-/*
-    private void setNextImage() {
 
-        int currentPosition = currentUser.getCurrentPositionInFeed();
-        //TODO
-        int breakfastPhotoCount = 0;
-
-        if (currentPosition < breakfastPhotoCount) {
-            currentUser.setCurrentPositionInFeed(currentPosition + 1);
-            mDatabase.child("Users").child(currentUser.getUserId()).child("currentPositionInFeed").setValue(currentPosition+1);
-            currentPost = currentBreakfast.getCampusFeed().get(currentPosition+1);
-            //TODO set image
-            //String nextImageUrl = currentPost.getImgURL();
-            //image.setImageDrawable();
-        }
-
-        else if (currentPosition == breakfastPhotoCount){
-            currentUser.setCurrentPositionInFeed(0);
-            mDatabase.child("Users").child(currentUser.getUserId()).child("currentPositionInFeed").setValue(0);
-            mDatabase.child("Users").child(currentUser.getUserId()).setValue("hasVotedUp");
-            mDatabase.child("Users").child(currentUser.getUserId()).setValue("hasVotedDown");
-        }
-
-    }
-*/
     private void setNextImage() {
         if(position < mSize) {
-            Picasso.with(getApplicationContext()).load(getItemURL(position).toString()).into(image);
+            Picasso.with(getApplicationContext()).load(getItemURL(position).toString()).fit().into(image);
+            if(currentUser.getCurrentPhotos().getBreakfastVotes().containsKey(photoids.get(position)))
+                pictureScore.setText(currentUser.getCurrentPhotos().getBreakfastVotes().get(photoids.get(position)).toString());
+            else {
+                pictureScore.setText("0");
+                currentUser.getCurrentPhotos().getBreakfastVotes().put(photoids.get(position), 0);
+            }
             position++;
             position = position%mSize;
         }
     }
 
     public URL getItemURL(int position) {
-        return photos.get(position);
-    }
-
-    public URL getPrevItemURL(int position) {
-        if(--position<0) position = mSize - 1;
-        return photos.get(position);
-    }
-
-    public URL getNextItemURL(int position) {
-        if(++position>mSize-1) position = 0;
         return photos.get(position);
     }
 
@@ -354,5 +330,56 @@ public class BreakfastFeedActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void removePost()
+    {
+        String sender = currentPost.getSenderID();
+        // ^ Use that to retrieve User info from firebase
+        final DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + sender);
+        memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                for(DataSnapshot d : dataSnapshot.getChildren())
+                {
+                    User u = new User();
+                    u.setName((String) d.child("name").getValue());
+                    u.setProfileImageUrl((String) d.child("profileImageUrl").getValue());
+                    u.setUserId((String) d.getKey());
+
+                    if(d.child("numberOfOffensives").exists())
+                    {
+                        Log.d("Offensives", "Field numberOfOffensives exists for " + u.getName());
+                        Long i = (Long) d.child("numberOfOffensives").getValue();
+                        Log.d("Offensives", "Got value from database");
+                        u.setNumberOfOffensives(i.intValue() + 1);
+                        Log.d("Offensives", "Updated value for user");
+                    }
+                    else
+                    {
+                        u.setNumberOfOffensives(1);
+                        Log.d("Offensives", "Added Field numberOfOffensives for " + u.getName());
+                        memberRef.child(u.getUserId()).child("numberOfOffensives").setValue(0);
+                        Log.d("Offensives", "Success");
+                    }
+
+                    // Update user in the database
+                    mDatabase.child("Users").child(u.getUserId()).child("numberOfOffensives").setValue(u.getNumberOfOffensives());
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        // TODO: @Emma
+        // Remove picture from BreakfastFeed
+
+        // Update database with picture removed
     }
 }

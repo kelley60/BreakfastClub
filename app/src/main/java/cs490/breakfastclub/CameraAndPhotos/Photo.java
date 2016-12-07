@@ -179,7 +179,7 @@ public class Photo implements Parcelable {
         return bitMap;
     }
 
-    public void addPhotoToFirebase(final User currentUser)
+    public void addPhotoToFirebase(final User currentUser, final String currentBreakfast)
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bMap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -209,15 +209,16 @@ public class Photo implements Parcelable {
 
                 //Todo: get the breakfast club key
                 //       mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("image").setValue(base64Image);
-                mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("user id").setValue(getPhotoUserId());
-                mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("squad id").setValue(getPhotoSquadId());
-                mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("isBreakfast").setValue(isBreakfastFeed());
-                mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("isSquad").setValue(isSquadFeed());
-                mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("isUserProfile").setValue(isProfilePhoto());
-                mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("isSquadProfile").setValue(isSquadProfilePhoto());
-                mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("image url").setValue(downloadUrl.toString());
+                mDatabase.child("Photos").child(currentBreakfast).child(getPhotoName()).child("user id").setValue(getPhotoUserId());
+                mDatabase.child("Photos").child(currentBreakfast).child(getPhotoName()).child("squad id").setValue(getPhotoSquadId());
+                mDatabase.child("Photos").child(currentBreakfast).child(getPhotoName()).child("isBreakfast").setValue(isBreakfastFeed());
+                mDatabase.child("Photos").child(currentBreakfast).child(getPhotoName()).child("isSquad").setValue(isSquadFeed());
+                mDatabase.child("Photos").child(currentBreakfast).child(getPhotoName()).child("isUserProfile").setValue(isProfilePhoto());
+                mDatabase.child("Photos").child(currentBreakfast).child(getPhotoName()).child("isSquadProfile").setValue(isSquadProfilePhoto());
+                mDatabase.child("Photos").child(currentBreakfast).child(getPhotoName()).child("image url").setValue(downloadUrl.toString());
 
-                mDatabase.child("Users/").child(String.valueOf(userId)).child("Breakfast1/Photos").child(getPhotoName()).setValue(downloadUrl.toString());
+
+                mDatabase.child("Users/").child(String.valueOf(userId)).child("Photos").child(currentBreakfast).child(getPhotoName()).setValue(downloadUrl.toString());
 
 
                 if (isProfilePhoto()) {
@@ -234,14 +235,17 @@ public class Photo implements Parcelable {
                     currentUser.getSquad().setSquadImageUrl(downloadUrl.toString());
                 }
 
-                if(isBreakfastFeed())
+                if (isBreakfastFeed()) {
                     //Todo get breakfast club key
-                    mDatabase.child("Breakfast/Breakfast1/Photos/").child(getPhotoName()).setValue(downloadUrl.toString());
+                    mDatabase.child("Breakfasts").child(currentBreakfast).child("Photos").child(getPhotoName()).setValue(downloadUrl.toString());
+                    mDatabase.child("Breakfasts").child(currentBreakfast).child("Votes").child(getPhotoName()).setValue(0);
 
-                if(isSquadFeed())
+                }
+
+                if (isSquadFeed())
                     //Todo get breakfast club key
                     // mDatabase.child("Squads/" + getPhotoSquadId() +  "/Breakfast1/Photos").child(getPhotoName()).setValue(downloadUrl.toString());
-                    mDatabase.child("Squads").child(getPhotoSquadId()).child("Breakfast1/Photos").child(getPhotoName()).setValue(downloadUrl.toString());
+                    mDatabase.child("Squads").child(getPhotoSquadId()).child("Photos").child(currentBreakfast).child(getPhotoName()).setValue(downloadUrl.toString());
             }
         });
     }

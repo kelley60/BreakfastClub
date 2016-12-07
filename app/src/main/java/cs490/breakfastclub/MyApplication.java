@@ -14,8 +14,7 @@ public class MyApplication extends Application {
 
     private User currentUser;
     private Photos currentPhotos;
-    private Breakfast currentBreakfast;
-
+    private Breakfast breakfast;
 
     // Use to get the application's current student
     public User getCurrentUser()
@@ -41,18 +40,12 @@ public class MyApplication extends Application {
         this.currentPhotos = photos;
     }
 
-    // Use to get the application's current student
-    public Breakfast getCurrentBreakfast()
-    {
-        return currentBreakfast;
+    public Breakfast getBreakfast() {
+        return breakfast;
     }
 
-    // Use to set the application's current student
-    public void setCurrentBreakfast(Breakfast breakfast)
-    {
-        this.currentBreakfast = breakfast;
+    public void setBreakfast(Breakfast breakfast) {
+        this.breakfast = breakfast;
     }
-
-
 
 }

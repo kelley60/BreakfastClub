@@ -14,9 +14,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -37,6 +34,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,12 +45,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
+import cs490.breakfastclub.BreakfastFiles.Breakfast;
 import cs490.breakfastclub.CameraAndPhotos.Photos;
 import cs490.breakfastclub.UserFiles.User;
 
@@ -62,13 +59,13 @@ import cs490.breakfastclub.UserFiles.User;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    private TextView info;
     public static LoginButton loginButton;
     public static CallbackManager callbackManager;
     public AccessTokenTracker accessTokenTracker;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
+    private Breakfast currentBreakfast;
 
     @Override
     //provide the onCreate method to apply the Friends layout to the activity
@@ -83,15 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        if (getIntent().hasExtra("CameFromDrawer"))
-        {
-            boolean cameFromDrawer = getIntent().getBooleanExtra("CameFromDrawer", false);
-            if (cameFromDrawer == true)
-            {
-                myToolbar.setVisibility(View.VISIBLE);
-            }
 
-        }
 
 
         // Add code to print out the key hash
@@ -119,30 +108,18 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = (LoginButton) findViewById(R.id.fb_button);
         loginButton.setReadPermissions("email", "public_profile", "user_friends");
         //gets the textview from activity_login.xml
-        info = (TextView) findViewById(R.id.fb_info);
-        final Button btnnav = (Button) findViewById(R.id.btn_nav);
-        btnnav.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent init = new Intent(LoginActivity.this, DrawerActivity.class);
-                init.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(init);
-                finish();
-            }
-        });
 
 
         if (isLoggedIn())
         {
-            info.setText("User is Logged In.");
             getSupportActionBar().setTitle("Sign Out");
-            btnnav.setVisibility(View.VISIBLE);
-            handleFacebookAccessToken(AccessToken.getCurrentAccessToken());
+            if (getIntent().hasExtra("CameFromDrawer") == false)
+            {
+                handleFacebookAccessToken(AccessToken.getCurrentAccessToken());
+            }
         }
         else
         {
-            info.setText("User is not Logged In.");
             getSupportActionBar().setTitle("Sign In");
         }
 
@@ -153,18 +130,17 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // DO something with information you got
-                btnnav.setVisibility(View.VISIBLE);
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
             @Override
             public void onCancel() {
-                info.setText("Login attempt canceled.");
+
             }
 
             @Override
             public void onError(FacebookException error) {
-                info.setText("Login attempt failed.");
+
             }
 
         });
@@ -302,9 +278,7 @@ public class LoginActivity extends AppCompatActivity {
                                 if (!dataSnapshot.exists()) {
                                     Log.v("User does not exisit", "User does not already exists");
                                     writeNewUser(currentUser);
-                                    currentUser.setCurrentPhotos(new Photos(currentUser));
-                                    HashMap<String, URL> photos = currentUser.getCurrentPhotos().getUserPhotos();
-
+                                    loadCurrentBreakfast();
 
                                 }
                                 // Get the information needed and update the user
@@ -314,9 +288,6 @@ public class LoginActivity extends AppCompatActivity {
 
                                     // Load the current application photos from firebase
                                     currentUser.setPermissions(User.Permissions.valueOf((String) dataSnapshot.child("permissions").getValue()));
-                                    ((MyApplication)getApplication()).setCurrentPhotos(new Photos(currentUser));
-                                    HashMap<String, URL> photos = ((MyApplication)getApplication()).getCurrentPhotos().getUserPhotos();
-
 
                                     if(dataSnapshot.child("squad").exists()) {
                                         currentUser.createSquad((String) dataSnapshot.child("squad").getValue());
@@ -330,9 +301,12 @@ public class LoginActivity extends AppCompatActivity {
                                         currentUser.setPartOfSquad(false);
                                     }
 
-                                    currentUser.setCurrentPhotos(new Photos(currentUser));
-
+                                    loadCurrentBreakfast();
                                 }
+                                Intent init = new Intent(LoginActivity.this, DrawerActivity.class);
+                                init.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(init);
+                                finish();
                             }
 
                             @Override
@@ -372,6 +346,49 @@ public class LoginActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void loadPhotos(){
+        //TODO
+        //Emma add your photo loading stuff here
+        User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+        currentUser.setCurrentPhotos(new Photos(currentUser, currentBreakfast.getBreakfastKey()));
+    }
 
+    public void loadCurrentBreakfast() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Breakfasts");
+        ref.orderByChild("isCurrentBreakfast").equalTo("true").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                int year = Integer.parseInt(dataSnapshot.child("year").getValue().toString());
+                int month = Integer.parseInt(dataSnapshot.child("month").getValue().toString());
+                int day =  Integer.parseInt(dataSnapshot.child("day").getValue().toString());
+                String description = dataSnapshot.child("description").getValue().toString();
+                String breakfastKey = dataSnapshot.getKey();
+                currentBreakfast = new Breakfast(year, month, day, description, breakfastKey);
+                ((MyApplication)getApplication()).setBreakfast(currentBreakfast);
+                loadPhotos();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 }

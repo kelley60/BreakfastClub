@@ -32,42 +32,47 @@ public class Photos {
     private static final int USER_PHOTOS = 0;
     private static final int SQUAD_PHOTOS = 1;
     private static final int BREAKFAST_PHOTOS = 2;
+    private static final int BREAKFAST_VOTES = 3;
 
     private Photo profilePic;
     private LinkedHashMap<String, URL> userPhotos;
     private LinkedHashMap<String, URL> squadPhotos;
     private LinkedHashMap<String, URL> breakfastPhotos;
-    private DatabaseReference ref1, ref2, ref3;
+    private LinkedHashMap<String, Integer> breakfastPhotosVotes;
+    private DatabaseReference ref1, ref2, ref3, ref4;
     private ChildEventListener userChildEventListener;
     private ChildEventListener squadChildEventListener;
     private ChildEventListener breakfastChildEventListener;
+    private ChildEventListener breakfastVotesChildEventListener;
+    private String breakfastId;
 
-    public Photos(User currentUser) {
+    public Photos(User currentUser, String currentBreakfast) {
         userPhotos = new LinkedHashMap<String, URL>();
         squadPhotos = new LinkedHashMap<String, URL>();
         breakfastPhotos = new LinkedHashMap<String, URL>();
+        breakfastPhotosVotes = new LinkedHashMap<String, Integer>();
 
         String userId = currentUser.getUserId();
-        String squadId;
         Squad squad = currentUser.getSquad();
-        String breakfastId = currentUser.getUserId();
+        breakfastId = currentBreakfast;
 
 
-        ref1 = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Breakfast1/Photos");
+        ref1 = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Photos").child(breakfastId);
         initPhotosRef(userChildEventListener, USER_PHOTOS);
 
         if (squad != null)
         {
-            squadId = currentUser.getSquad().getSquadID();
-            ref2 = FirebaseDatabase.getInstance().getReference("Squads").child(squadId).child(breakfastId).child("Photos");
             if (currentUser.isPartOfSquad() == true) {
                 setUserSquadPhotos(currentUser.getSquad().getSquadID());
             }
         }
 
         //Todo change to be Breakfasts
-        ref3 = FirebaseDatabase.getInstance().getReference("Breakfast/Breakfast1/Photos");
+        ref3 = FirebaseDatabase.getInstance().getReference("Breakfasts").child(currentBreakfast).child("Photos");
         initPhotosRef(breakfastChildEventListener, BREAKFAST_PHOTOS);
+
+        ref4 = FirebaseDatabase.getInstance().getReference("Breakfasts").child(currentBreakfast).child("Votes");
+        initPhotosRef(breakfastVotesChildEventListener, BREAKFAST_VOTES);
 
     }
 
@@ -102,73 +107,7 @@ public class Photos {
         };
         getRefSet(code).addChildEventListener(childEventListener);
     }
-    /*
 
-        private void initSquadPhotosRef( ChildEventListener childEventListener, final int code) {
-
-            childEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                    childAdded(dataSnapshot, code);
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    childChanged(dataSnapshot, code);
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    childRemoved(dataSnapshot, code);
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                    childMoved(dataSnapshot, code);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.w(TAG, "postComments:onCancelled", databaseError.toException());
-
-                }
-            };
-            ref2.addChildEventListener(squadChildEventListener);
-        }
-
-
-        private void initBreakfastPhotosRef( ChildEventListener childEventListener, final int code) {
-
-            childEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                    childAdded(dataSnapshot, code);
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    childChanged(dataSnapshot, code);
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    childRemoved(dataSnapshot, code);
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                    childMoved(dataSnapshot, code);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.w(TAG, "postComments:onCancelled", databaseError.toException());
-
-                }
-            };
-            ref3.addChildEventListener(breakfastChildEventListener);
-        }
-    */
     private LinkedHashMap<String, URL> getPhotoSet( int code )
     {
         switch (code)
@@ -193,6 +132,8 @@ public class Photos {
                 return ref2;
             case BREAKFAST_PHOTOS:
                 return ref3;
+            case BREAKFAST_VOTES:
+                return ref4;
         }
         return null;
     }
@@ -207,39 +148,49 @@ public class Photos {
                 return squadChildEventListener;
             case BREAKFAST_PHOTOS:
                 return breakfastChildEventListener;
+            case BREAKFAST_VOTES:
+                return breakfastVotesChildEventListener;
         }
         return null;
     }
 
-    private void childAdded(DataSnapshot dataSnapshot, final int code)
-    {
+    private void childAdded(DataSnapshot dataSnapshot, final int code) {
         Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
 
         // A new comment has been added, add it to the displayed list
 
         String key = dataSnapshot.getKey();
 
-        try {
-            URL url = new URL(dataSnapshot.getValue().toString());
-            getPhotoSet(code).put(key, url);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        if (code == BREAKFAST_VOTES) {
+            breakfastPhotosVotes.put(key, Integer.parseInt(dataSnapshot.getValue().toString()));
+        } else {
+            try {
+
+                URL url = new URL(dataSnapshot.getValue().toString());
+                getPhotoSet(code).put(key, url);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
-    private void childChanged(DataSnapshot dataSnapshot, final int code)
-    {
+    private void childChanged(DataSnapshot dataSnapshot, final int code) {
         Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
 
         // A new comment has been added, add it to the displayed list
 
         String key = dataSnapshot.getKey();
 
-        try {
-            URL url = new URL(dataSnapshot.getValue().toString());
-            getPhotoSet(code).put(key, url);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        if (code == BREAKFAST_VOTES) {
+            breakfastPhotosVotes.put(key, Integer.parseInt(dataSnapshot.getValue().toString()));
+        } else {
+            try {
+                URL url = new URL(dataSnapshot.getValue().toString());
+                getPhotoSet(code).put(key, url);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -248,11 +199,15 @@ public class Photos {
         Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
 
         String key = dataSnapshot.getKey();
-        getPhotoSet(code).remove(key);
+
+        if (code == BREAKFAST_VOTES) {
+            breakfastPhotosVotes.remove(key);
+        } else {
+            getPhotoSet(code).remove(key);
+        }
     }
 
-    private void childMoved(DataSnapshot dataSnapshot, final int code)
-    {
+    private void childMoved(DataSnapshot dataSnapshot, final int code) {
         Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
 
         // A comment has changed position, use the key to determine if we are
@@ -261,12 +216,6 @@ public class Photos {
         String commentKey = dataSnapshot.getKey();
 
     }
-
-
-
-
-
-
 
 
 
@@ -300,6 +249,9 @@ public class Photos {
     public LinkedHashMap<String, URL> getBreakfastPhotos() {
         return breakfastPhotos;
     }
+    public LinkedHashMap<String, Integer> getBreakfastVotes() {
+        return breakfastPhotosVotes;
+    }
 
 
 
@@ -325,7 +277,7 @@ public class Photos {
 
     public void setUserSquadPhotos(String squadId)
     {
-        ref2 = FirebaseDatabase.getInstance().getReference("Squads").child(squadId).child("/Breakfast1/Photos");
+        ref2 = FirebaseDatabase.getInstance().getReference("Squads").child(squadId).child("Photos").child(breakfastId);
         initPhotosRef(squadChildEventListener, SQUAD_PHOTOS);
     }
 
