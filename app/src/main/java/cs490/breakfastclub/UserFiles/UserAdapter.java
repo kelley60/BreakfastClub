@@ -98,7 +98,7 @@ public class UserAdapter extends ArrayAdapter<User>
         }
         else if(getContext().getClass() == RepeatOffendersActivity.class)
         {
-            lblTitle.setText("Posting Privelages");
+            lblTitle.setText("Enable/Disable Posting Privelages");
         }
 
         Button addButton = (Button) convertView.findViewById(R.id.btnAdd);

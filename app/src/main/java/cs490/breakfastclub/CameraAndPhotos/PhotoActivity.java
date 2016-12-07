@@ -8,6 +8,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +28,7 @@ import cs490.breakfastclub.UserFiles.User;
 import cs490.breakfastclub.MyApplication;
 import cs490.breakfastclub.R;
 
-public class PhotoActivity extends Activity {
+public class PhotoActivity extends AppCompatActivity {
 
 
     private ImageView m_vwImage;
@@ -46,6 +48,13 @@ public class PhotoActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Repeat Offenders");
+
         currentUser = ((MyApplication) getApplication()).getCurrentUser();
 
         Intent i = getIntent();
@@ -129,6 +138,8 @@ public class PhotoActivity extends Activity {
                 //Todo:add to facebook
             }
         });
+
+
 
     }
 

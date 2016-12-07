@@ -64,7 +64,6 @@ import cs490.breakfastclub.UserFiles.User;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    private TextView info;
     public static LoginButton loginButton;
     public static CallbackManager callbackManager;
     public AccessTokenTracker accessTokenTracker;
@@ -86,15 +85,7 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        if (getIntent().hasExtra("CameFromDrawer"))
-        {
-            boolean cameFromDrawer = getIntent().getBooleanExtra("CameFromDrawer", false);
-            if (cameFromDrawer == true)
-            {
-                myToolbar.setVisibility(View.VISIBLE);
-            }
 
-        }
 
 
         // Add code to print out the key hash
@@ -122,30 +113,18 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = (LoginButton) findViewById(R.id.fb_button);
         loginButton.setReadPermissions("email", "public_profile", "user_friends");
         //gets the textview from activity_login.xml
-        info = (TextView) findViewById(R.id.fb_info);
-        final Button btnnav = (Button) findViewById(R.id.btn_nav);
-        btnnav.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent init = new Intent(LoginActivity.this, DrawerActivity.class);
-                init.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(init);
-                finish();
-            }
-        });
 
 
         if (isLoggedIn())
         {
-            info.setText("User is Logged In.");
             getSupportActionBar().setTitle("Sign Out");
-            btnnav.setVisibility(View.VISIBLE);
-            handleFacebookAccessToken(AccessToken.getCurrentAccessToken());
+            if (getIntent().hasExtra("CameFromDrawer") == false)
+            {
+                handleFacebookAccessToken(AccessToken.getCurrentAccessToken());
+            }
         }
         else
         {
-            info.setText("User is not Logged In.");
             getSupportActionBar().setTitle("Sign In");
         }
 
@@ -156,18 +135,17 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // DO something with information you got
-                btnnav.setVisibility(View.VISIBLE);
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
             @Override
             public void onCancel() {
-                info.setText("Login attempt canceled.");
+
             }
 
             @Override
             public void onError(FacebookException error) {
-                info.setText("Login attempt failed.");
+
             }
 
         });
@@ -326,6 +304,10 @@ public class LoginActivity extends AppCompatActivity {
 
 
                                 }
+                                Intent init = new Intent(LoginActivity.this, DrawerActivity.class);
+                                init.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(init);
+                                finish();
                             }
 
                             @Override

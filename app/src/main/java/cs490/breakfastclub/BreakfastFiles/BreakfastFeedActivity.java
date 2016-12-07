@@ -21,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
@@ -61,7 +62,15 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         String layout = bundle.getString("Layout Type");
         setLayoutFromIntentString(layout);
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Repeat Offenders");
+
     }
+
+
 
     private void setLayoutFromIntentString(String layout) {
         if (layout.equals("Campus Feed")) {
@@ -138,13 +147,15 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         removePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO:
-                // currentPost.getSenderId();
-                // ^ Use that to retrieve User info from firebase
-                // Increase numberOffensive by 1
-                // Update User in database
-                // Remove picture from BreakfastFeed
-                // Update database with picture removed
+
+
+
+
+                // TODO: Uncomment when functional
+                //removePost();
+
+
+
             }
         });
 
@@ -318,5 +329,56 @@ public class BreakfastFeedActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void removePost()
+    {
+        String sender = currentPost.getSenderID();
+        // ^ Use that to retrieve User info from firebase
+        final DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + sender);
+        memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                for(DataSnapshot d : dataSnapshot.getChildren())
+                {
+                    User u = new User();
+                    u.setName((String) d.child("name").getValue());
+                    u.setProfileImageUrl((String) d.child("profileImageUrl").getValue());
+                    u.setUserId((String) d.getKey());
+
+                    if(d.child("numberOfOffensives").exists())
+                    {
+                        Log.d("Offensives", "Field numberOfOffensives exists for " + u.getName());
+                        Long i = (Long) d.child("numberOfOffensives").getValue();
+                        Log.d("Offensives", "Got value from database");
+                        u.setNumberOfOffensives(i.intValue() + 1);
+                        Log.d("Offensives", "Updated value for user");
+                    }
+                    else
+                    {
+                        u.setNumberOfOffensives(1);
+                        Log.d("Offensives", "Added Field numberOfOffensives for " + u.getName());
+                        memberRef.child(u.getUserId()).child("numberOfOffensives").setValue(0);
+                        Log.d("Offensives", "Success");
+                    }
+
+                    // Update user in the database
+                    mDatabase.child("Users").child(u.getUserId()).child("numberOfOffensives").setValue(u.getNumberOfOffensives());
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        // TODO: @Emma
+        // Remove picture from BreakfastFeed
+
+        // Update database with picture removed
     }
 }

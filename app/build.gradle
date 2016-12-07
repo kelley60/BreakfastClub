@@ -25,6 +25,12 @@ android {
     }
 }
 
+repositories {
+    maven {
+        url "https://s3.amazonaws.com/repo.commonsware.com"
+    }
+}
+
 dependencies {
     compile 'com.android.support:multidex:1.0.0'
     // TODO:
@@ -45,6 +51,7 @@ dependencies {
     compile 'com.google.android.gms:play-services:9.6.1'
     compile 'com.android.support:support-v13:25.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.commonsware.cwac:wakeful:1.0.+'
 }
 
 apply plugin: 'com.google.gms.google-services'
