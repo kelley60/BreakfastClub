@@ -319,10 +319,17 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                                                         .setItems(userNames.toArray(new CharSequence[userNames.size()]), new DialogInterface.OnClickListener() {
                                                             public void onClick(DialogInterface dialog, int which) {
                                                                 // The 'which' argument contains the index position of the selected item
-                                                                Log.d("Change squad ownership","\nIndex " + which + " was selected - Kunal.\n");
 
                                                                 // TODO - Make that user Owner - Change all that data locally and in db
+                                                                Log.d("User selected as cptn", "" + userNames.get(which).toString());
+
                                                                 // TODO - delete current user from Squad, locally and in db. Can probably copy code from below
+                                                                currentUser.setPartOfSquad(false);
+                                                                mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
+                                                                mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
+                                                                mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).removeValue();
+                                                                currentUser.setSquad(null);
+                                                                currentUser.setSquadRole("");
 
                                                                 finish();
                                                             }

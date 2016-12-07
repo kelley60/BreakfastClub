@@ -305,8 +305,6 @@ public class LoginActivity extends AppCompatActivity {
                                     writeNewUser(currentUser);
                                     ((MyApplication)getApplication()).setCurrentPhotos(new Photos(currentUser));
                                     HashMap<String, URL> photos = ((MyApplication)getApplication()).getCurrentPhotos().getUserPhotos();
-
-
                                 }
                                 // Get the information needed and update the user
                                 else {
