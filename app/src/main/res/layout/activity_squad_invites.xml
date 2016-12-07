@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/activity_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="0dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:paddingTop="0dp"
+                tools:context="cs490.breakfastclub.AdminViewUsersActivity"
+                android:background="@drawable/gradient_background" >
+
+    <!-- Put all other UI elements below this comment! -->
+
+
+    <ListView
+        android:id="@+id/lstAllUsers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+    </ListView>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/Purdue_Gold"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/PopupOverlay"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <!-- Put all other UI elements below this comment! -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/my_toolbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/squadInviteLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Squad Invites"
+                android:textColor="@color/Purdue_White"
+                android:layout_margin="5dp"/>
+
+            <ListView
+                android:id="@+id/listSquadInvites"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/squadInviteLabel">
+            </ListView>
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

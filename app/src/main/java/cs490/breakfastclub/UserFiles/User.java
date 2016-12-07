@@ -35,9 +35,17 @@ public class User {
     private Squad squad;
     private String squadRole;
     private boolean partOfSquad;
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
     private double lat, lng;
     private LatLng location;
-
     private Photos currentPhotos;
 
     public User(String name, String userId, String profileImageUrl, String profileImageID, ArrayList<User> friends){
@@ -206,7 +214,6 @@ public class User {
     public void setProfileImageID(String profileImageID) {
         this.profileImageID = profileImageID;
     }
-
 
 
 }
