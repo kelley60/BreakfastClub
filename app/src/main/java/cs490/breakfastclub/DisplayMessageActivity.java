@@ -68,8 +68,6 @@ public class DisplayMessageActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference messagesRef = mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Messages");
 
-
-
         if (currentUser.isPartOfSquad()) {
             Button send = (Button) findViewById(R.id.btnSend);
             send.setOnClickListener(new View.OnClickListener() {
