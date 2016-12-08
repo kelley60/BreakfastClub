@@ -99,6 +99,21 @@
                     android:visibility="gone"/>
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btnViewSquadPhotos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="View Photos"
+                    android:layout_margin="5dp"
+                    android:visibility="invisible"/>
+
+            </RelativeLayout>
+
 
         </LinearLayout>
     </ScrollView>

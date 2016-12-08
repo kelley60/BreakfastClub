@@ -22,7 +22,7 @@ import cs490.breakfastclub.R;
 
 public class SquadGalleryActivity extends AppCompatActivity {
 
-    private URL prev, next;
+    private URL prev, next, current;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,7 @@ public class SquadGalleryActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
-        final LinkedHashMap<String, URL> linkedHashMap = ((MyApplication) getApplication()).getCurrentPhotos().getUserPhotos();
+        final LinkedHashMap<String, URL> linkedHashMap = currentUser.getCurrentPhotos().getSquadPhotos();
         final ArrayList<URL> currentPhotos = new ArrayList<URL>(linkedHashMap.values());
         final ArrayList<String> photoids = new ArrayList<String>(linkedHashMap.keySet());
         final GridView squadGallery = (GridView) findViewById(R.id.squadGallery);
@@ -48,8 +48,11 @@ public class SquadGalleryActivity extends AppCompatActivity {
 
                 prev = ImageAdapter.getPrevItemURL(position);
                 next = ImageAdapter.getNextItemURL(position);
+                current = ImageAdapter.getItemURL(position);
 
-                showImage(squadGallery.getAdapter().getItemId(position), position);
+                showImage(position);
+
+                //showImage(squadGallery.getAdapter().getItemId(position), position);
 
 
             }
@@ -73,12 +76,12 @@ public class SquadGalleryActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showImage(long id, int pos){
+    private void showImage(int pos){
         Intent pictureViewer = new Intent(this, PhotoViewerActivity.class);
-        pictureViewer.putExtra("pictureId",id );
+        pictureViewer.putExtra("pictureId",current.toString() );
         pictureViewer.putExtra("picturePosition", pos);
-        pictureViewer.putExtra("picturePrevId", prev);
-        pictureViewer.putExtra("pictureNextId", next);
+        pictureViewer.putExtra("picturePrevId", prev.toString());
+        pictureViewer.putExtra("pictureNextId", next.toString());
 
         startActivityForResult(pictureViewer,0);
 

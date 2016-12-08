@@ -4,6 +4,9 @@
     <item
         android:id="@+id/set_profile_pic"
         android:title="Set as Profile Picture"/>
+    <item
+        android:id="@+id/set_squad_profile_pic"
+        android:title="Set as Squad Profile Picture"/>
 
     <item
         android:id="@+id/squad_post"
@@ -15,6 +18,6 @@
 
     <item
         android:id="@+id/facebook_share"
-        android:title="Share on Facebook"/>
+        android:title="Share with Social Media"/>
 
 </menu>  

@@ -14,9 +14,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -48,11 +45,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import cs490.breakfastclub.BreakfastFiles.Breakfast;
 import cs490.breakfastclub.CameraAndPhotos.Photos;
@@ -64,7 +59,6 @@ import cs490.breakfastclub.UserFiles.User;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    private TextView info;
     public static LoginButton loginButton;
     public static CallbackManager callbackManager;
     public AccessTokenTracker accessTokenTracker;
@@ -86,15 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        if (getIntent().hasExtra("CameFromDrawer"))
-        {
-            boolean cameFromDrawer = getIntent().getBooleanExtra("CameFromDrawer", false);
-            if (cameFromDrawer == true)
-            {
-                myToolbar.setVisibility(View.VISIBLE);
-            }
 
-        }
 
 
         // Add code to print out the key hash
@@ -120,32 +106,20 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         //gets the login button from activity_login.xml
         loginButton = (LoginButton) findViewById(R.id.fb_button);
-        loginButton.setReadPermissions("email", "public_profile", "user_friends");
+        loginButton.setReadPermissions("email", "public_profile", "user_friends", "publish_actions");
         //gets the textview from activity_login.xml
-        info = (TextView) findViewById(R.id.fb_info);
-        final Button btnnav = (Button) findViewById(R.id.btn_nav);
-        btnnav.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent init = new Intent(LoginActivity.this, DrawerActivity.class);
-                init.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(init);
-                finish();
-            }
-        });
 
 
         if (isLoggedIn())
         {
-            info.setText("User is Logged In.");
             getSupportActionBar().setTitle("Sign Out");
-            btnnav.setVisibility(View.VISIBLE);
-            handleFacebookAccessToken(AccessToken.getCurrentAccessToken());
+            if (getIntent().hasExtra("CameFromDrawer") == false)
+            {
+                handleFacebookAccessToken(AccessToken.getCurrentAccessToken());
+            }
         }
         else
         {
-            info.setText("User is not Logged In.");
             getSupportActionBar().setTitle("Sign In");
         }
 
@@ -156,18 +130,17 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // DO something with information you got
-                btnnav.setVisibility(View.VISIBLE);
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
             @Override
             public void onCancel() {
-                info.setText("Login attempt canceled.");
+
             }
 
             @Override
             public void onError(FacebookException error) {
-                info.setText("Login attempt failed.");
+
             }
 
         });
@@ -263,6 +236,7 @@ public class LoginActivity extends AppCompatActivity {
                         JSONObject object = response.getJSONObject();
                         JSONObject profileImageObject = null;
                         JSONArray friendsObject = null;
+
                         try {
                             profileImageObject = object.getJSONObject("picture").getJSONObject("data");
                             friendsObject = object.getJSONObject("friends").getJSONArray("data");
@@ -270,6 +244,7 @@ public class LoginActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         Log.v("Public Profile Object: " , object.toString());
+                        
                         Log.v("Image Object: ", profileImageObject.toString());
                         Log.v("Friends Object: ", friendsObject.toString());
 
@@ -303,31 +278,35 @@ public class LoginActivity extends AppCompatActivity {
                                 if (!dataSnapshot.exists()) {
                                     Log.v("User does not exisit", "User does not already exists");
                                     writeNewUser(currentUser);
-                                    ((MyApplication)getApplication()).setCurrentPhotos(new Photos(currentUser));
-                                    HashMap<String, URL> photos = ((MyApplication)getApplication()).getCurrentPhotos().getUserPhotos();
-
+                                    loadCurrentBreakfast();
 
                                 }
                                 // Get the information needed and update the user
                                 else {
                                     Log.v("User already exists", "User already exists");
                                     currentUser.setReceivesPushNotifications((boolean) dataSnapshot.child("receivesPushNotifications").getValue());
+
+                                    // Load the current application photos from firebase
                                     currentUser.setPermissions(User.Permissions.valueOf((String) dataSnapshot.child("permissions").getValue()));
-                                    ((MyApplication)getApplication()).setCurrentPhotos(new Photos(currentUser));
-                                    HashMap<String, URL> photos = ((MyApplication)getApplication()).getCurrentPhotos().getUserPhotos();
 
                                     if(dataSnapshot.child("squad").exists()) {
                                         currentUser.createSquad((String) dataSnapshot.child("squad").getValue());
                                         currentUser.setPartOfSquad(true);
                                         currentUser.setSquadRole((String) dataSnapshot.child("squadRole").getValue());
+                                        currentUser.getSquad().setSquadImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
+                                        currentUser.getSquad().setSquadImageID((String) dataSnapshot.child("profileImageID").getValue());
                                     }
                                     else
                                     {
                                         currentUser.setPartOfSquad(false);
                                     }
 
-
+                                    loadCurrentBreakfast();
                                 }
+                                Intent init = new Intent(LoginActivity.this, DrawerActivity.class);
+                                init.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(init);
+                                finish();
                             }
 
                             @Override
@@ -345,6 +324,7 @@ public class LoginActivity extends AppCompatActivity {
     private void writeNewUser(User user) {
         mDatabase.child("Users").child(user.getUserId()).child("name").setValue(user.getName());
         mDatabase.child("Users").child(user.getUserId()).child("profileImageUrl").setValue(user.getProfileImageUrl());
+        mDatabase.child("Users").child(user.getUserId()).child("profileImageID").setValue(user.getProfileImageID());
         mDatabase.child("Users").child(user.getUserId()).child("receivesPushNotifications").setValue(user.isReceivesPushNotifications());
         mDatabase.child("Users").child(user.getUserId()).child("currentPositionInFeed").setValue(0);
         mDatabase.child("Users").child(user.getUserId()).setValue("hasVotedUp");
@@ -369,6 +349,8 @@ public class LoginActivity extends AppCompatActivity {
     public void loadPhotos(){
         //TODO
         //Emma add your photo loading stuff here
+        User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+        currentUser.setCurrentPhotos(new Photos(currentUser, currentBreakfast.getBreakfastKey()));
     }
 
     public void loadCurrentBreakfast() {

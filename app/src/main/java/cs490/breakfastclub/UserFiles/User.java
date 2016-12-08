@@ -6,6 +6,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import cs490.breakfastclub.CameraAndPhotos.Photos;
 import cs490.breakfastclub.SquadFiles.Squad;
 
 /**
@@ -23,6 +24,7 @@ public class User {
     private String name;
     private String userId;
     private String profileImageUrl;
+    private String profileImageID;
     private boolean receivesPushNotifications;
     private ArrayList<User> friends;
     private Permissions permissions;
@@ -36,13 +38,24 @@ public class User {
     private Squad squad;
     private String squadRole;
     private boolean partOfSquad;
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
     private double lat, lng;
     private LatLng location;
+    private Photos currentPhotos;
 
-    public User(String name, String userId, String profileImageUrl, ArrayList<User> friends){
+    public User(String name, String userId, String profileImageUrl, String profileImageID, ArrayList<User> friends){
         this.name = name;
         this.userId = userId;
         this.profileImageUrl = profileImageUrl;
+        this.profileImageID = profileImageID;
         this.receivesPushNotifications = true;
         this.friends = friends;
         this.permissions = Permissions.Member;
@@ -52,25 +65,26 @@ public class User {
         numberOfOffensives = 0;
     }
 
-    public User(String name, String userId, String profileImageUrl)
+    public User(String name, String userId, String profileImageUrl, String profileImageID)
     {
-        this(name, userId, profileImageUrl, new ArrayList<User>());
+        this(name, userId, profileImageUrl, profileImageID, new ArrayList<User>());
     }
 
     public User()
     {
-        this("DEFAULT", "DEFAULT", "DEFAULT", new ArrayList<User>());
+        this("DEFAULT", "DEFAULT", "DEFAULT", "DEFAULT", new ArrayList<User>());
     }
 
     //TODO
     //add squad to DB
     public void createSquad(String squadID){
-        this.squad = new Squad(null, squadID, null, null);
+        this.squad = new Squad(null, squadID, null, null, null);
     }
 
     public void setSquad(Squad squad)
     {
         this.squad = squad;
+        getCurrentPhotos().setUserSquadPhotos(this.squad.getSquadID());
     }
 
     public Squad getSquad()
@@ -201,5 +215,25 @@ public class User {
             }
         }
     }
+
+
+    public Photos getCurrentPhotos() {
+        return currentPhotos;
+    }
+
+    public void setCurrentPhotos(Photos currentPhotos) {
+        this.currentPhotos = currentPhotos;
+    }
+
+
+    public String getProfileImageID() {
+        return profileImageID;
+    }
+
+    public void setProfileImageID(String profileImageID) {
+        this.profileImageID = profileImageID;
+    }
+
+
 
 }

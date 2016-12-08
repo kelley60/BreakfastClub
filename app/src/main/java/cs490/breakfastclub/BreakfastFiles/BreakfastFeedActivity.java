@@ -21,17 +21,21 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedHashMap;
 
 import cs490.breakfastclub.CameraAndPhotos.CameraActivity;
 import cs490.breakfastclub.CameraAndPhotos.Photos;
 import cs490.breakfastclub.Classes.Post;
 import cs490.breakfastclub.Classes.TimeFunctions;
 import cs490.breakfastclub.MyApplication;
-import cs490.breakfastclub.UserFiles.User;
 import cs490.breakfastclub.R;
-
+import cs490.breakfastclub.UserFiles.User;
 
 import static cs490.breakfastclub.Classes.TimeFunctions.isDuringBreakfast;
 import static cs490.breakfastclub.GeofenceFiles.GeofenceTransitionsIntentService.MYPREFERENCES;
@@ -51,8 +55,12 @@ public class BreakfastFeedActivity extends AppCompatActivity {
     ImageView image;
     Photos currentPhotos;
     int tempScore;
+
     int currentPositionInFeed;
     int breakfastPhotoCount;
+
+    private ArrayList<URL> photos;
+    private ArrayList<String> photoids;
 
     private DatabaseReference mDatabase;
 
@@ -65,7 +73,15 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         String layout = bundle.getString("Layout Type");
         setLayoutFromIntentString(layout);
 
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Repeat Offenders");
     }
+
+
 
     private void setLayoutFromIntentString(String layout) {
         if (layout.equals("Campus Feed")) {
@@ -118,9 +134,15 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Campus Feed");
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+
         currentUser = ((MyApplication) getApplication()).getCurrentUser();
         currentBreakfast = ((MyApplication) getApplication()).getCurrentBreakfast();
         currentPhotos = ((MyApplication) getApplication()).getCurrentPhotos();
+
+        final LinkedHashMap<String, URL> linkedHashMap = currentUser.getCurrentPhotos().getBreakfastPhotos();
+        photos = new ArrayList<URL>(linkedHashMap.values());
+        photoids = new ArrayList<String>(linkedHashMap.keySet());
+        breakfastPhotoCount = photos.size();
 
         upArrow = (ImageButton) findViewById(R.id.upArrowId);
         downArrow = (ImageButton) findViewById(R.id.downArrowId);
@@ -128,10 +150,12 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         cameraButton = (ImageButton) findViewById(R.id.cameraButtonId);
         pictureScore = (TextView) findViewById(R.id.pictureScoreId);
         image = (ImageView) findViewById(R.id.campusFeedImageId);
+
         currentPositionInFeed = currentUser.getCurrentPositionInFeed();
-        //TODO
-        breakfastPhotoCount = 10;
         currentUser.increaseVotingArrays(breakfastPhotoCount);
+
+        Picasso.with(getApplicationContext()).load(getItemURL(currentPositionInFeed).toString()).fit().into(image);
+
 
 
                 upArrow.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +175,18 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         removePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 //removeCurrentPicture();
+
+
+
+
+
+                // TODO: Uncomment when functional
+                //removePost();
+
+
+
             }
         });
 
@@ -165,7 +200,7 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //setNextImage();
+                setNextImage();
             }
         });
 
@@ -173,11 +208,6 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         if (isDuringBreakfast() == false || currentUser.getNumberOfOffensives() >= 3){
             cameraButton.setVisibility(View.INVISIBLE);
         }
-
-        //currentPost = currentBreakfast.getCampusFeed().get(currentUser.getCurrentPositionInFeed());
-        //pictureScore.setText(currentPost.getScore());
-        //String imgUrl = currentPost.getImgURL();
-        //image.setImageDrawable(null);
 
         User.Permissions Permission = currentUser.getPermissions();
         if (Permission == User.Permissions.Developer || Permission == User.Permissions.Moderator){
@@ -190,38 +220,46 @@ public class BreakfastFeedActivity extends AppCompatActivity {
 
     private void setNextImage() {
 
-        if (currentPositionInFeed < breakfastPhotoCount) {
 
+        if (currentPositionInFeed < breakfastPhotoCount) {
             currentPositionInFeed += 1;
             currentUser.setCurrentPositionInFeed(currentPositionInFeed);
             mDatabase.child("Users").child(currentUser.getUserId()).child("currentPositionInFeed").setValue(currentPositionInFeed);
-            //TODO set image
-            //String nextImageUrl = currentPost.getImgURL();
-            //image.setImageDrawable();
+            Picasso.with(getApplicationContext()).load(getItemURL(currentPositionInFeed).toString()).fit().into(image);
         }
 
-        if (currentPositionInFeed == breakfastPhotoCount){
-            //TODO check if photocount has increased
-            //breakfastPhotoCount = 0
+        if (currentPositionInFeed == breakfastPhotoCount) {
+            breakfastPhotoCount = photos.size();
             if (currentPositionInFeed == breakfastPhotoCount) {
                 currentPositionInFeed = 0;
                 currentUser.setCurrentPositionInFeed(currentPositionInFeed);
                 mDatabase.child("Users").child(currentUser.getUserId()).child("currentPositionInFeed").setValue(currentPositionInFeed);
+                Picasso.with(getApplicationContext()).load(getItemURL(currentPositionInFeed).toString()).fit().into(image);
             }
             //number of photos has increased, load next photo
-            else{
+            else {
                 currentUser.increaseVotingArrays(breakfastPhotoCount);
                 currentPositionInFeed += 1;
                 currentUser.setCurrentPositionInFeed(currentPositionInFeed);
                 mDatabase.child("Users").child(currentUser.getUserId()).child("currentPositionInFeed").setValue(currentPositionInFeed);
+                Picasso.with(getApplicationContext()).load(getItemURL(currentPositionInFeed).toString()).fit().into(image);
 
-                //TODO set image
-
-                //String nextImageUrl = currentPost.getImgURL();
-                //image.setImageDrawable();
             }
         }
 
+
+            Picasso.with(getApplicationContext()).load(getItemURL(currentPositionInFeed).toString()).fit().into(image);
+            if(currentUser.getCurrentPhotos().getBreakfastVotes().containsKey(photoids.get(currentPositionInFeed)))
+                pictureScore.setText(currentUser.getCurrentPhotos().getBreakfastVotes().get(photoids.get(currentPositionInFeed)).toString());
+
+                currentUser.getCurrentPhotos().getBreakfastVotes().put(photoids.get(currentPositionInFeed), 0);
+
+
+
+    }
+
+    public URL getItemURL(int position) {
+        return photos.get(position);
     }
 
     private void launchCameraActivity() {
@@ -326,6 +364,56 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         // Increase numberOffensive by 1
         // Update User in database
         // Remove picture from BreakfastFeed
+        // Update database with picture removed
+    }
+
+    private void removePost() {
+        String sender = currentPost.getSenderID();
+        // ^ Use that to retrieve User info from firebase
+        final DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + sender);
+        memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                for(DataSnapshot d : dataSnapshot.getChildren())
+                {
+                    User u = new User();
+                    u.setName((String) d.child("name").getValue());
+                    u.setProfileImageUrl((String) d.child("profileImageUrl").getValue());
+                    u.setUserId((String) d.getKey());
+
+                    if(d.child("numberOfOffensives").exists())
+                    {
+                        Log.d("Offensives", "Field numberOfOffensives exists for " + u.getName());
+                        Long i = (Long) d.child("numberOfOffensives").getValue();
+                        Log.d("Offensives", "Got value from database");
+                        u.setNumberOfOffensives(i.intValue() + 1);
+                        Log.d("Offensives", "Updated value for user");
+                    }
+                    else
+                    {
+                        u.setNumberOfOffensives(1);
+                        Log.d("Offensives", "Added Field numberOfOffensives for " + u.getName());
+                        memberRef.child(u.getUserId()).child("numberOfOffensives").setValue(0);
+                        Log.d("Offensives", "Success");
+                    }
+
+                    // Update user in the database
+                    mDatabase.child("Users").child(u.getUserId()).child("numberOfOffensives").setValue(u.getNumberOfOffensives());
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        // TODO: @Emma
+        // Remove picture from BreakfastFeed
+
         // Update database with picture removed
     }
 

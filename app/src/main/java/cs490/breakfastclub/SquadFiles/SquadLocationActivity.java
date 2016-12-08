@@ -66,7 +66,6 @@ public class SquadLocationActivity extends AppCompatActivity implements OnMapRea
                 Log.d("Location", "Sizeof mSquad is " + mSquad.size() + "\n");
                 for(int i = 0; i < mSquad.size(); i++)
                 {
-                    mSquad.get(i).updateLocation(latBase, lngBase);
                     Log.d("Location", "SquadMember + " + mSquad.get(i).getName() + "\n");
                     mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(mSquad.get(i).getLat(), mSquad.get(i).getLng()))
@@ -143,7 +142,6 @@ public class SquadLocationActivity extends AppCompatActivity implements OnMapRea
         double lngBase = -86.917040;
         latBase += rand.nextDouble() / 1000;
         lngBase += rand.nextDouble() / 10000;
-        currentUser.updateLocation(latBase, lngBase);
         //Log.d("SquadLocation", "currentUserLocation: " + currentUser.getName() + "  (" + currentUser.getLat() + ", " + currentUser.getLng() + ")\n");
         map.addMarker(new MarkerOptions()
                 .position(new LatLng(currentUser.getLat(), currentUser.getLng()))
@@ -162,7 +160,7 @@ public class SquadLocationActivity extends AppCompatActivity implements OnMapRea
                     Log.v("Members", members.toString());
 
                     for (Map.Entry<String, String> member : members.entrySet()) {
-                        Log.v("Member", member.getKey() + " " + member.getValue());
+                        //Log.v("Member", member.getKey() + " " + member.getValue());
                         DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + member.getKey());
                         memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -171,6 +169,22 @@ public class SquadLocationActivity extends AppCompatActivity implements OnMapRea
                                 currentMember.setName((String) dataSnapshot.child("name").getValue());
                                 currentMember.setProfileImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
                                 currentMember.setUserId(dataSnapshot.getKey());
+                                if (dataSnapshot.child("latitude").exists())
+                                {
+                                    currentMember.setLat((double) dataSnapshot.child("latitude").getValue());
+                                }
+                                else
+                                {
+                                    currentMember.setLat(40.427608);
+                                }
+                                if (dataSnapshot.child("longitude").exists())
+                                {
+                                    currentMember.setLng((double) dataSnapshot.child("longitude").getValue());
+                                }
+                                else
+                                {
+                                    currentMember.setLng(-86.917040);
+                                }
                                 mSquad.add(currentMember);
                             }
 

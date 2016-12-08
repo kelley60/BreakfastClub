@@ -1,7 +1,9 @@
 package cs490.breakfastclub;
 
-import android.support.v7.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -16,7 +18,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
+import cs490.breakfastclub.SquadFiles.SquadGalleryActivity;
 import cs490.breakfastclub.UserFiles.User;
 
 public class ProfileViewActivity extends AppCompatActivity {
@@ -40,6 +44,8 @@ public class ProfileViewActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
 
+
+
         if (getIntent().hasExtra("MemberFromSquadView"))
         {
             String userID = getIntent().getStringExtra("MemberFromSquadView");
@@ -53,7 +59,7 @@ public class ProfileViewActivity extends AppCompatActivity {
                     ImageView profileImageView = (ImageView) findViewById(R.id.lblProfileImage);
                    // new DownloadImageAsyncTask(profileImageView)
                      //       .execute((String) dataSnapshot.child("profileImageUrl").getValue());
-     //               Picasso.with(mContext).load(getItemURL(position).toString()).into(profileImageView);
+                    Picasso.with(getApplicationContext()).load(currentUser.getProfileImageUrl().toString()).into(profileImageView);
 
                     TextView squadNameView = (TextView) findViewById(R.id.lblSquadName);
                     squadNameView.setText(getIntent().getStringExtra("Squad"));
@@ -64,6 +70,20 @@ public class ProfileViewActivity extends AppCompatActivity {
 
                 }
             });
+
+            if(userID.equals(currentUser.getUserId())) {
+                Button btnGallery = (Button) findViewById(R.id.btnViewSquadPhotos);
+                btnGallery.setVisibility(View.VISIBLE);
+                btnGallery.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(ProfileViewActivity.this, SquadGalleryActivity.class);
+                        startActivity(intent);
+                    }
+                });
+            }
+
+
         }
         else if (getIntent().hasExtra(("AddMemberFromSquadView")))
         {
@@ -137,6 +157,16 @@ public class ProfileViewActivity extends AppCompatActivity {
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
+                }
+            });
+
+            Button btnGallery = (Button) findViewById(R.id.btnViewSquadPhotos);
+            btnGallery.setVisibility(View.VISIBLE);
+            btnGallery.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ProfileViewActivity.this, SquadGalleryActivity.class);
+                    startActivity(intent);
                 }
             });
         }

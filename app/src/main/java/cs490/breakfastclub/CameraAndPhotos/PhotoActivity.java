@@ -1,6 +1,5 @@
 package cs490.breakfastclub.CameraAndPhotos;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -8,6 +7,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,15 +19,16 @@ import android.widget.Toast;
 
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
+import com.facebook.share.widget.ShareDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import cs490.breakfastclub.UserFiles.User;
 import cs490.breakfastclub.MyApplication;
 import cs490.breakfastclub.R;
+import cs490.breakfastclub.UserFiles.User;
 
-public class PhotoActivity extends Activity {
+public class PhotoActivity extends AppCompatActivity {
 
 
     private ImageView m_vwImage;
@@ -36,18 +38,34 @@ public class PhotoActivity extends Activity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
     User currentUser;
+    String currentBreakfast;
     Photo photo;
     String path;
     String name;
     Bitmap b;
     Uri photoUri;
+    Context c;
+    ShareDialog shareDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
-        currentUser = ((MyApplication) getApplication()).getCurrentUser();
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Repeat Offenders");
+
+       // shareDialog = new ShareDialog(this);
+        // this part is optional
+       // shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {...     });
+
+
+        currentUser = ((MyApplication) getApplication()).getCurrentUser();
+        currentBreakfast = ((MyApplication) getApplication()).getCurrentBreakfast().getBreakfastKey();
+        c = this;
         Intent i = getIntent();
 
         path = i.getStringExtra("Path");
@@ -75,7 +93,7 @@ public class PhotoActivity extends Activity {
         saveButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 addPhotoToGallery();
-                photo.addPhotoToFirebase();
+                photo.addPhotoToFirebase(currentUser, currentBreakfast);
                 Toast toast = Toast.makeText(getApplicationContext(), "photo saved", Toast.LENGTH_SHORT);
                 toast.show();
                 //Todo:add to db
@@ -95,24 +113,43 @@ public class PhotoActivity extends Activity {
                 //registering popup with OnMenuItemClickListener
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
+
+                        photo.setPhotoSquadId(currentUser.getSquad().getSquadID().toString());
+                        photo.setPhotoUserId(currentUser.getUserId());
                         switch(item.getItemId())
                         {
                             case R.id.set_profile_pic: {
-                                mDatabase.child("Users").child(currentUser.getUserId()).child("profileImageUrl").setValue(photo.getPhotoName());
+                                photo.setIsProfilePhoto(true);
+                                photo.addPhotoToFirebase(currentUser, currentBreakfast);
+                               // mDatabase.child("Users").child(currentUser.getUserId()).child("profileImageUrl").setValue(photo.getPhotoName());
+                                break;
+                            }
+                            case R.id.set_squad_profile_pic: {
+                                photo.setIsSquadProfilePhoto(true);
+                                photo.setIsSquadFeed(true);
+                                photo.addPhotoToFirebase(currentUser, currentBreakfast);
+                              //  mDatabase.child("Squads").child(currentUser.getSquad().getSquadID()).child("profileImageUrl").setValue(photo.getPhotoName());
                                 break;
                             }
                             case R.id.squad_post: {
-                                mDatabase.child("Photos/Breakfast1/").child(photo.getPhotoName()).child("isSquadFeed").setValue(true);
-                                //Todo: add photoname and url into the squad database
+                                photo.setIsSquadFeed(true);
+                                photo.addPhotoToFirebase(currentUser, currentBreakfast);
                                 break;
                             }
                             case R.id.breakfast_post: {
-                                mDatabase.child("Photos/Breakfast1/").child(photo.getPhotoName()).child("isBreakfastFeed").setValue(true);
-                                //Todo: add photoname and url into the breakfast database
+                                photo.setIsBreakfastFeed(true);
+                                photo.addPhotoToFirebase(currentUser, currentBreakfast);
                                 break;
                             }
                             case R.id.facebook_share: {
-                                //todo: get facebook post
+                                photo.addPhotoToFirebase(currentUser, currentBreakfast);
+
+                                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+
+                                sharingIntent.setType("image/jpeg");
+                                sharingIntent.putExtra(Intent.EXTRA_STREAM, photoUri);
+                                startActivity(Intent.createChooser(sharingIntent, "Share image using"));
+
                                 break;
                             }
 
@@ -124,11 +161,11 @@ public class PhotoActivity extends Activity {
 
                 popup.show();//showing popup menu
 
-                //Todo:add to squad
-                //Todo:add to breakfast
                 //Todo:add to facebook
             }
         });
+
+
 
     }
 

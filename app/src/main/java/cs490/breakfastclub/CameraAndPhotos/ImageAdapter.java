@@ -71,7 +71,7 @@ public class ImageAdapter extends BaseAdapter {
             return imageView;
         }
 
-        Picasso.with(mContext).load(getItemURL(position).toString()).into(imageView);
+        Picasso.with(mContext).load(getItemURL(position).toString()).fit().into(imageView);
         //imageView.setImageBitmap(photos[position].getbMap());
       // imageView.setImageResource(mThumbIds[position]);
        // imageView.setLayoutParams(new GridLayoutManager.LayoutParams(imageView.getWidth(), imageView.getWidth()));

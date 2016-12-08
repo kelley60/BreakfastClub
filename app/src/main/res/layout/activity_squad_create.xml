@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/lblSquadName"
-                    android:text="[Squad_Name_Here]"
+                    android:hint="Squad_Name_Here"
                     android:textSize="18sp"/>
 
             </RelativeLayout>
@@ -86,7 +86,7 @@
                     android:inputType="textMultiLine"
                     android:ems="10"
                     android:layout_below="@id/lblSquadDesc"
-                    android:text="[Description Here]"
+                    android:hint="Squad Description Here"
                     android:textSize="18sp"
                     android:id="@+id/txtSquadDesc"
                     />

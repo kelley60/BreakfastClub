@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,14 +13,12 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import cs490.breakfastclub.R;
 
 public class PhotoViewerActivity extends AppCompatActivity {
 
-    URL picItem,picPrevItem,picNextItem;
+    //URL picItem,picPrevItem,picNextItem;
+    String picItem,picPrevItem,picNextItem;
     int picPosition;
     private ImageView m_vwImage;
 
@@ -27,24 +26,30 @@ public class PhotoViewerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_viewer);
-        Intent i = getIntent();
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Repeat Offenders");
+        Intent i = getIntent();
+/*
         try {
-            picItem = new URL(i.getStringExtra("pictureId"));
             picPrevItem = new URL (i.getStringExtra("picturePrevId"));
             picNextItem = new URL(i.getStringExtra("pictureNextId"));
+            picItem = new URL(i.getStringExtra("pictureId"));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+*/
+        picPrevItem = i.getStringExtra("picturePrevId");
+        picNextItem = i.getStringExtra("pictureNextId");
+        picItem = i.getStringExtra("pictureId");
 
         picPosition = i.getIntExtra("picturePosition", -1);
         m_vwImage = (ImageView) findViewById(R.id.imgDisplay);
 
-
-
-     //   Drawable image = getResources().getDrawable((int)picItem);
-     //   m_vwImage.setImageDrawable(image);
-        Picasso.with((Context)getApplicationContext()).load(picItem.toString()).into(m_vwImage);
+        Picasso.with((Context)getApplicationContext()).load(picItem.toString()).fit().into(m_vwImage);
 
         ImageButton startButton = (ImageButton) findViewById(R.id.grid_button);
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -56,13 +61,12 @@ public class PhotoViewerActivity extends AppCompatActivity {
         ImageButton leftButton = (ImageButton) findViewById(R.id.left_button);
         leftButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                Picasso.with(ImageAdapter.getmContext()).load(picPrevItem.toString()).into(m_vwImage);
-                //Drawable imagePrev = getResources().getDrawable((int)picPrevItem);
-                //m_vwImage.setImageDrawable(imagePrev);
+//                Picasso.with(ImageAdapter.getmContext()).load(picPrevItem.toString()).into(m_vwImage);
+                Picasso.with(ImageAdapter.getmContext()).load(picPrevItem).into(m_vwImage);
 
-                if(--picPosition<0) picPosition = ImageAdapter.mSize;
-                picPrevItem = (ImageAdapter.getPrevItemURL(picPosition));
-                picNextItem = (ImageAdapter.getNextItemURL(picPosition));
+                if(--picPosition<0) picPosition = ImageAdapter.mSize -1;
+                picPrevItem = (ImageAdapter.getPrevItemURL(picPosition).toString());
+                picNextItem = (ImageAdapter.getNextItemURL(picPosition).toString());
 
             }
         });
@@ -74,9 +78,9 @@ public class PhotoViewerActivity extends AppCompatActivity {
                 //m_vwImage.setImageDrawable(imageNext);
                 Picasso.with(ImageAdapter.getmContext()).load(picNextItem.toString()).into(m_vwImage);
 
-                if(++picPosition> ImageAdapter.mSize) picPosition = 0;
-                picNextItem = (ImageAdapter.getNextItemURL(picPosition));
-                picPrevItem = (ImageAdapter.getPrevItemURL(picPosition));
+                if(++picPosition> ImageAdapter.mSize - 1) picPosition = 0;
+                picNextItem = (ImageAdapter.getNextItemURL(picPosition).toString());
+                picPrevItem = (ImageAdapter.getPrevItemURL(picPosition).toString());
             }
         });
 

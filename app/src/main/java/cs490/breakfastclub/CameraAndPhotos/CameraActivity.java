@@ -28,6 +28,13 @@ public class CameraActivity extends AppCompatActivity {
                     .replace(R.id.container, CameraActivityFragment.newInstance())
                     .commit();
         }
+/*
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Repeat Offenders");
+        */
     }
 
 
