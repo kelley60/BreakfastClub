@@ -24,7 +24,6 @@ public class Squad {
         this.squadFeed = new SquadFeed();
     }
 
-
     public Squad(String squadName, String squadID, String squadImageURL, String squadImageID, String squadDesc){
         this.squadName = squadName;
         this.squadID = squadID;
@@ -34,35 +33,6 @@ public class Squad {
         userList = new ArrayList<User>();
         squadFeed = new SquadFeed();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     //GETTERS AND SETTERS --------------------------------------------------------------
 

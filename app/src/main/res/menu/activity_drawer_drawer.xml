@@ -24,6 +24,9 @@
             android:id="@+id/nav_squadView"
             android:title="ViewSquad"/>
         <item
+            android:id="@+id/nav_history"
+            android:title="History" />
+        <item
             android:id="@+id/nav_adminViewUsers"
             android:title="Admin - View Users" />
         <item
