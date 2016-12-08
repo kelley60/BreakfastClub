@@ -108,7 +108,7 @@ public class Photos {
         getRefSet(code).addChildEventListener(childEventListener);
     }
 
-    private LinkedHashMap<String, URL> getPhotoSet( int code )
+    public LinkedHashMap<String, URL> getPhotoSet( int code )
     {
         switch (code)
         {

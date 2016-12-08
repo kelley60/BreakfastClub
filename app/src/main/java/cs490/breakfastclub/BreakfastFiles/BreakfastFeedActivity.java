@@ -21,6 +21,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -56,7 +58,6 @@ public class BreakfastFeedActivity extends AppCompatActivity {
     private ArrayList<URL> photos;
     private ArrayList<String> photoids;
     int mSize;
-    int position;
 
     private DatabaseReference mDatabase;
 
@@ -134,7 +135,6 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Campus Feed");
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        position = 0;
         upArrow = (ImageButton) findViewById(R.id.upArrowId);
         downArrow = (ImageButton) findViewById(R.id.downArrowId);
         removePictureButton = (ImageButton) findViewById(R.id.removePhotoButtonId);
@@ -147,14 +147,14 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         upArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //increaseCurrentPostScore();
+                increaseCurrentPostScore();
             }
         });
 
         downArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //decreaseCurrentPostScore();
+                decreaseCurrentPostScore();
             }
         });
 
@@ -183,6 +183,7 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                currentUser.setCurrentPositionInFeed((currentUser.getCurrentPositionInFeed() + 1)%mSize);
                 setNextImage();
             }
         });
@@ -209,17 +210,19 @@ public class BreakfastFeedActivity extends AppCompatActivity {
     }
 
     private void setNextImage() {
-        if(position < mSize) {
-            Picasso.with(getApplicationContext()).load(getItemURL(position).toString()).fit().into(image);
-            if(currentUser.getCurrentPhotos().getBreakfastVotes().containsKey(photoids.get(position)))
-                pictureScore.setText(currentUser.getCurrentPhotos().getBreakfastVotes().get(photoids.get(position)).toString());
+
+        if(currentUser.getCurrentPositionInFeed() < mSize) {
+            Picasso.with(getApplicationContext()).load(getItemURL(currentUser.getCurrentPositionInFeed()).toString()).fit().into(image);
+            if(currentUser.getCurrentPhotos().getBreakfastVotes().containsKey(photoids.get(currentUser.getCurrentPositionInFeed())))
+                pictureScore.setText(currentUser.getCurrentPhotos().getBreakfastVotes().get(photoids.get(currentUser.getCurrentPositionInFeed())).toString());
             else {
                 pictureScore.setText("0");
-                currentUser.getCurrentPhotos().getBreakfastVotes().put(photoids.get(position), 0);
+                currentUser.getCurrentPhotos().getBreakfastVotes().put(photoids.get(currentUser.getCurrentPositionInFeed()), 0);
             }
-            position++;
-            position = position%mSize;
         }
+        else
+            currentUser.setCurrentPositionInFeed((currentUser.getCurrentPositionInFeed())%mSize);
+
     }
 
     public URL getItemURL(int position) {
@@ -233,35 +236,57 @@ public class BreakfastFeedActivity extends AppCompatActivity {
 
     private void decreaseCurrentPostScore() {
 
-        boolean hasVotedDown = currentUser.getHasVotedDown().get(currentUser.getCurrentPositionInFeed());
+      //TODO: Sean, add has voted checks and vote count checks
+            final DatabaseReference downvoteref = FirebaseDatabase.getInstance().getReference("Breakfasts").
+                    child(currentBreakfast.getBreakfastKey()).child("Votes").child(photoids.get(currentUser.getCurrentPositionInFeed()));
 
-       /*
-        if (hasVotedOnThisPic == false){
-            currentPost.setScore(currentPost.getScore() - 1);
-            currentUser.getHasVoted().set(currentUser.getCurrentPositionInFeed() ,true);
-            pictureScore.setText(currentPost.getScore());
-            //TODO save to DB
-        }
-        */
+            downvoteref.runTransaction(new Transaction.Handler() {
+                @Override
+                public Transaction.Result doTransaction(final MutableData currentData) {
+                    if (currentData.getValue() == null) {
+                        currentData.setValue(-1);
+                    } else {
+                        currentData.setValue((Long) currentData.getValue() - 1);
+                    }
+                    return Transaction.success(currentData);
+                }
 
-        if (tempScore > -5) {
-            tempScore -= 1;
-            pictureScore.setText(tempScore + "");
-        }
-    }
+                public void onComplete(DatabaseError databaseError, boolean committed, DataSnapshot currentData) {
+                    if (databaseError != null) {
+                        System.out.println("Firebase counter decrement failed.");
+                    } else {
+                        System.out.println("Firebase counter decrement succeeded.");
+                        pictureScore.setText(currentData.getValue().toString());
+                    }
+                }
+            });
+   }
 
     private void increaseCurrentPostScore() {
-        /*
-        boolean hasVotedOnThisPic = currentUser.getHasVoted().get(currentUser.getCurrentPositionInFeed());
-        if (hasVotedOnThisPic == false){
-            currentPost.setScore(currentPost.getScore() + 1);
-            currentUser.getHasVoted().set(currentUser.getCurrentPositionInFeed() ,true);
-            pictureScore.setText(currentPost.getScore());
-            //TODO save to DB
-        }
-        */
-        tempScore += 1;
-        pictureScore.setText(tempScore + "");
+        //TODO: Sean, add has voted checks and vote count checks
+        final DatabaseReference upvoteref = FirebaseDatabase.getInstance().getReference("Breakfasts").
+                child(currentBreakfast.getBreakfastKey()).child("Votes").child(photoids.get(currentUser.getCurrentPositionInFeed()));
+
+        upvoteref.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(final MutableData currentData) {
+                if (currentData.getValue() == null) {
+                    currentData.setValue(1);
+                } else {
+                    currentData.setValue((Long) currentData.getValue() + 1);
+                }
+                return Transaction.success(currentData);
+            }
+
+            public void onComplete(DatabaseError databaseError, boolean committed, DataSnapshot currentData) {
+                if (databaseError != null) {
+                    System.out.println("Firebase counter increment failed.");
+                } else {
+                    System.out.println("Firebase counter increment succeeded.");
+                    pictureScore.setText(currentData.getValue().toString());
+                }
+            }
+        });
     }
 
     @Override

@@ -10,7 +10,7 @@
 
     <item
         android:id="@+id/squad_post"
-        android:title="Post to Squad Feed"/>
+        android:title="Add to Squad Gallery"/>
 
     <item
         android:id="@+id/breakfast_post"

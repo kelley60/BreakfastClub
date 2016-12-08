@@ -20,7 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import cs490.breakfastclub.SquadFiles.SquadGalleryActivity;
+import cs490.breakfastclub.CameraAndPhotos.GalleryActivity;
 import cs490.breakfastclub.UserFiles.User;
 
 public class ProfileViewActivity extends AppCompatActivity {
@@ -77,7 +77,8 @@ public class ProfileViewActivity extends AppCompatActivity {
                 btnGallery.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(ProfileViewActivity.this, SquadGalleryActivity.class);
+                        Intent intent = new Intent(ProfileViewActivity.this, GalleryActivity.class);
+                        intent.putExtra("photo set", 0);
                         startActivity(intent);
                     }
                 });
@@ -165,7 +166,8 @@ public class ProfileViewActivity extends AppCompatActivity {
             btnGallery.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(ProfileViewActivity.this, SquadGalleryActivity.class);
+                    Intent intent = new Intent(ProfileViewActivity.this, GalleryActivity.class);
+                    intent.putExtra("photo set", 0);
                     startActivity(intent);
                 }
             });

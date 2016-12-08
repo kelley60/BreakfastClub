@@ -75,7 +75,7 @@
             android:name=".DrawerActivity"
             android:label="@string/title_activity_drawer"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".SquadFiles.SquadGalleryActivity"/>
+        <activity android:name=".CameraAndPhotos.GalleryActivity"/>
 
         <service
             android:name=".GeofenceFiles.GeofenceTransitionsIntentService"
