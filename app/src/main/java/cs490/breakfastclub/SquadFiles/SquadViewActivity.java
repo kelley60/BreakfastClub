@@ -57,11 +57,9 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
     List<CharSequence> userNames = new ArrayList<>();
     List<CharSequence> userIDs = new ArrayList<>();
 
-
     private DatabaseReference mDatabase;
 
     private GoogleApiClient mGoogleApiClient = null;
-
 
     @Override
     public void onConnectionSuspended(int s)

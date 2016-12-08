@@ -150,7 +150,12 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-        }else if (id == R.id.nav_adminViewUsers) {
+        }
+        else if (id == R.id.nav_history) {
+            Intent intent = new Intent(DrawerActivity.this, HistoryActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.nav_adminViewUsers) {
             Intent intent = new Intent(DrawerActivity.this, AdminViewUsersActivity.class);
             startActivity(intent);
         }
