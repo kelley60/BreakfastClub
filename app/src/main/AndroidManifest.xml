@@ -85,7 +85,8 @@
         <activity android:name=".SquadFiles.SquadLocationActivity" />
         <activity android:name=".CameraAndPhotos.CameraActivity" />
         <activity android:name=".CameraAndPhotos.PhotoActivity" />
-        <activity android:name=".RepeatOffendersActivity"></activity>
+        <activity android:name=".RepeatOffendersActivity" />
+        <activity android:name=".NotificationViewActivity"></activity>
     </application>
 
 </manifest>

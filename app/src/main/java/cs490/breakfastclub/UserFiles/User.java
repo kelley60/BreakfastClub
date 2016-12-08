@@ -1,9 +1,17 @@
 package cs490.breakfastclub.UserFiles;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import cs490.breakfastclub.Classes.Notification;
 import cs490.breakfastclub.SquadFiles.Squad;
 
 /**
@@ -25,6 +33,8 @@ public class User {
     private ArrayList<User> friends;
     private Permissions permissions;
 
+    private ArrayList<Notification> notifications;
+
     private ArrayList<Boolean> hasVotedUp;
     private ArrayList<Boolean> hasVotedDown;
     private int currentPositionInFeed;
@@ -36,6 +46,8 @@ public class User {
     private double lat, lng;
     private LatLng location;
 
+    private boolean gotNotificationsFromFirebase = false;
+
     public User(String name, String userId, String profileImageUrl, ArrayList<User> friends){
         this.name = name;
         this.userId = userId;
@@ -46,7 +58,8 @@ public class User {
         this.hasVotedUp = new ArrayList<Boolean>();
         this.hasVotedDown = new ArrayList<Boolean>();
         this.currentPositionInFeed = 0;
-        numberOfOffensives = 0;
+        this.numberOfOffensives = 0;
+        notifications = new ArrayList<>();
     }
 
     public User(String name, String userId, String profileImageUrl)
@@ -183,4 +196,79 @@ public class User {
     public void setNumberOfOffensives(int numberOfOffensives) {
         this.numberOfOffensives = numberOfOffensives;
     }
+
+    private void getNotificationsFromFirebase()
+    {
+        final DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + userId + "/Notifications/");
+        memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot d : dataSnapshot.getChildren())
+                {
+                    Notification n = new Notification((String)d.child("title").getValue(),
+                                                      (String)d.child("content").getValue(),
+                                                      userId);
+                    n.setTimestamp((String)d.child("timestamp").getValue());
+                    notifications.add(n);
+                    Log.d("Notifications", "FROM FIREBASE: Timestamp=" + n.getTimestamp());
+                    Log.d("Notifications", "FROM FIREBASE: User=" + name);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public ArrayList<Notification> getNotifications()
+    {
+        if(gotNotificationsFromFirebase == false)
+        {
+            gotNotificationsFromFirebase = true;
+            Log.d("Notifications", "SIZE 0, Getting notifications from Firebase");
+            getNotificationsFromFirebase();
+        }
+        return notifications;
+    }
+
+    public void addNotification(Notification n)
+    {
+        if(gotNotificationsFromFirebase == false)
+        {
+            gotNotificationsFromFirebase = true;
+            getNotificationsFromFirebase();
+        }
+        notifications.add(n);
+        n.addToFirebase();
+    }
+
+    public boolean removeNotification(Notification toRemove)
+    {
+        for(Notification n : notifications)
+        {
+            if(n.getContent().equals(toRemove.getContent()) &&
+                    n.getTimestamp().equals(toRemove.getContent()))
+            {
+                n.removeNotification();
+                notifications.remove(n);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean removeNotification(int pos)
+    {
+        if(pos >= 0 && pos < notifications.size())
+        {
+            notifications.get(pos).removeNotification();
+            notifications.remove(pos);
+            return true;
+        }
+        return false;
+    }
+
 }

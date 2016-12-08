@@ -112,6 +112,16 @@
                     android:layout_margin="5dp"
                     android:visibility="invisible"/>
 
+                <Button
+                    android:id="@+id/btnNotifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btnViewSquadPhotos"
+                    android:layout_centerHorizontal="true"
+                    android:visibility="invisible"
+                    android:layout_margin="5dp"
+                    android:text="Notifications"/>
+
             </RelativeLayout>
 
 

@@ -18,9 +18,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import cs490.breakfastclub.Classes.Notification;
 import cs490.breakfastclub.SquadFiles.SquadGalleryActivity;
 import cs490.breakfastclub.SquadFiles.SquadViewActivity;
 import cs490.breakfastclub.UserFiles.User;
+
 
 public class ProfileViewActivity extends AppCompatActivity {
 
@@ -165,6 +167,18 @@ public class ProfileViewActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(ProfileViewActivity.this, SquadGalleryActivity.class);
+                    startActivity(intent);
+                }
+            });
+
+            //((MyApplication) getApplication()).getCurrentUser().addTestNotification();
+
+            Button btnNotifications = (Button) findViewById(R.id.btnNotifications);
+            btnNotifications.setVisibility(View.VISIBLE);
+            btnNotifications.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ProfileViewActivity.this, NotificationViewActivity.class);
                     startActivity(intent);
                 }
             });
