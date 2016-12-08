@@ -383,7 +383,7 @@ public class LoginActivity extends AppCompatActivity {
                 String description = dataSnapshot.child("description").getValue().toString();
                 String breakfastKey = dataSnapshot.getKey();
                 currentBreakfast = new Breakfast(year, month, day, description, breakfastKey);
-                ((MyApplication)getApplication()).setBreakfast(currentBreakfast);
+                ((MyApplication)getApplication()).setCurrentBreakfast(currentBreakfast);
                 loadPhotos();
             }
 

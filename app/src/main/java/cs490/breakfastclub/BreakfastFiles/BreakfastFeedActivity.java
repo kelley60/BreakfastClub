@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Calendar;
 
 import cs490.breakfastclub.CameraAndPhotos.CameraActivity;
+import cs490.breakfastclub.CameraAndPhotos.Photos;
 import cs490.breakfastclub.Classes.Post;
 import cs490.breakfastclub.Classes.TimeFunctions;
 import cs490.breakfastclub.MyApplication;
@@ -48,7 +49,10 @@ public class BreakfastFeedActivity extends AppCompatActivity {
     User currentUser;
     Post currentPost;
     ImageView image;
+    Photos currentPhotos;
     int tempScore;
+    int currentPositionInFeed;
+    int breakfastPhotoCount;
 
     private DatabaseReference mDatabase;
 
@@ -66,7 +70,8 @@ public class BreakfastFeedActivity extends AppCompatActivity {
     private void setLayoutFromIntentString(String layout) {
         if (layout.equals("Campus Feed")) {
             setContentView(R.layout.activity_campus_feed);
-            loadCurrentBreakfast();
+            //loadCurrentBreakfast();
+            campusFeedInit();
         }
         if (layout.equals("Not on Campus")){
             setContentView(R.layout.not_on_campus);
@@ -113,15 +118,23 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Campus Feed");
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        currentUser = ((MyApplication) getApplication()).getCurrentUser();
+        currentBreakfast = ((MyApplication) getApplication()).getCurrentBreakfast();
+        currentPhotos = ((MyApplication) getApplication()).getCurrentPhotos();
+
         upArrow = (ImageButton) findViewById(R.id.upArrowId);
         downArrow = (ImageButton) findViewById(R.id.downArrowId);
         removePictureButton = (ImageButton) findViewById(R.id.removePhotoButtonId);
         cameraButton = (ImageButton) findViewById(R.id.cameraButtonId);
         pictureScore = (TextView) findViewById(R.id.pictureScoreId);
         image = (ImageView) findViewById(R.id.campusFeedImageId);
+        currentPositionInFeed = currentUser.getCurrentPositionInFeed();
+        //TODO
+        breakfastPhotoCount = 10;
+        currentUser.increaseVotingArrays(breakfastPhotoCount);
 
 
-        upArrow.setOnClickListener(new View.OnClickListener() {
+                upArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //increaseCurrentPostScore();
@@ -138,13 +151,7 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         removePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO:
-                // currentPost.getSenderId();
-                // ^ Use that to retrieve User info from firebase
-                // Increase numberOffensive by 1
-                // Update User in database
-                // Remove picture from BreakfastFeed
-                // Update database with picture removed
+                //removeCurrentPicture();
             }
         });
 
@@ -164,11 +171,9 @@ public class BreakfastFeedActivity extends AppCompatActivity {
 
         cameraButton.setVisibility(View.VISIBLE);
         if (isDuringBreakfast() == false || currentUser.getNumberOfOffensives() >= 3){
-            //cameraButton.setVisibility(View.INVISIBLE);
+            cameraButton.setVisibility(View.INVISIBLE);
         }
 
-
-        currentUser = ((MyApplication) getApplication()).getCurrentUser();
         //currentPost = currentBreakfast.getCampusFeed().get(currentUser.getCurrentPositionInFeed());
         //pictureScore.setText(currentPost.getScore());
         //String imgUrl = currentPost.getImgURL();
@@ -185,24 +190,36 @@ public class BreakfastFeedActivity extends AppCompatActivity {
 
     private void setNextImage() {
 
-        int currentPosition = currentUser.getCurrentPositionInFeed();
-        //TODO
-        int breakfastPhotoCount = 0;
+        if (currentPositionInFeed < breakfastPhotoCount) {
 
-        if (currentPosition < breakfastPhotoCount) {
-            currentUser.setCurrentPositionInFeed(currentPosition + 1);
-            mDatabase.child("Users").child(currentUser.getUserId()).child("currentPositionInFeed").setValue(currentPosition+1);
-            currentPost = currentBreakfast.getCampusFeed().get(currentPosition+1);
+            currentPositionInFeed += 1;
+            currentUser.setCurrentPositionInFeed(currentPositionInFeed);
+            mDatabase.child("Users").child(currentUser.getUserId()).child("currentPositionInFeed").setValue(currentPositionInFeed);
             //TODO set image
             //String nextImageUrl = currentPost.getImgURL();
             //image.setImageDrawable();
         }
 
-        else if (currentPosition == breakfastPhotoCount){
-            currentUser.setCurrentPositionInFeed(0);
-            mDatabase.child("Users").child(currentUser.getUserId()).child("currentPositionInFeed").setValue(0);
-            mDatabase.child("Users").child(currentUser.getUserId()).setValue("hasVotedUp");
-            mDatabase.child("Users").child(currentUser.getUserId()).setValue("hasVotedDown");
+        if (currentPositionInFeed == breakfastPhotoCount){
+            //TODO check if photocount has increased
+            //breakfastPhotoCount = 0
+            if (currentPositionInFeed == breakfastPhotoCount) {
+                currentPositionInFeed = 0;
+                currentUser.setCurrentPositionInFeed(currentPositionInFeed);
+                mDatabase.child("Users").child(currentUser.getUserId()).child("currentPositionInFeed").setValue(currentPositionInFeed);
+            }
+            //number of photos has increased, load next photo
+            else{
+                currentUser.increaseVotingArrays(breakfastPhotoCount);
+                currentPositionInFeed += 1;
+                currentUser.setCurrentPositionInFeed(currentPositionInFeed);
+                mDatabase.child("Users").child(currentUser.getUserId()).child("currentPositionInFeed").setValue(currentPositionInFeed);
+
+                //TODO set image
+
+                //String nextImageUrl = currentPost.getImgURL();
+                //image.setImageDrawable();
+            }
         }
 
     }
@@ -214,35 +231,56 @@ public class BreakfastFeedActivity extends AppCompatActivity {
 
     private void decreaseCurrentPostScore() {
 
-        boolean hasVotedDown = currentUser.getHasVotedDown().get(currentUser.getCurrentPositionInFeed());
+        boolean hasVotedDown = currentUser.getHasVotedDown().get(currentPositionInFeed);
+        boolean hasVotedUp = currentUser.getHasVotedUp().get(currentPositionInFeed);
 
-       /*
-        if (hasVotedOnThisPic == false){
-            currentPost.setScore(currentPost.getScore() - 1);
-            currentUser.getHasVoted().set(currentUser.getCurrentPositionInFeed() ,true);
+
+        if (hasVotedDown){
+            currentPost.setScore(currentPost.getScore() + 1);
+            currentUser.getHasVotedDown().set(currentPositionInFeed , false);
             pictureScore.setText(currentPost.getScore());
-            //TODO save to DB
         }
-        */
+        else if(hasVotedUp){
+            currentPost.setScore(currentPost.getScore() - 2);
+            currentUser.getHasVotedDown().set(currentPositionInFeed , true);
+            currentUser.getHasVotedUp().set(currentPositionInFeed , false);
+            pictureScore.setText(currentPost.getScore());
+        }
+        else{
+            currentPost.setScore(currentPost.getScore() - 1);
+            currentUser.getHasVotedDown().set(currentPositionInFeed , true);
+            pictureScore.setText(currentPost.getScore());
 
-        if (tempScore > -5) {
-            tempScore -= 1;
-            pictureScore.setText(tempScore + "");
+            if (currentPost.getScore() <= -5){
+                removeCurrentPicture();
+            }
         }
+
+
     }
 
     private void increaseCurrentPostScore() {
-        /*
-        boolean hasVotedOnThisPic = currentUser.getHasVoted().get(currentUser.getCurrentPositionInFeed());
-        if (hasVotedOnThisPic == false){
-            currentPost.setScore(currentPost.getScore() + 1);
-            currentUser.getHasVoted().set(currentUser.getCurrentPositionInFeed() ,true);
+
+        boolean hasVotedDown = currentUser.getHasVotedDown().get(currentPositionInFeed);
+        boolean hasVotedUp = currentUser.getHasVotedUp().get(currentPositionInFeed);
+
+
+        if (hasVotedDown){
+            currentPost.setScore(currentPost.getScore() + 2);
+            currentUser.getHasVotedDown().set(currentPositionInFeed , false);
+            currentUser.getHasVotedUp().set(currentPositionInFeed , true);
             pictureScore.setText(currentPost.getScore());
-            //TODO save to DB
         }
-        */
-        tempScore += 1;
-        pictureScore.setText(tempScore + "");
+        else if(hasVotedUp){
+            currentPost.setScore(currentPost.getScore() - 1);
+            currentUser.getHasVotedUp().set(currentPositionInFeed , false);
+            pictureScore.setText(currentPost.getScore());
+        }
+        else{
+            currentPost.setScore(currentPost.getScore() + 1);
+            currentUser.getHasVotedUp().set(currentPositionInFeed , true);
+            pictureScore.setText(currentPost.getScore());
+        }
     }
 
     @Override
@@ -282,41 +320,13 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         return intent;
     }
 
-
-    public void loadCurrentBreakfast() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Breakfasts");
-        ref.orderByChild("isCurrentBreakfast").equalTo("true").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                int year = Integer.parseInt(dataSnapshot.child("year").getValue().toString());
-                int month = Integer.parseInt(dataSnapshot.child("month").getValue().toString());
-                int day =  Integer.parseInt(dataSnapshot.child("day").getValue().toString());
-                String description = dataSnapshot.child("description").getValue().toString();
-                String breakfastKey = dataSnapshot.getKey();
-                currentBreakfast = new Breakfast(year, month, day, description, breakfastKey);
-                campusFeedInit();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+    public void removeCurrentPicture(){
+        //currentPost.getSenderId();
+        // ^ Use that to retrieve User info from firebase
+        // Increase numberOffensive by 1
+        // Update User in database
+        // Remove picture from BreakfastFeed
+        // Update database with picture removed
     }
+
 }

@@ -1,6 +1,8 @@
 package cs490.breakfastclub.UserFiles;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -24,6 +26,7 @@ public class User {
     private boolean receivesPushNotifications;
     private ArrayList<User> friends;
     private Permissions permissions;
+    private DatabaseReference mDatabase;
 
     private ArrayList<Boolean> hasVotedUp;
     private ArrayList<Boolean> hasVotedDown;
@@ -183,4 +186,20 @@ public class User {
     public void setNumberOfOffensives(int numberOfOffensives) {
         this.numberOfOffensives = numberOfOffensives;
     }
+
+
+    public void increaseVotingArrays(int photoCount) {
+        if (photoCount > this.getHasVotedDown().size()){
+
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            for (int i = this.getHasVotedDown().size(); i <= photoCount; i++){
+                this.getHasVotedDown().add(false);
+                this.getHasVotedUp().add(false);
+                mDatabase.child("Users").child(this.getUserId()).child("hasVotedUp").child(i+"").setValue("false");
+                mDatabase.child("Users").child(this.getUserId()).child("hasVotedDown").child(i+"").setValue("false");
+            }
+        }
+    }
+
 }

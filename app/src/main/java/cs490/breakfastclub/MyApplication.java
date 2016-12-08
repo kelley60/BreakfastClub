@@ -36,11 +36,11 @@ public class MyApplication extends Application {
         this.currentPhotos = currentPhotos;
     }
 
-    public Breakfast getBreakfast() {
+    public Breakfast getCurrentBreakfast() {
         return breakfast;
     }
 
-    public void setBreakfast(Breakfast breakfast) {
+    public void setCurrentBreakfast(Breakfast breakfast) {
         this.breakfast = breakfast;
     }
 }
