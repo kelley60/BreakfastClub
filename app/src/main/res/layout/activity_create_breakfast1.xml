@@ -84,7 +84,7 @@
                 android:layout_below="@+id/DescriptionTextViewId"
                 android:layout_alignStart="@+id/DescriptionTextViewId"
                 android:id="@+id/createBreakfastDescriptionEditTextId"
-                android:text="[Description Here]"
+                android:hint="Description Here"
                 android:textSize="14sp" />
 
         </RelativeLayout>

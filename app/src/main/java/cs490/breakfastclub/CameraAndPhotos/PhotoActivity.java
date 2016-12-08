@@ -1,6 +1,5 @@
 package cs490.breakfastclub.CameraAndPhotos;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -20,6 +19,7 @@ import android.widget.Toast;
 
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
+import com.facebook.share.widget.ShareDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -45,6 +45,7 @@ public class PhotoActivity extends AppCompatActivity {
     Bitmap b;
     Uri photoUri;
     Context c;
+    ShareDialog shareDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,11 @@ public class PhotoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("Repeat Offenders");
+
+       // shareDialog = new ShareDialog(this);
+        // this part is optional
+       // shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {...     });
+
 
         currentUser = ((MyApplication) getApplication()).getCurrentUser();
         currentBreakfast = ((MyApplication) getApplication()).getBreakfast().getBreakfastKey();
@@ -136,8 +142,14 @@ public class PhotoActivity extends AppCompatActivity {
                                 break;
                             }
                             case R.id.facebook_share: {
-                                photo.addPhotoToFirebase(currentUser,currentBreakfast);
-                                //todo: get facebook post
+                                photo.addPhotoToFirebase(currentUser, currentBreakfast);
+
+                                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+
+                                sharingIntent.setType("image/jpeg");
+                                sharingIntent.putExtra(Intent.EXTRA_STREAM, photoUri);
+                                startActivity(Intent.createChooser(sharingIntent, "Share image using"));
+
                                 break;
                             }
 
