@@ -73,20 +73,30 @@
             android:name=".DrawerActivity"
             android:label="@string/title_activity_drawer"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".SquadFiles.SquadGalleryActivity" />
+        <activity android:name=".CameraAndPhotos.GalleryActivity" />
 
         <service
             android:name=".GeofenceFiles.GeofenceTransitionsIntentService"
+
+            android:exported="false" />
+        <activity android:name=".AdminViewUsersActivity"/>
+        <activity android:name=".HistoryActivity"/>
+        <activity android:name=".SquadFiles.SearchMemberActivity"/>
+        <activity android:name=".BreakfastFiles.CreateBreakfastActivity2"/>
+        <activity android:name=".SquadFiles.SquadLocationActivity"/>
+        <activity android:name=".CameraAndPhotos.CameraActivity"/>
+        <activity android:name=".CameraAndPhotos.PhotoActivity"/>
+
+        <activity android:name=".CameraAndPhotos.PhotoViewerActivity" />
+        <activity android:name=".RepeatOffendersActivity" />
+
+        <service
+            android:name=".LocationService"
             android:exported="false" />
 
-        <activity android:name=".AdminViewUsersActivity" />
-        <activity android:name=".SquadFiles.SearchMemberActivity" />
-        <activity android:name=".BreakfastFiles.CreateBreakfastActivity2" />
-        <activity android:name=".SquadFiles.SquadLocationActivity" />
-        <activity android:name=".CameraAndPhotos.CameraActivity" />
-        <activity android:name=".CameraAndPhotos.PhotoActivity" />
-        <activity android:name=".RepeatOffendersActivity" />
         <activity android:name=".NotificationViewActivity"></activity>
+        <activity android:name=".BreakfastFiles.TimeUntilBreakfastActivity" />
+        <activity android:name=".BreakfastFiles.NotOnCampusActivity"></activity>
     </application>
 
 </manifest>

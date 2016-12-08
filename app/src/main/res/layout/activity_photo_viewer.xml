@@ -28,7 +28,9 @@
             android:id="@+id/left_button"
             android:layout_weight="1"
             android:background="@drawable/ic_arrow_left_bold_circle_outline_white_48dp"
-         />
+            android:maxHeight="36dp"
+            android:maxWidth="36dp"
+            android:longClickable="true" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -36,14 +38,18 @@
             android:id="@+id/grid_button"
             android:background="@drawable/ic_view_grid_white_48dp"
             android:layout_weight="1"
-            />
+            android:maxHeight="36dp"
+            android:maxWidth="36dp"
+            android:longClickable="true" />
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/right_button"
             android:layout_weight="1"
             android:background="@drawable/ic_arrow_right_bold_circle_outline_white_48dp"
-            />
+            android:maxHeight="36dp"
+            android:maxWidth="36dp"
+            android:longClickable="true" />
 
     </LinearLayout>
 

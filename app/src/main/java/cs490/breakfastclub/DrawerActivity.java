@@ -1,6 +1,9 @@
 package cs490.breakfastclub;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -12,10 +15,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Calendar;
+
 import cs490.breakfastclub.BreakfastFiles.BreakfastFeedActivity;
 import cs490.breakfastclub.CameraAndPhotos.CameraActivity;
 import cs490.breakfastclub.BreakfastFiles.Breakfast;
 import cs490.breakfastclub.GeofenceFiles.GeofenceManager;
+import cs490.breakfastclub.SquadFiles.SquadInviteActivity;
 import cs490.breakfastclub.UserFiles.User;
 import cs490.breakfastclub.BreakfastFiles.CreateBreakfastActivity;
 import cs490.breakfastclub.SquadFiles.SquadCreateActivity;
@@ -33,6 +39,9 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         // Enable the Up button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+        Intent locationService = new Intent(getApplicationContext(), LocationService.class);
+//        getApplicationContext().startService(locationService);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -91,8 +100,20 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             Intent intent = new Intent(DrawerActivity.this, CreateBreakfastActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_displayMessage) {
-            Intent intent = new Intent(DrawerActivity.this, DisplayMessageActivity.class);
-            startActivity(intent);
+            final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+            if (currentUser.isPartOfSquad()){
+                Intent intent = new Intent(DrawerActivity.this, DisplayMessageActivity.class);
+                startActivity(intent);
+            }
+            else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("You must be in a Squad to access that.")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", null);
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
         } else if (id == R.id.nav_login) {
             Intent intent = new Intent(DrawerActivity.this, LoginActivity.class);
             intent.putExtra("CameFromDrawer", true);
@@ -101,8 +122,19 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             Intent intent = new Intent(DrawerActivity.this, ProfileViewActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_squadCreate) {
-            Intent intent = new Intent(DrawerActivity.this, SquadCreateActivity.class);
-            startActivity(intent);
+            final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+            if (currentUser.isPartOfSquad()){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("You are already in a squad.")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", null);
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+            else{
+                Intent intent = new Intent(DrawerActivity.this, SquadCreateActivity.class);
+                startActivity(intent);
+            }
         } else if (id == R.id.nav_squadView) {
             // disable SquadViewActivity if user is not in squad
             final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
@@ -118,7 +150,12 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-        }else if (id == R.id.nav_adminViewUsers) {
+        }
+        else if (id == R.id.nav_history) {
+            Intent intent = new Intent(DrawerActivity.this, HistoryActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.nav_adminViewUsers) {
             Intent intent = new Intent(DrawerActivity.this, AdminViewUsersActivity.class);
             startActivity(intent);
         }

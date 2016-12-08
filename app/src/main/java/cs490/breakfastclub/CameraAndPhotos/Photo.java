@@ -22,6 +22,8 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import cs490.breakfastclub.UserFiles.User;
+
 /**
  * Created by Emma on 11/1/2016.
  */
@@ -33,7 +35,8 @@ public class Photo implements Parcelable {
     private String photoSquadId;
     private boolean isBreakfastFeed;
     private boolean isSquadFeed;
-
+    private boolean isProfilePhoto = false;
+    private boolean isSquadProfilePhoto = false;
 
     public Photo(String photoName, Bitmap bMap, String photoUserId, String photoSquadId, boolean isBreakfastFeed, boolean isSquadFeed){
         this.photoName = photoName;
@@ -176,18 +179,19 @@ public class Photo implements Parcelable {
         return bitMap;
     }
 
-    public void addPhotoToFirebase()
+    public void addPhotoToFirebase(final User currentUser, final String currentBreakfast)
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bMap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] bytes = baos.toByteArray();
-      //  String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
+        final String userId = currentUser.getUserId();
+        //  String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
         // we finally have our base64 string version of the image, save it.
 
 
 
         StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://breakfastclubapp-437bd.appspot.com");
-        StorageReference photoRef = mStorage.child("Photos/Breakfast1/" + getPhotoName());
+        StorageReference photoRef = mStorage.child("Photos").child(currentBreakfast).child(getPhotoName());
         UploadTask uploadTask = photoRef.putBytes(bytes);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -205,20 +209,42 @@ public class Photo implements Parcelable {
 
                 //Todo: get the breakfast club key
                 //       mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("image").setValue(base64Image);
-                mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("user id").setValue(getPhotoUserId());
-                mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("squad id").setValue(getPhotoSquadId());
-                mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("isBreakfast").setValue(isBreakfastFeed());
-                mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("isSquad").setValue(isSquadFeed());
-                mDatabase.child("Photos/Breakfast1/" + getPhotoName()).child("image url").setValue(downloadUrl.toString());
+                mDatabase.child("Photos").child(currentBreakfast).child(getPhotoName()).child("user id").setValue(getPhotoUserId());
+                mDatabase.child("Photos").child(currentBreakfast).child(getPhotoName()).child("squad id").setValue(getPhotoSquadId());
+                mDatabase.child("Photos").child(currentBreakfast).child(getPhotoName()).child("isBreakfast").setValue(isBreakfastFeed());
+                mDatabase.child("Photos").child(currentBreakfast).child(getPhotoName()).child("isSquad").setValue(isSquadFeed());
+                mDatabase.child("Photos").child(currentBreakfast).child(getPhotoName()).child("isUserProfile").setValue(isProfilePhoto());
+                mDatabase.child("Photos").child(currentBreakfast).child(getPhotoName()).child("isSquadProfile").setValue(isSquadProfilePhoto());
+                mDatabase.child("Photos").child(currentBreakfast).child(getPhotoName()).child("image url").setValue(downloadUrl.toString());
 
-                mDatabase.child("Users/").child(String.valueOf(getPhotoUserId())).child("Breakfast1/Photos").child(getPhotoName()).setValue(downloadUrl.toString());
 
-                if(isBreakfastFeed())
-                    mDatabase.child("Breakfast/Breakfast1/Photos/").child(getPhotoName()).setValue(downloadUrl.toString());
+                mDatabase.child("Users/").child(String.valueOf(userId)).child("Photos").child(currentBreakfast).child(getPhotoName()).setValue(downloadUrl.toString());
 
-                if(isSquadFeed())
-                    mDatabase.child("Squads/" + getPhotoSquadId() +  "/Breakfast1/Photos").child(getPhotoName()).setValue(downloadUrl.toString());
 
+                if (isProfilePhoto()) {
+                    mDatabase.child("Users").child(String.valueOf(userId)).child("profileImageUrl").setValue(downloadUrl.toString());
+                    mDatabase.child("Users").child(String.valueOf(userId)).child("profileImageID").setValue(getPhotoName());
+                    currentUser.setProfileImageID(getPhotoName());
+                    currentUser.setProfileImageUrl(downloadUrl.toString());
+                }
+
+                if (isSquadProfilePhoto()) {
+                    mDatabase.child("Squads").child(getPhotoSquadId()).child("profileImageUrl").setValue(downloadUrl.toString());
+                    mDatabase.child("Squads").child(getPhotoSquadId()).child("profileImageID").setValue(getPhotoName());
+                    currentUser.getSquad().setSquadImageID(getPhotoName());
+                    currentUser.getSquad().setSquadImageUrl(downloadUrl.toString());
+                }
+
+                if (isBreakfastFeed()) {
+                    mDatabase.child("Breakfasts").child(currentBreakfast).child("Photos").child(getPhotoName()).setValue(downloadUrl.toString());
+                    mDatabase.child("Breakfasts").child(currentBreakfast).child("Votes").child(getPhotoName()).setValue(0);
+
+                }
+
+                if (isSquadFeed()) {
+                    mDatabase.child("Squads").child(getPhotoSquadId()).child("Photos").child(currentBreakfast).child(getPhotoName()).setValue(downloadUrl.toString());
+                    final DatabaseReference messagesRef = mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Messages");
+                }
             }
         });
     }
@@ -270,5 +296,22 @@ public class Photo implements Parcelable {
 
     public void setIsSquadFeed(boolean isSquadFeed) {
         this.isSquadFeed = isSquadFeed;
+    }
+
+    public boolean isProfilePhoto() {
+        return isProfilePhoto;
+    }
+
+    public void setIsProfilePhoto(boolean isProfilePhoto) {
+        this.isProfilePhoto = isProfilePhoto;
+    }
+
+
+    public boolean isSquadProfilePhoto() {
+        return isSquadProfilePhoto;
+    }
+
+    public void setIsSquadProfilePhoto(boolean isSquadProfilePhoto) {
+        this.isSquadProfilePhoto = isSquadProfilePhoto;
     }
 }

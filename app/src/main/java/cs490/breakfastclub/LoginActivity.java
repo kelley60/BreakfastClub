@@ -14,9 +14,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -48,11 +45,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import cs490.breakfastclub.BreakfastFiles.Breakfast;
 import cs490.breakfastclub.CameraAndPhotos.Photos;
@@ -111,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         //gets the login button from activity_login.xml
         loginButton = (LoginButton) findViewById(R.id.fb_button);
-        loginButton.setReadPermissions("email", "public_profile", "user_friends");
+        loginButton.setReadPermissions("email", "public_profile", "user_friends", "publish_actions");
         //gets the textview from activity_login.xml
 
 
@@ -241,6 +236,7 @@ public class LoginActivity extends AppCompatActivity {
                         JSONObject object = response.getJSONObject();
                         JSONObject profileImageObject = null;
                         JSONArray friendsObject = null;
+
                         try {
                             profileImageObject = object.getJSONObject("picture").getJSONObject("data");
                             friendsObject = object.getJSONObject("friends").getJSONArray("data");
@@ -248,6 +244,7 @@ public class LoginActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         Log.v("Public Profile Object: " , object.toString());
+                        
                         Log.v("Image Object: ", profileImageObject.toString());
                         Log.v("Friends Object: ", friendsObject.toString());
 
@@ -281,30 +278,47 @@ public class LoginActivity extends AppCompatActivity {
                                 if (!dataSnapshot.exists()) {
                                     Log.v("User does not exisit", "User does not already exists");
                                     writeNewUser(currentUser);
-                                    ((MyApplication)getApplication()).setCurrentPhotos(new Photos(currentUser));
-                                    HashMap<String, URL> photos = ((MyApplication)getApplication()).getCurrentPhotos().getUserPhotos();
-
+                                    loadCurrentBreakfast();
 
                                 }
                                 // Get the information needed and update the user
                                 else {
                                     Log.v("User already exists", "User already exists");
                                     currentUser.setReceivesPushNotifications((boolean) dataSnapshot.child("receivesPushNotifications").getValue());
+
+                                    ArrayList<Boolean> hasVotedUp = new ArrayList<Boolean>();
+                                    ArrayList<Boolean> hasVotedDown = new ArrayList<Boolean>();
+                                    String photocount = dataSnapshot.child("getHasVoted").getChildrenCount() + "";
+                                    int photoCount = Integer.parseInt(photocount);
+                                    for (int i = 0; i < photoCount; i++) {
+                                        String upValue = dataSnapshot.child("hasVotedUp").child(i+"").getValue().toString();
+                                        String downValue = dataSnapshot.child("hasVotedDown").child(i+"").getValue().toString();
+                                        hasVotedUp.add(Boolean.parseBoolean(upValue));
+                                        hasVotedDown.add(Boolean.parseBoolean(downValue));
+                                    }
+                                    currentUser.setHasVotedUp(hasVotedUp);
+                                    currentUser.setHasVotedDown(hasVotedDown);
+
+                                    //String currentPosition = dataSnapshot.child("currentPositionInFeed").getValue() + "";
+                                    //currentUser.setCurrentPositionInFeed(Integer.parseInt(currentPosition));
+                                    currentUser.setCurrentPositionInFeed(0);
+
+                                    // Load the current application photos from firebase
                                     currentUser.setPermissions(User.Permissions.valueOf((String) dataSnapshot.child("permissions").getValue()));
-                                    ((MyApplication)getApplication()).setCurrentPhotos(new Photos(currentUser));
-                                    HashMap<String, URL> photos = ((MyApplication)getApplication()).getCurrentPhotos().getUserPhotos();
 
                                     if(dataSnapshot.child("squad").exists()) {
                                         currentUser.createSquad((String) dataSnapshot.child("squad").getValue());
                                         currentUser.setPartOfSquad(true);
                                         currentUser.setSquadRole((String) dataSnapshot.child("squadRole").getValue());
+                                        currentUser.getSquad().setSquadImageUrl((String) dataSnapshot.child("profileImageUrl").getValue());
+                                        currentUser.getSquad().setSquadImageID((String) dataSnapshot.child("profileImageID").getValue());
                                     }
                                     else
                                     {
                                         currentUser.setPartOfSquad(false);
                                     }
 
-
+                                    loadCurrentBreakfast();
                                 }
                                 Intent init = new Intent(LoginActivity.this, DrawerActivity.class);
                                 init.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -327,6 +341,7 @@ public class LoginActivity extends AppCompatActivity {
     private void writeNewUser(User user) {
         mDatabase.child("Users").child(user.getUserId()).child("name").setValue(user.getName());
         mDatabase.child("Users").child(user.getUserId()).child("profileImageUrl").setValue(user.getProfileImageUrl());
+        mDatabase.child("Users").child(user.getUserId()).child("profileImageID").setValue(user.getProfileImageID());
         mDatabase.child("Users").child(user.getUserId()).child("receivesPushNotifications").setValue(user.isReceivesPushNotifications());
         mDatabase.child("Users").child(user.getUserId()).child("currentPositionInFeed").setValue(0);
         mDatabase.child("Users").child(user.getUserId()).setValue("hasVotedUp");
@@ -349,8 +364,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loadPhotos(){
-        //TODO
-        //Emma add your photo loading stuff here
+        User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+        Photos photos = new Photos(currentUser, currentBreakfast.getBreakfastKey());
+        currentUser.setCurrentPhotos(photos);
+
     }
 
     public void loadCurrentBreakfast() {
@@ -365,7 +382,8 @@ public class LoginActivity extends AppCompatActivity {
                 String description = dataSnapshot.child("description").getValue().toString();
                 String breakfastKey = dataSnapshot.getKey();
                 currentBreakfast = new Breakfast(year, month, day, description, breakfastKey);
-                ((MyApplication)getApplication()).setBreakfast(currentBreakfast);
+                currentBreakfast.setCurrentBreakfast(true);
+                ((MyApplication)getApplication()).setCurrentBreakfast(currentBreakfast);
                 loadPhotos();
             }
 

@@ -1,8 +1,8 @@
-package cs490.breakfastclub.SquadFiles;
+package cs490.breakfastclub.CameraAndPhotos;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,32 +14,35 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-import cs490.breakfastclub.CameraAndPhotos.ImageAdapter;
-import cs490.breakfastclub.CameraAndPhotos.PhotoViewerActivity;
-import cs490.breakfastclub.UserFiles.User;
 import cs490.breakfastclub.MyApplication;
 import cs490.breakfastclub.R;
+import cs490.breakfastclub.UserFiles.User;
 
-public class SquadGalleryActivity extends AppCompatActivity {
+public class GalleryActivity extends AppCompatActivity {
 
-    private URL prev, next;
-
+    private URL prev, next, current;
+    private static final int USER_PHOTOS = 0;
+    private static final int SQUAD_PHOTOS = 1;
+    private static final int BREAKFAST_PHOTOS = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_squad_gallery);
+        setContentView(R.layout.activity_gallery);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        Intent intent = getIntent();
+
         final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
-        final LinkedHashMap<String, URL> linkedHashMap = ((MyApplication) getApplication()).getCurrentPhotos().getUserPhotos();
+        final LinkedHashMap<String, URL> linkedHashMap =
+                currentUser.getCurrentPhotos().getPhotoSet(intent.getIntExtra("photo set", 0));
         final ArrayList<URL> currentPhotos = new ArrayList<URL>(linkedHashMap.values());
         final ArrayList<String> photoids = new ArrayList<String>(linkedHashMap.keySet());
-        final GridView squadGallery = (GridView) findViewById(R.id.squadGallery);
-        Intent intent = getIntent();
+        final GridView squadGallery = (GridView) findViewById(R.id.gallery);
+
         squadGallery.setAdapter(new ImageAdapter(this, currentUser, currentPhotos, photoids));
 
         squadGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -48,17 +51,14 @@ public class SquadGalleryActivity extends AppCompatActivity {
 
                 prev = ImageAdapter.getPrevItemURL(position);
                 next = ImageAdapter.getNextItemURL(position);
+                current = ImageAdapter.getItemURL(position);
 
-                showImage(squadGallery.getAdapter().getItemId(position), position);
-
+                showImage(position);
 
             }
         });
     }
 
-    /* TODO: Populate gridview with info from this link
-    http://stacktips.com/tutorials/android/android-gridview-example-building-image-gallery-in-android
-    */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -73,12 +73,12 @@ public class SquadGalleryActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showImage(long id, int pos){
+    private void showImage(int pos){
         Intent pictureViewer = new Intent(this, PhotoViewerActivity.class);
-        pictureViewer.putExtra("pictureId",id );
+        pictureViewer.putExtra("pictureId",current.toString() );
         pictureViewer.putExtra("picturePosition", pos);
-        pictureViewer.putExtra("picturePrevId", prev);
-        pictureViewer.putExtra("pictureNextId", next);
+        pictureViewer.putExtra("picturePrevId", prev.toString());
+        pictureViewer.putExtra("pictureNextId", next.toString());
 
         startActivityForResult(pictureViewer,0);
 

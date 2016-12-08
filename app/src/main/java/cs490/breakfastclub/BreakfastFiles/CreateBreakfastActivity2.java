@@ -18,6 +18,7 @@ import java.util.Calendar;
 
 import cs490.breakfastclub.Classes.TimeFunctions;
 import cs490.breakfastclub.DrawerActivity;
+import cs490.breakfastclub.MyApplication;
 import cs490.breakfastclub.R;
 
 public class CreateBreakfastActivity2 extends AppCompatActivity {
@@ -61,7 +62,8 @@ public class CreateBreakfastActivity2 extends AppCompatActivity {
                 int year = datePicker.getYear();
                 int month = datePicker.getMonth();
 
-                Breakfast.createBreakfastEvent(year, month, day, descriptionString);
+                Breakfast.createBreakfastEvent(year, month, day, descriptionString, CreateBreakfastActivity2.this);
+
                 Intent intent = new Intent(CreateBreakfastActivity2.this, DrawerActivity.class);
                 startActivity(intent);
             }

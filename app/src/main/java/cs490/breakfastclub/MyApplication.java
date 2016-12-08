@@ -3,7 +3,12 @@ package cs490.breakfastclub;
 /**
  * Created by michaelrollberg on 10/18/16.
  */
+
 import android.app.Application;
+import android.location.Location;
+import android.location.LocationListener;
+import android.os.Bundle;
+import android.util.Log;
 
 import cs490.breakfastclub.BreakfastFiles.Breakfast;
 import cs490.breakfastclub.CameraAndPhotos.Photos;
@@ -27,20 +32,24 @@ public class MyApplication extends Application {
         this.currentUser = user;
     }
 
-
-    public Photos getCurrentPhotos() {
+    // Use to get the application's current student
+    public Photos getCurrentPhotos()
+    {
         return currentPhotos;
     }
 
-    public void setCurrentPhotos(Photos currentPhotos) {
-        this.currentPhotos = currentPhotos;
+    // Use to set the application's current student
+    public void setCurrentPhotos(Photos photos)
+    {
+        this.currentPhotos = photos;
     }
 
-    public Breakfast getBreakfast() {
+    public Breakfast getCurrentBreakfast() {
         return breakfast;
     }
 
-    public void setBreakfast(Breakfast breakfast) {
+    public void setCurrentBreakfast(Breakfast breakfast) {
         this.breakfast = breakfast;
     }
+
 }

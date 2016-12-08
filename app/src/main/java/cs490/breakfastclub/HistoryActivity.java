@@ -1,43 +1,36 @@
-package cs490.breakfastclub.SquadFiles;
+package cs490.breakfastclub;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 
-import java.util.ArrayList;
-
+import com.google.firebase.database.DatabaseReference;
+import android.util.Log;
 import cs490.breakfastclub.UserFiles.User;
-import cs490.breakfastclub.UserFiles.UserAdapter;
-import cs490.breakfastclub.R;
 
-public class SearchMemberActivity extends AppCompatActivity {
+/**
+ * Created by Kunal on 12/8/2016.
+ */
+
+public class HistoryActivity extends AppCompatActivity {
+
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_member);
+        setContentView(R.layout.activity_history);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle("[SQUAD_NAME]");
+        getSupportActionBar().setTitle("Repeat Offenders");
 
-        // Populate the list view
-        ArrayList<User> userList = new ArrayList<>();
-        for(int i = 0; i < 10; i++)
-        {
-            User u = new User("Name " + i, "[url_here]", null, null);
-            userList.add(u);
-        }
-
-        UserAdapter uAdapter = new UserAdapter(this, userList);
-
-        ListView lView = (ListView) findViewById(R.id.lstSearchMembers);
-        lView.setAdapter(uAdapter);
+        final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+        Log.d("OnCreate", "In History!");
     }
 
     @Override

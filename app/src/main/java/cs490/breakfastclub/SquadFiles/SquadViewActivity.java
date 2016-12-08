@@ -1,15 +1,13 @@
 package cs490.breakfastclub.SquadFiles;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.support.annotation.NonNull;
+import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,25 +15,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.app.AlertDialog;
-import android.widget.Button;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,11 +37,12 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import cs490.breakfastclub.UserFiles.User;
+import cs490.breakfastclub.CameraAndPhotos.GalleryActivity;
 import cs490.breakfastclub.DisplayMessageActivity;
 import cs490.breakfastclub.MyApplication;
 import cs490.breakfastclub.ProfileViewActivity;
 import cs490.breakfastclub.R;
+import cs490.breakfastclub.UserFiles.User;
 
 public class SquadViewActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
@@ -60,12 +55,11 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
     private TextView mDrawerTitle;
     CharSequence[] items;
     List<CharSequence> userNames = new ArrayList<>();
-
+    List<CharSequence> userIDs = new ArrayList<>();
 
     private DatabaseReference mDatabase;
 
     private GoogleApiClient mGoogleApiClient = null;
-
 
     @Override
     public void onConnectionSuspended(int s)
@@ -82,6 +76,8 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+
         setContentView(R.layout.activity_squad_view);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -98,16 +94,16 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
         mDrawerTitle = (TextView) findViewById(R.id.drawerTitle);
 
 
-        /*
-        Button btnSearch = (Button) findViewById(R.id.btnInviteMember);
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SquadViewActivity.this, SearchMemberActivity.class);
-                startActivity(intent);
-            }
-        });
-        */
+    /*
+    Button btnSearch = (Button) findViewById(R.id.btnInviteMember);
+    btnSearch.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(SquadViewActivity.this, SearchMemberActivity.class);
+            startActivity(intent);
+        }
+    });
+    */
 
         Button btnMsgs = (Button) findViewById(R.id.btnViewSquadMsgs);
         btnMsgs.setOnClickListener(new View.OnClickListener() {
@@ -131,25 +127,26 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
         btnGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SquadViewActivity.this, SquadGalleryActivity.class);
+                Intent intent = new Intent(SquadViewActivity.this, GalleryActivity.class);
+                intent.putExtra("photo set", 1);
                 startActivity(intent);
             }
         });
 
         // Populate the list view
-        /*
-        ArrayList<User> userList = new ArrayList<>();
-        for(int i = 0; i < 2; i++)
-        {
-            User u = new User("Name " + i, "[url_here]", null);
-            userList.add(u);
-        }
+    /*
+    ArrayList<User> userList = new ArrayList<>();
+    for(int i = 0; i < 2; i++)
+    {
+        User u = new User("Name " + i, "[url_here]", null);
+        userList.add(u);
+    }
 
-        UserAdapter uAdapter = new UserAdapter(this, userList);
+    UserAdapter uAdapter = new UserAdapter(this, userList);
 
-        ListView lView = (ListView) findViewById(R.id.lstSquadMembers);
-        lView.setAdapter(uAdapter);
-        */
+    ListView lView = (ListView) findViewById(R.id.lstSquadMembers);
+    lView.setAdapter(uAdapter);
+    */
 
 
         // Get user's last known location
@@ -168,8 +165,8 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
         final ArrayList<URL> currentPhotos = new ArrayList<URL>(linkedHashMap.values());
         final ArrayList<String> photoids = new ArrayList<String>(linkedHashMap.keySet());
         final ImageView imgView = (ImageView) findViewById(R.id.squadPhoto);
-*/
 
+*/
     }
 
     protected void onStart() {
@@ -283,6 +280,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                             // Captain is the only user in here. Delete the squad
                             if (currentUser.getSquad().getUserList().size() == 1) {
                                 currentUser.setPartOfSquad(false);
+                                Log.d("HI", "deleting the only user in the sq - " + currentUser.getSquad().getSquadID());
                                 mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
                                 mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
                                 mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).removeValue();
@@ -310,19 +308,31 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                                                 // Build radio button list for user to click
                                                 ListIterator<User> iter = currentUser.getSquad().getUserList().listIterator();
                                                 while(iter.hasNext()) {
-                                                    String name = iter.next().getName();
-                                                    if (!name.equals(currentUser.getName()))
+                                                    User temp = iter.next();
+                                                    String name = temp.getName();
+                                                    String ID = temp.getUserId();
+                                                    if (!ID.equals(currentUser.getUserId())) {
                                                         userNames.add(name);
+                                                        userIDs.add(ID);
+                                                    }
                                                 }
                                                 AlertDialog.Builder builder = new AlertDialog.Builder(SquadViewActivity.this);
                                                 builder.setTitle("Pick a new captain")
                                                         .setItems(userNames.toArray(new CharSequence[userNames.size()]), new DialogInterface.OnClickListener() {
                                                             public void onClick(DialogInterface dialog, int which) {
                                                                 // The 'which' argument contains the index position of the selected item
-                                                                Log.d("Change squad ownership","\nIndex " + which + " was selected - Kunal.\n");
+                                                                // Make that user captain
+                                                                Log.d("User selected as cptn", "" + userNames.get(which).toString() + " " + userIDs.get(which).toString());
+                                                                mDatabase.child("Users/"  + userIDs.get(which).toString()).child("squadRole").setValue("captain");
+                                                                mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(userIDs.get(which).toString()).child("squadRole").setValue("captain");
 
-                                                                // TODO - Make that user Owner - Change all that data locally and in db
-                                                                // TODO - delete current user from Squad, locally and in db. Can probably copy code from below
+                                                                // Delete current user from Squad
+                                                                currentUser.setPartOfSquad(false);
+                                                                mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
+                                                                mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
+                                                                mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(currentUser.getUserId()).removeValue();
+                                                                currentUser.setSquad(null);
+                                                                currentUser.setSquadRole("");
 
                                                                 finish();
                                                             }
@@ -368,6 +378,8 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                             mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
                             mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
                             mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(currentUser.getUserId()).removeValue();
+                            currentUser.setSquad(null);
+                            currentUser.setSquadRole("");
                             finish();
                         }
                     }   // end of onclick
@@ -380,6 +392,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
     @Override
     protected void onResume() {
         final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+
         if (currentUser.isPartOfSquad()) {
             DatabaseReference squadRef = FirebaseDatabase.getInstance().getReference("Squads/" + currentUser.getSquad().getSquadID());
             squadRef.orderByPriority().addListenerForSingleValueEvent(new ValueEventListener() {
@@ -397,30 +410,8 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                     currentUser.getSquad().setSquadDesc((String) dataSnapshot.child("description").getValue());
                     squadDescView.setText((String) dataSnapshot.child("description").getValue());
 
-                    // Gets a firebase reference ready to access a picture
-                    FirebaseStorage storage = FirebaseStorage.getInstance();
-                    StorageReference storageRef = storage.getReferenceFromUrl("gs://breakfastclubapp-437bd.appspot.com");
-                    StorageReference squadImageRef = storageRef.child("Squads/" + dataSnapshot.getKey());
-
-                    // Get picture from db
-                    final long ONE_MEGABYTE = 1024 * 1024;
-                    squadImageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                        @Override
-                        public void onSuccess(byte[] bytes) {
-                            // Data for "images/island.jpg" is returns, use this as needed
-                            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                            ImageView squadImageView = (ImageView) findViewById(R.id.squadPhoto);
-
-                            squadImageView.setImageBitmap(bmp);
-                            currentUser.getSquad().setSquadPhoto(bmp);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            // Handle any errors
-                        }
-                    });
-
+                    ImageView squadImageView = (ImageView) findViewById(R.id.squadPhoto);
+                    Picasso.with(getApplicationContext()).load((String) dataSnapshot.child("profileImageUrl").getValue()).into(squadImageView);
 
 
                     for (Map.Entry<String, HashMap> memberEntry : members.entrySet()) {
@@ -433,7 +424,6 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                         member.add(currentMember);
                     }
                     currentUser.getSquad().setUserList(member);
-
                 }
 
                 @Override
@@ -464,6 +454,8 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                 }
             });
         }
+
+
         super.onResume();
     }
 
