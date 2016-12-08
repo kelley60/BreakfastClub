@@ -286,6 +286,23 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.v("User already exists", "User already exists");
                                     currentUser.setReceivesPushNotifications((boolean) dataSnapshot.child("receivesPushNotifications").getValue());
 
+                                    ArrayList<Boolean> hasVotedUp = new ArrayList<Boolean>();
+                                    ArrayList<Boolean> hasVotedDown = new ArrayList<Boolean>();
+                                    String photocount = dataSnapshot.child("getHasVoted").getChildrenCount() + "";
+                                    int photoCount = Integer.parseInt(photocount);
+                                    for (int i = 0; i < photoCount; i++) {
+                                        String upValue = dataSnapshot.child("hasVotedUp").child(i+"").getValue().toString();
+                                        String downValue = dataSnapshot.child("hasVotedDown").child(i+"").getValue().toString();
+                                        hasVotedUp.add(Boolean.parseBoolean(upValue));
+                                        hasVotedDown.add(Boolean.parseBoolean(downValue));
+                                    }
+                                    currentUser.setHasVotedUp(hasVotedUp);
+                                    currentUser.setHasVotedDown(hasVotedDown);
+
+                                    //String currentPosition = dataSnapshot.child("currentPositionInFeed").getValue() + "";
+                                    //currentUser.setCurrentPositionInFeed(Integer.parseInt(currentPosition));
+                                    currentUser.setCurrentPositionInFeed(0);
+
                                     // Load the current application photos from firebase
                                     currentUser.setPermissions(User.Permissions.valueOf((String) dataSnapshot.child("permissions").getValue()));
 
@@ -347,10 +364,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loadPhotos(){
-        //TODO
-        //Emma add your photo loading stuff here
         User currentUser = ((MyApplication) getApplication()).getCurrentUser();
-        currentUser.setCurrentPhotos(new Photos(currentUser, currentBreakfast.getBreakfastKey()));
+        Photos photos = new Photos(currentUser, currentBreakfast.getBreakfastKey());
+        currentUser.setCurrentPhotos(photos);
+
     }
 
     public void loadCurrentBreakfast() {
@@ -365,6 +382,7 @@ public class LoginActivity extends AppCompatActivity {
                 String description = dataSnapshot.child("description").getValue().toString();
                 String breakfastKey = dataSnapshot.getKey();
                 currentBreakfast = new Breakfast(year, month, day, description, breakfastKey);
+                currentBreakfast.setCurrentBreakfast(true);
                 ((MyApplication)getApplication()).setCurrentBreakfast(currentBreakfast);
                 loadPhotos();
             }

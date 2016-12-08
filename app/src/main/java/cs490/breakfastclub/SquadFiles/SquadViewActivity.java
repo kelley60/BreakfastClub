@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import cs490.breakfastclub.CameraAndPhotos.GalleryActivity;
 import cs490.breakfastclub.DisplayMessageActivity;
 import cs490.breakfastclub.MyApplication;
 import cs490.breakfastclub.ProfileViewActivity;
@@ -128,7 +129,8 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
         btnGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SquadViewActivity.this, SquadGalleryActivity.class);
+                Intent intent = new Intent(SquadViewActivity.this, GalleryActivity.class);
+                intent.putExtra("photo set", 1);
                 startActivity(intent);
             }
         });

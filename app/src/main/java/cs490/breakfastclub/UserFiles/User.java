@@ -202,12 +202,13 @@ public class User {
     }
 
 
+
     public void increaseVotingArrays(int photoCount) {
         if (photoCount > this.getHasVotedDown().size()){
 
             mDatabase = FirebaseDatabase.getInstance().getReference();
 
-            for (int i = this.getHasVotedDown().size(); i <= photoCount; i++){
+            for (int i = this.getHasVotedDown().size(); i < photoCount; i++){
                 this.getHasVotedDown().add(false);
                 this.getHasVotedUp().add(false);
                 mDatabase.child("Users").child(this.getUserId()).child("hasVotedUp").child(i+"").setValue("false");

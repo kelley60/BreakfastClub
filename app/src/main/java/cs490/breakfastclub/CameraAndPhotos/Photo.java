@@ -191,7 +191,7 @@ public class Photo implements Parcelable {
 
 
         StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://breakfastclubapp-437bd.appspot.com");
-        StorageReference photoRef = mStorage.child("Photos/Breakfast1/" + getPhotoName());
+        StorageReference photoRef = mStorage.child("Photos").child(currentBreakfast).child(getPhotoName());
         UploadTask uploadTask = photoRef.putBytes(bytes);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -236,16 +236,15 @@ public class Photo implements Parcelable {
                 }
 
                 if (isBreakfastFeed()) {
-                    //Todo get breakfast club key
                     mDatabase.child("Breakfasts").child(currentBreakfast).child("Photos").child(getPhotoName()).setValue(downloadUrl.toString());
                     mDatabase.child("Breakfasts").child(currentBreakfast).child("Votes").child(getPhotoName()).setValue(0);
 
                 }
 
-                if (isSquadFeed())
-                    //Todo get breakfast club key
-                    // mDatabase.child("Squads/" + getPhotoSquadId() +  "/Breakfast1/Photos").child(getPhotoName()).setValue(downloadUrl.toString());
+                if (isSquadFeed()) {
                     mDatabase.child("Squads").child(getPhotoSquadId()).child("Photos").child(currentBreakfast).child(getPhotoName()).setValue(downloadUrl.toString());
+                    final DatabaseReference messagesRef = mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Messages");
+                }
             }
         });
     }

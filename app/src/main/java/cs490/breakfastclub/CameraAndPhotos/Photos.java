@@ -108,7 +108,7 @@ public class Photos {
         getRefSet(code).addChildEventListener(childEventListener);
     }
 
-    private LinkedHashMap<String, URL> getPhotoSet( int code )
+    public LinkedHashMap<String, URL> getPhotoSet( int code )
     {
         switch (code)
         {
@@ -253,7 +253,9 @@ public class Photos {
         return breakfastPhotosVotes;
     }
 
-
+    public void setBreakfastPhotosVotes(LinkedHashMap<String, Integer> breakfastPhotosVotes) {
+        this.breakfastPhotosVotes = breakfastPhotosVotes;
+    }
 
     public URL getUserPhotoURL(String name) {
         return userPhotos.get(name);
