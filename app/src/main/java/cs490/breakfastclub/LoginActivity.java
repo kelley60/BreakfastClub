@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         //gets the login button from activity_login.xml
         loginButton = (LoginButton) findViewById(R.id.fb_button);
-        loginButton.setReadPermissions("email", "public_profile", "user_friends", "publish_actions");
+        loginButton.setReadPermissions("email", "public_profile", "user_friends");
         //gets the textview from activity_login.xml
 
 
