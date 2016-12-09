@@ -1,5 +1,6 @@
 package cs490.breakfastclub.BreakfastFiles;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -14,6 +15,7 @@ import java.util.Calendar;
 
 import cs490.breakfastclub.Classes.Post;
 import cs490.breakfastclub.Classes.TimeFunctions;
+import cs490.breakfastclub.MyApplication;
 
 /**
  * Created by Sean on 10/17/16.
@@ -43,14 +45,13 @@ public class Breakfast {
     }
 
 
-    public static void endCurrentBreakfast(final Context context, final Intent callbackIntent){
+    public static void endCurrentBreakfast(){
         final DatabaseReference breakfastReference = FirebaseDatabase.getInstance().getReference("Breakfasts");
 
         breakfastReference.orderByChild("isCurrentBreakfast").equalTo("true").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 breakfastReference.child(dataSnapshot.getKey()).child("isCurrentBreakfast").setValue("false");
-                context.startActivity(callbackIntent);
             }
 
             @Override
@@ -70,12 +71,12 @@ public class Breakfast {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                context.startActivity(callbackIntent);
+
             }
         });
     }
 
-    public static void createBreakfastEvent(int year, int month, int day, String descriptionString) {
+    public static void createBreakfastEvent(int year, int month, int day, String descriptionString, Context context) {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
         Calendar calendar = TimeFunctions.getCurrentTime();
@@ -88,6 +89,8 @@ public class Breakfast {
         mDatabase.child("Breakfasts").child(breakfastKey).child("description").setValue(descriptionString);
         mDatabase.child("Breakfasts").child(breakfastKey).child("isCurrentBreakfast").setValue("true");
 
+        Breakfast currentBreakfast = new Breakfast(year, month, day , descriptionString, breakfastKey);
+        ((MyApplication)context.getApplicationContext()).setCurrentBreakfast(currentBreakfast);
     }
 
 

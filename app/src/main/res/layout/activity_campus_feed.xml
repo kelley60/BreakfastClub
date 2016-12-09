@@ -12,31 +12,6 @@
     tools:context="cs490.breakfastclub.BreakfastFiles.BreakfastFeedActivity"
     android:background="@drawable/gradient_background" >
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/Purdue_Gold"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/PopupOverlay">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/lblBrkfstCounter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Countdown: [XXh XXm]"
-                android:layout_alignParentEnd="true"
-                android:layout_margin="5dp"/>
-        </RelativeLayout>
-
-
-        </android.support.v7.widget.Toolbar>
-
 
     <!-- Put all other UI elements below this comment! -->
 
@@ -61,20 +36,6 @@
         android:id="@+id/pictureScoreId"
         android:textColor="@color/Purdue_Gold"
         android:textSize="30sp" />
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/arrow_up_float"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/upArrowId" />
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/arrow_down_float"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/downArrowId" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -103,6 +64,42 @@
         android:layout_below="@+id/my_toolbar"
         android:layout_toEndOf="@+id/btnRemovePost"
         android:id="@+id/removePhotoButtonId" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/Purdue_Gold"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/PopupOverlay"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </RelativeLayout>
+
+
+        </android.support.v7.widget.Toolbar>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/arrow_up_float"
+        android:id="@+id/upArrowId"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/arrow_down_float"
+        android:id="@+id/downArrowId"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

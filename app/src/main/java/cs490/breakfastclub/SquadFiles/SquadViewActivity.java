@@ -38,6 +38,7 @@ import java.util.ListIterator;
 import java.util.Map;
 
 import cs490.breakfastclub.CameraAndPhotos.GalleryActivity;
+import cs490.breakfastclub.Classes.Notification;
 import cs490.breakfastclub.DisplayMessageActivity;
 import cs490.breakfastclub.MyApplication;
 import cs490.breakfastclub.ProfileViewActivity;
@@ -57,11 +58,9 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
     List<CharSequence> userNames = new ArrayList<>();
     List<CharSequence> userIDs = new ArrayList<>();
 
-
     private DatabaseReference mDatabase;
 
     private GoogleApiClient mGoogleApiClient = null;
-
 
     @Override
     public void onConnectionSuspended(int s)
@@ -286,6 +285,10 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                                 mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
                                 mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
                                 mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).removeValue();
+                                Notification n = new Notification("Squad Removal",
+                                        "You have been removed from squad " + currentUser.getSquad().getSquadName(),
+                                        currentUser.getUserId());
+                                n.addToFirebase();
                                 currentUser.setSquad(null);
                                 currentUser.setSquadRole("");
                                 finish();
@@ -323,13 +326,16 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                                                         .setItems(userNames.toArray(new CharSequence[userNames.size()]), new DialogInterface.OnClickListener() {
                                                             public void onClick(DialogInterface dialog, int which) {
                                                                 // The 'which' argument contains the index position of the selected item
-
-                                                                // TODO - Make that user Owner - Change all that data locally and in db
+                                                                // Make that user captain
                                                                 Log.d("User selected as cptn", "" + userNames.get(which).toString() + " " + userIDs.get(which).toString());
                                                                 mDatabase.child("Users/"  + userIDs.get(which).toString()).child("squadRole").setValue("captain");
                                                                 mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(userIDs.get(which).toString()).child("squadRole").setValue("captain");
 
-                                                                // TODO - delete current user from Squad, locally and in db. Can probably copy code from below
+                                                                // Delete current user from Squad
+                                                                Notification n = new Notification("Squad Removal",
+                                                                        "You have been removed from squad " + currentUser.getSquad().getSquadName(),
+                                                                        currentUser.getUserId());
+                                                                n.addToFirebase();
                                                                 currentUser.setPartOfSquad(false);
                                                                 mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
                                                                 mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
@@ -361,6 +367,10 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                                                     mDatabase.child("Users/" + mem.getKey()).child("squadRole").removeValue();
                                                 }
                                                 mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).removeValue();
+                                                Notification n = new Notification("Squad Removal",
+                                                        "You have been removed from squad " + currentUser.getSquad().getSquadName(),
+                                                        currentUser.getUserId());
+                                                n.addToFirebase();
                                                 currentUser.setPartOfSquad(false);
                                                 currentUser.setSquad(null);
                                                 currentUser.setSquadRole("");
@@ -381,6 +391,10 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                             mDatabase.child("Users/" + currentUser.getUserId()).child("squad").removeValue();
                             mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").removeValue();
                             mDatabase.child("Squads/" + currentUser.getSquad().getSquadID()).child("Members").child(currentUser.getUserId()).removeValue();
+                            Notification n = new Notification("Squad Removal",
+                                    "You have been removed from squad " + currentUser.getSquad().getSquadName(),
+                                    currentUser.getUserId());
+                            n.addToFirebase();
                             currentUser.setSquad(null);
                             currentUser.setSquadRole("");
                             finish();

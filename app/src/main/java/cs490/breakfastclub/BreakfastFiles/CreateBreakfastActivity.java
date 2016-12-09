@@ -11,14 +11,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import cs490.breakfastclub.DrawerActivity;
+import cs490.breakfastclub.MyApplication;
 import cs490.breakfastclub.R;
+import cs490.breakfastclub.UserFiles.User;
 
 public class CreateBreakfastActivity extends AppCompatActivity {
 
     EditText description;
     Button nextButton;
+    Button endBreakfastButton;
     ImageView image;
-
+    User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,8 @@ public class CreateBreakfastActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("Create Breakfast");
 
+        currentUser = ((MyApplication) getApplication()).getCurrentUser();
+
         UIInit();
     }
 
@@ -37,6 +43,7 @@ public class CreateBreakfastActivity extends AppCompatActivity {
         description = (EditText) findViewById(R.id.createBreakfastDescriptionEditTextId);
         image = (ImageView) findViewById(R.id.createBreakfastImageId);
         nextButton = (Button) findViewById(R.id.createBreakfastNextButton1Id);
+        endBreakfastButton = (Button) findViewById(R.id.endBreakfastButton);
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,6 +51,22 @@ public class CreateBreakfastActivity extends AppCompatActivity {
                 Intent intent = new Intent(CreateBreakfastActivity.this, CreateBreakfastActivity2.class);
                 String descriptionString = description.getText().toString();
                 intent.putExtra("description", descriptionString);
+                startActivity(intent);
+            }
+        });
+
+
+        endBreakfastButton.setVisibility(View.INVISIBLE);
+
+        if (currentUser.getPermissions() == User.Permissions.Developer){
+            endBreakfastButton.setVisibility(View.VISIBLE);
+        }
+
+        endBreakfastButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Breakfast.endCurrentBreakfast();
+                Intent intent = new Intent(CreateBreakfastActivity.this, DrawerActivity.class);
                 startActivity(intent);
             }
         });

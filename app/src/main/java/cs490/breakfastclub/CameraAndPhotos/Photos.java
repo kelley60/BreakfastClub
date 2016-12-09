@@ -274,7 +274,9 @@ public class Photos {
         return breakfastPhotosVotes;
     }
 
-
+    public void setBreakfastPhotosVotes(LinkedHashMap<String, Integer> breakfastPhotosVotes) {
+        this.breakfastPhotosVotes = breakfastPhotosVotes;
+    }
 
     public URL getUserPhotoURL(String name) {
         return userPhotos.get(name);

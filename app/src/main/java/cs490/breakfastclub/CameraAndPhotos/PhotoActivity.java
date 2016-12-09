@@ -64,7 +64,7 @@ public class PhotoActivity extends AppCompatActivity {
 
 
         currentUser = ((MyApplication) getApplication()).getCurrentUser();
-        currentBreakfast = ((MyApplication) getApplication()).getBreakfast().getBreakfastKey();
+        currentBreakfast = ((MyApplication) getApplication()).getCurrentBreakfast().getBreakfastKey();
         c = this;
         Intent i = getIntent();
 
@@ -171,6 +171,20 @@ public class PhotoActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+/* Stuff above works in all other activities,
+    stuff commented out does not make back arrow functional
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_photo_viewer, menu);
         return true;
@@ -190,7 +204,7 @@ public class PhotoActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
+*/
 
     /**
      * Add the picture to the photo gallery.

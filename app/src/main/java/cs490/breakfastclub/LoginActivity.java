@@ -45,9 +45,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import cs490.breakfastclub.BreakfastFiles.Breakfast;
 import cs490.breakfastclub.CameraAndPhotos.Photos;
@@ -286,6 +288,28 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.v("User already exists", "User already exists");
                                     currentUser.setReceivesPushNotifications((boolean) dataSnapshot.child("receivesPushNotifications").getValue());
 
+                                    LinkedHashMap<String, Boolean> hasVotedUp = new LinkedHashMap<String, Boolean>();
+                                    LinkedHashMap<String, Boolean> hasVotedDown = new LinkedHashMap<String, Boolean>();
+                                    String photocount = dataSnapshot.child("getHasVoted").getChildrenCount() + "";
+                                    int photoCount = Integer.parseInt(photocount);
+
+                                    for (int i = 0; i < photoCount; i++) {
+                                        String upValuePictureKey = dataSnapshot.child("hasVotedUp").getValue().toString();
+                                        String downValuePictureKey = dataSnapshot.child("hasVotedDown").getValue().toString();
+                                        Boolean upValue = Boolean.parseBoolean(dataSnapshot.child("hasVotedUp").child(upValuePictureKey).getValue().toString());
+                                        Boolean downValue = Boolean.parseBoolean(dataSnapshot.child("hasVotedDown").child(downValuePictureKey).getValue().toString());
+
+                                        hasVotedUp.put(upValuePictureKey, upValue);
+                                        hasVotedDown.put(downValuePictureKey, downValue);
+                                    }
+
+                                    currentUser.setHasVotedUp(hasVotedUp);
+                                    currentUser.setHasVotedDown(hasVotedDown);
+
+                                    //String currentPosition = dataSnapshot.child("currentPositionInFeed").getValue() + "";
+                                    //currentUser.setCurrentPositionInFeed(Integer.parseInt(currentPosition));
+                                    currentUser.setCurrentPositionInFeed(0);
+
                                     // Load the current application photos from firebase
                                     currentUser.setPermissions(User.Permissions.valueOf((String) dataSnapshot.child("permissions").getValue()));
 
@@ -347,10 +371,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loadPhotos(){
-        //TODO
-        //Emma add your photo loading stuff here
         User currentUser = ((MyApplication) getApplication()).getCurrentUser();
-        currentUser.setCurrentPhotos(new Photos(currentUser, currentBreakfast.getBreakfastKey()));
+        Photos photos = new Photos(currentUser, currentBreakfast.getBreakfastKey());
+        currentUser.setCurrentPhotos(photos);
+
     }
 
     public void loadCurrentBreakfast() {
@@ -365,7 +389,8 @@ public class LoginActivity extends AppCompatActivity {
                 String description = dataSnapshot.child("description").getValue().toString();
                 String breakfastKey = dataSnapshot.getKey();
                 currentBreakfast = new Breakfast(year, month, day, description, breakfastKey);
-                ((MyApplication)getApplication()).setBreakfast(currentBreakfast);
+                currentBreakfast.setCurrentBreakfast(true);
+                ((MyApplication)getApplication()).setCurrentBreakfast(currentBreakfast);
                 loadPhotos();
             }
 

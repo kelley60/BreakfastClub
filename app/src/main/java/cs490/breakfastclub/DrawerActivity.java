@@ -93,8 +93,20 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             Intent intent = new Intent(DrawerActivity.this, CreateBreakfastActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_displayMessage) {
-            Intent intent = new Intent(DrawerActivity.this, DisplayMessageActivity.class);
-            startActivity(intent);
+            final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+            if (currentUser.isPartOfSquad()){
+                Intent intent = new Intent(DrawerActivity.this, DisplayMessageActivity.class);
+                startActivity(intent);
+            }
+            else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("You must be in a Squad to access that.")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", null);
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
         } else if (id == R.id.nav_login) {
             Intent intent = new Intent(DrawerActivity.this, LoginActivity.class);
             intent.putExtra("CameFromDrawer", true);
@@ -103,8 +115,19 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             Intent intent = new Intent(DrawerActivity.this, ProfileViewActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_squadCreate) {
-            Intent intent = new Intent(DrawerActivity.this, SquadCreateActivity.class);
-            startActivity(intent);
+            final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
+            if (currentUser.isPartOfSquad()){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("You are already in a squad.")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", null);
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+            else{
+                Intent intent = new Intent(DrawerActivity.this, SquadCreateActivity.class);
+                startActivity(intent);
+            }
         } else if (id == R.id.nav_squadView) {
             // disable SquadViewActivity if user is not in squad
             final User currentUser = ((MyApplication) getApplication()).getCurrentUser();
@@ -113,8 +136,6 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
                 startActivity(intent);
             }
             else{
-                //Intent intent = new Intent(DrawerActivity.this, SquadInviteActivity.class);
-                //startActivity(intent);
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("You must be in a Squad to access that.")
                         .setCancelable(false)
@@ -122,7 +143,12 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-        }else if (id == R.id.nav_adminViewUsers) {
+        }
+        else if (id == R.id.nav_history) {
+            Intent intent = new Intent(DrawerActivity.this, HistoryActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.nav_adminViewUsers) {
             Intent intent = new Intent(DrawerActivity.this, AdminViewUsersActivity.class);
             startActivity(intent);
         }

@@ -9,8 +9,8 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    tools:context="cs490.breakfastclub.SquadFiles.SquadLocationActivity"
-    android:background="@drawable/gradient_background">
+    tools:context="cs490.breakfastclub.NotificationViewActivity"
+    android:background="@drawable/gradient_background" >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -25,37 +25,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/btnAddMarkers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Find Members"
-                android:layout_marginRight="10dp"/>
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
 
     <!-- Put all other UI elements below this comment! -->
 
+        <ListView
+            android:id="@+id/notification_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/my_toolbar">
+        </ListView>
 
-
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        map:cameraTargetLat="40.4237"
-        map:cameraTargetLng="-86.9100"
-        map:cameraZoom="13"
-        map:mapType="normal"
-        map:uiCompass="true"
-        map:uiRotateGestures="true"
-        map:uiScrollGestures="true"
-        map:uiTiltGestures="true"
-        map:uiZoomControls="true"
-        map:uiZoomGestures="true"
-        />
 
 
 </RelativeLayout>
