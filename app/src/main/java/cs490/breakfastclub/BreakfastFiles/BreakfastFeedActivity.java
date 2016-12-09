@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -24,14 +23,12 @@ import com.squareup.picasso.Picasso;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.LinkedHashMap;
 
 import cs490.breakfastclub.CameraAndPhotos.CameraActivity;
 import cs490.breakfastclub.CameraAndPhotos.Photos;
 import cs490.breakfastclub.Classes.Notification;
 import cs490.breakfastclub.Classes.Post;
-import cs490.breakfastclub.Classes.TimeFunctions;
 import cs490.breakfastclub.MyApplication;
 import cs490.breakfastclub.R;
 import cs490.breakfastclub.ToolBarBreakfastClub;
@@ -169,8 +166,7 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         if (hasVotedDown){
             currentScore += 2;
             currentUser.getHasVotedDown().put(currentPhotoId , false);
-            currentUser.getHasVotedUp().put(currentPhotoId , true);
-            mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedDown").child(currentPhotoId).setValue("false");
+            currentUser.getHasVotedUp().put(currentPhotoId, true);
             mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedUp").child(currentPhotoId).setValue("true");
             updateCurrentPictureScore();
             setPictureScore();
@@ -376,8 +372,12 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         removePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                removeCurrentPicture();
-                removePost();
+                //removeCurrentPicture();
+                Photos.removePhoto(currentUser, currentBreakfast.getBreakfastKey(), photoids.get(currentPositionInFeed), 2);
+                photos.remove(currentPositionInFeed);
+                photoids.remove(currentPositionInFeed);
+                setNextImage();
+                //removePost();
             }
         });
 

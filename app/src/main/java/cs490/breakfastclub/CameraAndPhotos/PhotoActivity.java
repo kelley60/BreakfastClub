@@ -12,7 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -81,15 +81,15 @@ public class PhotoActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         callbackManager = CallbackManager.Factory.create();
 
-        ImageButton undoButton = (ImageButton) findViewById(R.id.undo_button);
+  /*      ImageButton undoButton = (ImageButton) findViewById(R.id.undo_button);
         undoButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intent = new Intent(PhotoActivity.this, CameraActivity.class);
                 startActivity(intent);
             }
         });
-
-        ImageButton saveButton = (ImageButton) findViewById(R.id.save_button);
+*/
+        Button saveButton = (Button) findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 addPhotoToGallery();
@@ -100,7 +100,7 @@ public class PhotoActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton shareButton = (ImageButton) findViewById(R.id.share_button);
+        Button shareButton = (Button) findViewById(R.id.share_button);
         shareButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 addPhotoToGallery();

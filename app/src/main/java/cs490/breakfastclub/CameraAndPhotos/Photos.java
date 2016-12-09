@@ -7,6 +7,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Comment;
 
@@ -217,57 +218,141 @@ public class Photos {
 
     }
 
+    public static void removePhoto(final User currentUser, final String breakfastId, final String photoId, final int code)
+    {
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Photos/" + breakfastId +"/" + photoId);
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+       // mDatabase.child("Photos").child(breakfastId).child(photoId);
+
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                switch (code) {
+                    case USER_PHOTOS: {
+                        if (currentUser.getUserId() == dataSnapshot.child("user id").getValue().toString()) {
+                            ref.child("Users/" + currentUser.getUserId()).child("Photos").child(breakfastId).child(photoId).removeValue();
+
+                            if (dataSnapshot.child("isUserProfile").getValue().toString() == "true") {
+                                //TODO get default profile picture and set the surrent user profile also
+                                ref.child("Users/" + currentUser.getUserId()).child("profileImageUrl").setValue("");
+                            }
+                            if (dataSnapshot.child("isSquadProfile").getValue().toString() == "true") {
+                                //TODO get default profile picture and set the surrent user profile also
+                                ref.child("Squads/" + currentUser.getSquad().getSquadID()).child("profileImageUrl").setValue("");
+                            }
+                            if (dataSnapshot.child("isSquad").getValue().toString() == "true") {
+                                //TODO get default profile picture and set the surrent user profile also
+                                ref.child("Squads/" + currentUser.getSquad().getSquadID()).child("Photos/" + breakfastId).child(photoId).removeValue();
+                            }
+                            if (dataSnapshot.child("isBreakfast").getValue().toString() == "true") {
+                                //TODO get default profile picture and set the surrent user profile also
+                                ref.child("Breakfasts/" + breakfastId).child("Photos").child(photoId).removeValue();
+                                ref.child("Breakfasts/" + breakfastId).child("Votes").child(photoId).removeValue();
+                            }
+
+                            ref.child("Photos").child(breakfastId).child(photoId).removeValue();
+                        }
+                        break;
+                    }
+                    case SQUAD_PHOTOS: {
+                        //TODO squad role == captain
+                        // if(currentUser.getSquad().getPermissions() == User.Permissions.Moderator ||
+                        if (currentUser.getUserId() == dataSnapshot.child("user id").getValue().toString()) {
+                            if (dataSnapshot.child("isSquadProfile").getValue().toString() == "true") {
+                                //TODO get default profile picture and set the surrent user profile also
+                                ref.child("Squads/" + currentUser.getSquad().getSquadID()).child("profileImageUrl").setValue("");
+                            }
+                            if (dataSnapshot.child("isSquad").getValue().toString() == "true") {
+                                //TODO get default profile picture and set the surrent user profile also
+                                ref.child("Squads/" + currentUser.getSquad().getSquadID()).child("Photos/" + breakfastId).child(photoId).removeValue();
+                            }
+                            ref.child("Photos/" + breakfastId).child(photoId).child("isSquad").setValue("false");
+                        }
+                        break;
+                    }
+                    case BREAKFAST_PHOTOS: {
+                        if (currentUser.getPermissions() == User.Permissions.Moderator
+                                || currentUser.getUserId() == dataSnapshot.child("user id").getValue().toString()) {
+                            if (dataSnapshot.child("isBreakfast").getValue().toString() == "true") {
+                                //TODO get default profile picture and set the surrent user profile also
+                                ref.child("Breakfasts/" + breakfastId).child("Photos").child(photoId).removeValue();
+                                ref.child("Breakfasts/" + breakfastId).child("Votes").child(photoId).removeValue();
+                                ref.child("Photos/" + breakfastId).child(photoId).child("isBreakfast").setValue("false");
+                            }
+                        }
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+    }
 
 
-    //GETTERS AND SETTERS --------------------------------------------------------------
+            //GETTERS AND SETTERS --------------------------------------------------------------
 
-    public Photo getProfilePic() {
-        return profilePic;
-    }
+            public Photo getProfilePic() {
+                return profilePic;
+            }
 
-    public void setProfilePic(Photo profilePic) {
-        this.profilePic = profilePic;
-    }
+            public void setProfilePic(Photo profilePic) {
+                this.profilePic = profilePic;
+            }
 
-    public LinkedHashMap<String, URL> getUserPhotoURLs() {
-        return userPhotos;
-    }
-    public LinkedHashMap<String, URL> getSquadPhotoURLs() {
-        return squadPhotos;
-    }
-    public LinkedHashMap<String, URL> getBreakfastPhotoURLs() {
-        return breakfastPhotos;
-    }
+            public LinkedHashMap<String, URL> getUserPhotoURLs() {
+                return userPhotos;
+            }
+
+            public LinkedHashMap<String, URL> getSquadPhotoURLs() {
+                return squadPhotos;
+            }
+
+            public LinkedHashMap<String, URL> getBreakfastPhotoURLs() {
+                return breakfastPhotos;
+            }
 
 
-    public LinkedHashMap<String, URL> getUserPhotos() {
-        return userPhotos;
-    }
-    public LinkedHashMap<String, URL> getSquadPhotos() {
-        return squadPhotos;
-    }
-    public LinkedHashMap<String, URL> getBreakfastPhotos() {
-        return breakfastPhotos;
-    }
-    public LinkedHashMap<String, Integer> getBreakfastVotes() {
-        return breakfastPhotosVotes;
-    }
+            public LinkedHashMap<String, URL> getUserPhotos() {
+                return userPhotos;
+            }
 
-    public void setBreakfastPhotosVotes(LinkedHashMap<String, Integer> breakfastPhotosVotes) {
-        this.breakfastPhotosVotes = breakfastPhotosVotes;
-    }
+            public LinkedHashMap<String, URL> getSquadPhotos() {
+                return squadPhotos;
+            }
 
-    public URL getUserPhotoURL(String name) {
-        return userPhotos.get(name);
-    }
-    public URL getSquadPhotoURL(String name) {
-        return squadPhotos.get(name);
-    }
-    public URL getBreakfastPhotoURL(String name) {
-        return breakfastPhotos.get(name);
-    }
+            public LinkedHashMap<String, URL> getBreakfastPhotos() {
+                return breakfastPhotos;
+            }
 
-    public URL getUserPhoto(String name) {
+            public LinkedHashMap<String, Integer> getBreakfastVotes() {
+                return breakfastPhotosVotes;
+            }
+
+            public void setBreakfastPhotosVotes(LinkedHashMap<String, Integer> breakfastPhotosVotes) {
+                this.breakfastPhotosVotes = breakfastPhotosVotes;
+            }
+
+            public URL getUserPhotoURL(String name) {
+                return userPhotos.get(name);
+            }
+
+            public URL getSquadPhotoURL(String name) {
+                return squadPhotos.get(name);
+            }
+
+            public URL getBreakfastPhotoURL(String name) {
+                return breakfastPhotos.get(name);
+            }
+
+            public URL getUserPhoto(String name) {
         return userPhotos.get(name);
     }
     public URL getSquadPhoto(String name) {
