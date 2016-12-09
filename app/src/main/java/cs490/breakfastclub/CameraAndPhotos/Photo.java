@@ -160,7 +160,10 @@ public class Photo implements Parcelable {
 
     public Bitmap getNewBitmap( String localPhotoPath)
     {
-        Bitmap bitMap = BitmapFactory.decodeFile(localPhotoPath);
+
+            Bitmap bitMap = BitmapFactory.decodeFile(localPhotoPath);
+
+
         // int orientation = getOrientation(getApplicationContext(), photoUri);
         try
         {
@@ -175,6 +178,11 @@ public class Photo implements Parcelable {
         catch(IOException e)
         {
             e.printStackTrace();
+        }
+        catch (Exception e){
+            Log.v("Photo.java","In here");
+            e.printStackTrace();
+            Log.e("Photo.java", e.getLocalizedMessage());
         }
         return bitMap;
     }

@@ -94,7 +94,7 @@ public class BreakfastFeedActivity extends AppCompatActivity {
     private void setNextImage() {
 
         //Fencepost
-        breakfastPhotoCount = photos.size() - 1;
+        breakfastPhotoCount = (photos.size()-1);
 
         if (currentPositionInFeed < breakfastPhotoCount) {
             currentPositionInFeed += 1;
@@ -104,12 +104,15 @@ public class BreakfastFeedActivity extends AppCompatActivity {
             currentPhotoId = photoids.get(currentPositionInFeed);
         }
 
-        if (currentPositionInFeed == breakfastPhotoCount) {
+        else if (currentPositionInFeed == breakfastPhotoCount) {
             currentPositionInFeed = 0;
             updateCurrentPositionInFeed();
             setCurrentPicture();
             setPictureScore();
             currentPhotoId = photoids.get(currentPositionInFeed);
+        }
+        else{
+            //nothing
         }
 
     }
@@ -294,6 +297,7 @@ public class BreakfastFeedActivity extends AppCompatActivity {
     }
 
     private void variableInit() {
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
         currentUser = ((MyApplication) getApplication()).getCurrentUser();
         currentBreakfast = ((MyApplication) getApplication()).getCurrentBreakfast();
