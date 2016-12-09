@@ -45,9 +45,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import cs490.breakfastclub.BreakfastFiles.Breakfast;
 import cs490.breakfastclub.CameraAndPhotos.Photos;
@@ -286,16 +288,21 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.v("User already exists", "User already exists");
                                     currentUser.setReceivesPushNotifications((boolean) dataSnapshot.child("receivesPushNotifications").getValue());
 
-                                    ArrayList<Boolean> hasVotedUp = new ArrayList<Boolean>();
-                                    ArrayList<Boolean> hasVotedDown = new ArrayList<Boolean>();
+                                    LinkedHashMap<String, Boolean> hasVotedUp = new LinkedHashMap<String, Boolean>();
+                                    LinkedHashMap<String, Boolean> hasVotedDown = new LinkedHashMap<String, Boolean>();
                                     String photocount = dataSnapshot.child("getHasVoted").getChildrenCount() + "";
                                     int photoCount = Integer.parseInt(photocount);
+
                                     for (int i = 0; i < photoCount; i++) {
-                                        String upValue = dataSnapshot.child("hasVotedUp").child(i+"").getValue().toString();
-                                        String downValue = dataSnapshot.child("hasVotedDown").child(i+"").getValue().toString();
-                                        hasVotedUp.add(Boolean.parseBoolean(upValue));
-                                        hasVotedDown.add(Boolean.parseBoolean(downValue));
+                                        String upValuePictureKey = dataSnapshot.child("hasVotedUp").getValue().toString();
+                                        String downValuePictureKey = dataSnapshot.child("hasVotedDown").getValue().toString();
+                                        Boolean upValue = Boolean.parseBoolean(dataSnapshot.child("hasVotedUp").child(upValuePictureKey).getValue().toString());
+                                        Boolean downValue = Boolean.parseBoolean(dataSnapshot.child("hasVotedDown").child(downValuePictureKey).getValue().toString());
+
+                                        hasVotedUp.put(upValuePictureKey, upValue);
+                                        hasVotedDown.put(downValuePictureKey, downValue);
                                     }
+
                                     currentUser.setHasVotedUp(hasVotedUp);
                                     currentUser.setHasVotedDown(hasVotedDown);
 
