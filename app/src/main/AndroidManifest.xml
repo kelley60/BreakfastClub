@@ -77,16 +77,15 @@
 
         <service
             android:name=".GeofenceFiles.GeofenceTransitionsIntentService"
-
             android:exported="false" />
-        <activity android:name=".AdminViewUsersActivity"/>
-        <activity android:name=".HistoryActivity"/>
-        <activity android:name=".SquadFiles.SearchMemberActivity"/>
-        <activity android:name=".BreakfastFiles.CreateBreakfastActivity2"/>
-        <activity android:name=".SquadFiles.SquadLocationActivity"/>
-        <activity android:name=".CameraAndPhotos.CameraActivity"/>
-        <activity android:name=".CameraAndPhotos.PhotoActivity"/>
 
+        <activity android:name=".AdminViewUsersActivity" />
+        <activity android:name=".HistoryActivity" />
+        <activity android:name=".SquadFiles.SearchMemberActivity" />
+        <activity android:name=".BreakfastFiles.CreateBreakfastActivity2" />
+        <activity android:name=".SquadFiles.SquadLocationActivity" />
+        <activity android:name=".CameraAndPhotos.CameraActivity" />
+        <activity android:name=".CameraAndPhotos.PhotoActivity" />
         <activity android:name=".CameraAndPhotos.PhotoViewerActivity" />
         <activity android:name=".RepeatOffendersActivity" />
 
@@ -94,9 +93,10 @@
             android:name=".LocationService"
             android:exported="false" />
 
-        <activity android:name=".NotificationViewActivity"></activity>
+        <activity android:name=".NotificationViewActivity" />
         <activity android:name=".BreakfastFiles.TimeUntilBreakfastActivity" />
-        <activity android:name=".BreakfastFiles.NotOnCampusActivity"></activity>
+        <activity android:name=".BreakfastFiles.NotOnCampusActivity" />
+        <activity android:name=".BestPictureActivity"></activity>
     </application>
 
 </manifest>

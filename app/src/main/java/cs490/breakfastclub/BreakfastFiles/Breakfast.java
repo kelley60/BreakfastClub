@@ -1,8 +1,6 @@
 package cs490.breakfastclub.BreakfastFiles;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;

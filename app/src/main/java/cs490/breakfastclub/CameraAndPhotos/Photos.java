@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedHashMap;
 
+import cs490.breakfastclub.Classes.Notification;
 import cs490.breakfastclub.SquadFiles.Squad;
 import cs490.breakfastclub.UserFiles.User;
 
@@ -255,9 +256,8 @@ public class Photos {
                         break;
                     }
                     case SQUAD_PHOTOS: {
-                        //TODO squad role == captain
-                        // if(currentUser.getSquad().getPermissions() == User.Permissions.Moderator ||
-                        if (currentUser.getUserId() == dataSnapshot.child("user id").getValue().toString()) {
+                         if(currentUser.getSquadRole().equals("captain")
+                            || currentUser.getUserId() == dataSnapshot.child("user id").getValue().toString()) {
                             if (dataSnapshot.child("isSquadProfile").getValue().toString() == "true") {
                                 //TODO get default profile picture and set the surrent user profile also
                                 ref.child("Squads/" + currentUser.getSquad().getSquadID()).child("profileImageUrl").setValue("");
@@ -278,6 +278,21 @@ public class Photos {
                                 ref.child("Breakfasts/" + breakfastId).child("Photos").child(photoId).removeValue();
                                 ref.child("Breakfasts/" + breakfastId).child("Votes").child(photoId).removeValue();
                                 ref.child("Photos/" + breakfastId).child(photoId).child("isBreakfast").setValue("false");
+
+                                if(currentUser.getUserId() == dataSnapshot.child("user id").getValue().toString())
+                                { // Removing own post
+                                    Notification n = new Notification("Post Removed",
+                                            "You have removed your own post from the Campus Feed.",
+                                            currentUser.getUserId());
+                                    n.addToFirebase();
+                                }
+                                else
+                                { // Mod removing post
+                                    Notification n = new Notification("Post Removed",
+                                            "Your post was deemed inappropriate and has been removed from the Campus Feed.",
+                                            dataSnapshot.child("user id").getValue().toString());
+                                    n.addToFirebase();
+                                }
                             }
                         }
                         break;

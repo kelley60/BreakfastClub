@@ -160,6 +160,10 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             Intent intent = new Intent(DrawerActivity.this, RepeatOffendersActivity.class);
             startActivity(intent);
         }
+        else if (id == R.id.nav_bestPicture) {
+            Intent intent = new Intent(DrawerActivity.this, BestPictureActivity.class);
+            startActivity(intent);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
