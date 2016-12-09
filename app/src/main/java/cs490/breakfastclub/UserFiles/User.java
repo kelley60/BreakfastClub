@@ -5,6 +5,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import cs490.breakfastclub.CameraAndPhotos.Photos;
 import cs490.breakfastclub.SquadFiles.Squad;
@@ -30,8 +31,8 @@ public class User {
     private Permissions permissions;
     private DatabaseReference mDatabase;
 
-    private ArrayList<Boolean> hasVotedUp;
-    private ArrayList<Boolean> hasVotedDown;
+    LinkedHashMap<String, Boolean> hasVotedUp;
+    LinkedHashMap<String, Boolean> hasVotedDown;
     private int currentPositionInFeed;
     private int numberOfOffensives;
 
@@ -59,8 +60,8 @@ public class User {
         this.receivesPushNotifications = true;
         this.friends = friends;
         this.permissions = Permissions.Member;
-        this.hasVotedUp = new ArrayList<Boolean>();
-        this.hasVotedDown = new ArrayList<Boolean>();
+        hasVotedUp = new LinkedHashMap<String, Boolean>();
+        hasVotedDown = new LinkedHashMap<String, Boolean>();
         this.currentPositionInFeed = 0;
         numberOfOffensives = 0;
     }
@@ -161,19 +162,19 @@ public class User {
     public void setPermissions(Permissions p) { permissions = p; }
 
 
-    public ArrayList<Boolean> getHasVotedUp() {
+    public LinkedHashMap<String, Boolean> getHasVotedUp() {
         return hasVotedUp;
     }
 
-    public void setHasVotedUp(ArrayList<Boolean> hasVoted) {
-        this.hasVotedUp = hasVoted;
+    public void setHasVotedUp(LinkedHashMap<String, Boolean> hasVotedUp) {
+        this.hasVotedUp = hasVotedUp;
     }
 
-    public ArrayList<Boolean> getHasVotedDown() {
+    public LinkedHashMap<String, Boolean> getHasVotedDown() {
         return hasVotedDown;
     }
 
-    public void setHasVotedDown(ArrayList<Boolean> hasVotedDown) {
+    public void setHasVotedDown(LinkedHashMap<String, Boolean> hasVotedDown) {
         this.hasVotedDown = hasVotedDown;
     }
 
@@ -203,16 +204,16 @@ public class User {
 
 
 
-    public void increaseVotingArrays(int photoCount) {
+    public void increaseVotingArrays(int photoCount, ArrayList<String> photoids) {
         if (photoCount > this.getHasVotedDown().size()){
 
             mDatabase = FirebaseDatabase.getInstance().getReference();
 
             for (int i = this.getHasVotedDown().size(); i < photoCount; i++){
-                this.getHasVotedDown().add(false);
-                this.getHasVotedUp().add(false);
-                mDatabase.child("Users").child(this.getUserId()).child("hasVotedUp").child(i+"").setValue("false");
-                mDatabase.child("Users").child(this.getUserId()).child("hasVotedDown").child(i+"").setValue("false");
+                this.getHasVotedDown().put(photoids.get(i), false);
+                this.getHasVotedUp().put(photoids.get(i), false);
+                mDatabase.child("Users").child(this.getUserId()).child("hasVotedUp").child(photoids.get(i)).setValue("false");
+                mDatabase.child("Users").child(this.getUserId()).child("hasVotedDown").child(photoids.get(i)).setValue("false");
             }
         }
     }
