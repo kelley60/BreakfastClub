@@ -29,6 +29,7 @@ import java.util.LinkedHashMap;
 
 import cs490.breakfastclub.CameraAndPhotos.CameraActivity;
 import cs490.breakfastclub.CameraAndPhotos.Photos;
+import cs490.breakfastclub.Classes.Notification;
 import cs490.breakfastclub.Classes.Post;
 import cs490.breakfastclub.Classes.TimeFunctions;
 import cs490.breakfastclub.MyApplication;
@@ -93,8 +94,6 @@ public class BreakfastFeedActivity extends AppCompatActivity {
     }
 
 
-
-
     private void setNextImage() {
 
         //Fencepost
@@ -105,6 +104,7 @@ public class BreakfastFeedActivity extends AppCompatActivity {
             updateCurrentPositionInFeed();
             setCurrentPicture();
             setPictureScore();
+            currentPhotoId = photoids.get(currentPositionInFeed);
         }
 
         if (currentPositionInFeed == breakfastPhotoCount) {
@@ -112,6 +112,7 @@ public class BreakfastFeedActivity extends AppCompatActivity {
             updateCurrentPositionInFeed();
             setCurrentPicture();
             setPictureScore();
+            currentPhotoId = photoids.get(currentPositionInFeed);
         }
 
     }
@@ -124,29 +125,29 @@ public class BreakfastFeedActivity extends AppCompatActivity {
 
     private void decreaseCurrentPostScore() {
 
-        boolean hasVotedDown = currentUser.getHasVotedDown().get(currentPositionInFeed);
-        boolean hasVotedUp = currentUser.getHasVotedUp().get(currentPositionInFeed);
+        boolean hasVotedDown = currentUser.getHasVotedDown().get(currentPhotoId);
+        boolean hasVotedUp = currentUser.getHasVotedUp().get(currentPhotoId);
 
         if (hasVotedDown){
             currentScore += 1;
-            currentUser.getHasVotedDown().set(currentPositionInFeed , false);
-            mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedDown").child(currentPositionInFeed+"").child("false");
+            currentUser.getHasVotedDown().put(currentPhotoId , false);
+            mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedDown").child(currentPhotoId).setValue("false");
             updateCurrentPictureScore();
             setPictureScore();
         }
         else if(hasVotedUp){
             currentScore -= 2;
-            currentUser.getHasVotedDown().set(currentPositionInFeed , true);
-            currentUser.getHasVotedUp().set(currentPositionInFeed , false);
-            mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedDown").child(currentPositionInFeed+"").child("true");
-            mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedUp").child(currentPositionInFeed+"").child("false");
+            currentUser.getHasVotedDown().put(currentPhotoId , true);
+            currentUser.getHasVotedUp().put(currentPhotoId , false);
+            mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedDown").child(currentPhotoId).setValue("true");
+            mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedUp").child(currentPhotoId).setValue("false");
             updateCurrentPictureScore();
             setPictureScore();
         }
         else{
             currentScore -= 1;
-            currentUser.getHasVotedDown().set(currentPositionInFeed , true);
-            mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedUp").child(currentPositionInFeed+"").child("true");
+            currentUser.getHasVotedDown().put(currentPhotoId , true);
+            mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedDown").child(currentPhotoId).setValue("true");
             updateCurrentPictureScore();
             setPictureScore();
 
@@ -161,30 +162,30 @@ public class BreakfastFeedActivity extends AppCompatActivity {
 
     private void increaseCurrentPostScore() {
 
-        boolean hasVotedDown = currentUser.getHasVotedDown().get(currentPositionInFeed);
-        boolean hasVotedUp = currentUser.getHasVotedUp().get(currentPositionInFeed);
+        boolean hasVotedDown = currentUser.getHasVotedDown().get(currentPhotoId);
+        boolean hasVotedUp = currentUser.getHasVotedUp().get(currentPhotoId);
 
 
         if (hasVotedDown){
             currentScore += 2;
-            currentUser.getHasVotedDown().set(currentPositionInFeed , false);
-            currentUser.getHasVotedUp().set(currentPositionInFeed , true);
-            mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedDown").child(currentPositionInFeed+"").child("false");
-            mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedUp").child(currentPositionInFeed+"").child("true");
+            currentUser.getHasVotedDown().put(currentPhotoId , false);
+            currentUser.getHasVotedUp().put(currentPhotoId , true);
+            mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedDown").child(currentPhotoId).setValue("false");
+            mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedUp").child(currentPhotoId).setValue("true");
             updateCurrentPictureScore();
             setPictureScore();
         }
         else if(hasVotedUp){
             currentScore -= 1;
-            currentUser.getHasVotedUp().set(currentPositionInFeed , false);
-            mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedUp").child(currentPositionInFeed+"").child("false");
+            currentUser.getHasVotedUp().put(currentPhotoId , false);
+            mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedUp").child(currentPhotoId).setValue("false");
             updateCurrentPictureScore();
             setPictureScore();
         }
         else{
             currentScore += 1;
-            currentUser.getHasVotedUp().set(currentPositionInFeed , true);
-            mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedUp").child(currentPositionInFeed+"").child("true");
+            currentUser.getHasVotedUp().put(currentPhotoId, true);
+            mDatabase.child("Users").child(currentUser.getUserId()).child("hasVotedUp").child(currentPhotoId).setValue("true");
             updateCurrentPictureScore();
             setPictureScore();
         }
@@ -263,7 +264,10 @@ public class BreakfastFeedActivity extends AppCompatActivity {
 
                     // Update user in the database
                     mDatabase.child("Users").child(u.getUserId()).child("numberOfOffensives").setValue(u.getNumberOfOffensives());
-
+                    Notification n = new Notification( "Post Removal",
+                            "Your post was deemed inappropriate and has been removed from the Campus Feed",
+                            u.getUserId());
+                    n.addToFirebase();
                 }
 
             }
@@ -278,6 +282,8 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         // Remove picture from BreakfastFeed
 
         // Update database with picture removed
+
+
     }
 
     private void setPictureScore(){
@@ -288,6 +294,7 @@ public class BreakfastFeedActivity extends AppCompatActivity {
 
     private void setCurrentPicture() {
             Picasso.with(getApplicationContext()).load(getItemURL(currentPositionInFeed).toString()).fit().into(image);
+            currentPhotoId = photoids.get(currentPositionInFeed);
     }
 
     private void variableInit() {
@@ -302,7 +309,7 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         breakfastPhotoCount = photos.size();
 
         currentPositionInFeed = currentUser.getCurrentPositionInFeed();
-        currentUser.increaseVotingArrays(breakfastPhotoCount);
+        currentUser.increaseVotingArrays(breakfastPhotoCount, photoids);
         currentPost = null;
     }
 

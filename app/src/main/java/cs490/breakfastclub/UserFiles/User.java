@@ -1,10 +1,18 @@
 package cs490.breakfastclub.UserFiles;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
+import cs490.breakfastclub.Classes.Notification;
 
 import cs490.breakfastclub.CameraAndPhotos.Photos;
 import cs490.breakfastclub.SquadFiles.Squad;
@@ -29,9 +37,11 @@ public class User {
     private ArrayList<User> friends;
     private Permissions permissions;
     private DatabaseReference mDatabase;
+    
+    LinkedHashMap<String, Boolean> hasVotedUp;
+    LinkedHashMap<String, Boolean> hasVotedDown;
+    private ArrayList<Notification> notifications;
 
-    private ArrayList<Boolean> hasVotedUp;
-    private ArrayList<Boolean> hasVotedDown;
     private int currentPositionInFeed;
     private int numberOfOffensives;
 
@@ -51,6 +61,8 @@ public class User {
     private LatLng location;
     private Photos currentPhotos;
 
+    private boolean gotNotificationsFromFirebase = false;
+
     public User(String name, String userId, String profileImageUrl, String profileImageID, ArrayList<User> friends){
         this.name = name;
         this.userId = userId;
@@ -59,10 +71,11 @@ public class User {
         this.receivesPushNotifications = true;
         this.friends = friends;
         this.permissions = Permissions.Member;
-        this.hasVotedUp = new ArrayList<Boolean>();
-        this.hasVotedDown = new ArrayList<Boolean>();
+        hasVotedUp = new LinkedHashMap<String, Boolean>();
+        hasVotedDown = new LinkedHashMap<String, Boolean>();
         this.currentPositionInFeed = 0;
-        numberOfOffensives = 0;
+        this.numberOfOffensives = 0;
+        notifications = new ArrayList<>();
     }
 
     public User(String name, String userId, String profileImageUrl, String profileImageID)
@@ -84,6 +97,7 @@ public class User {
     public void setSquad(Squad squad)
     {
         this.squad = squad;
+        if(squad != null)
         getCurrentPhotos().setUserSquadPhotos(this.squad.getSquadID());
     }
 
@@ -161,19 +175,19 @@ public class User {
     public void setPermissions(Permissions p) { permissions = p; }
 
 
-    public ArrayList<Boolean> getHasVotedUp() {
+    public LinkedHashMap<String, Boolean> getHasVotedUp() {
         return hasVotedUp;
     }
 
-    public void setHasVotedUp(ArrayList<Boolean> hasVoted) {
-        this.hasVotedUp = hasVoted;
+    public void setHasVotedUp(LinkedHashMap<String, Boolean> hasVotedUp) {
+        this.hasVotedUp = hasVotedUp;
     }
 
-    public ArrayList<Boolean> getHasVotedDown() {
+    public LinkedHashMap<String, Boolean> getHasVotedDown() {
         return hasVotedDown;
     }
 
-    public void setHasVotedDown(ArrayList<Boolean> hasVotedDown) {
+    public void setHasVotedDown(LinkedHashMap<String, Boolean> hasVotedDown) {
         this.hasVotedDown = hasVotedDown;
     }
 
@@ -201,18 +215,98 @@ public class User {
         this.numberOfOffensives = numberOfOffensives;
     }
 
+    private void getNotificationsFromFirebase()
+    {
+        final DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference("Users/" + userId + "/Notifications/");
+        memberRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot d : dataSnapshot.getChildren())
+                {
+                    Notification n = new Notification((String)d.child("title").getValue(),
+                                                      (String)d.child("content").getValue(),
+                                                      userId);
+                    n.setTimestamp((String)d.child("timestamp").getValue());
+                    notifications.add(n);
+                    Log.d("Notifications", "FROM FIREBASE: Timestamp=" + n.getTimestamp());
+                    Log.d("Notifications", "FROM FIREBASE: User=" + name);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public ArrayList<Notification> getNotifications()
+    {
+        if(gotNotificationsFromFirebase == false)
+        {
+            gotNotificationsFromFirebase = true;
+            Log.d("Notifications", "SIZE 0, Getting notifications from Firebase");
+            getNotificationsFromFirebase();
+        }
+        return notifications;
+    }
+
+    public void addNotification(Notification n)
+    {
+        if(gotNotificationsFromFirebase == false)
+        {
+            gotNotificationsFromFirebase = true;
+            getNotificationsFromFirebase();
+        }
+        notifications.add(n);
+        n.addToFirebase();
+    }
+
+    public void clearNotifications()
+    {
+        gotNotificationsFromFirebase = false;
+        notifications.clear();
+    }
+
+    public boolean removeNotification(Notification toRemove)
+    {
+        for(Notification n : notifications)
+        {
+            if(n.getContent().equals(toRemove.getContent()) &&
+                    n.getTimestamp().equals(toRemove.getContent()))
+            {
+                n.removeNotification();
+                notifications.remove(n);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean removeNotification(int pos)
+    {
+        if(pos >= 0 && pos < notifications.size())
+        {
+            notifications.get(pos).removeNotification();
+            notifications.remove(pos);
+            return true;
+        }
+        return false;
+    }
 
 
-    public void increaseVotingArrays(int photoCount) {
+
+    public void increaseVotingArrays(int photoCount, ArrayList<String> photoids) {
         if (photoCount > this.getHasVotedDown().size()){
 
             mDatabase = FirebaseDatabase.getInstance().getReference();
 
             for (int i = this.getHasVotedDown().size(); i < photoCount; i++){
-                this.getHasVotedDown().add(false);
-                this.getHasVotedUp().add(false);
-                mDatabase.child("Users").child(this.getUserId()).child("hasVotedUp").child(i+"").setValue("false");
-                mDatabase.child("Users").child(this.getUserId()).child("hasVotedDown").child(i+"").setValue("false");
+                this.getHasVotedDown().put(photoids.get(i), false);
+                this.getHasVotedUp().put(photoids.get(i), false);
+                mDatabase.child("Users").child(this.getUserId()).child("hasVotedUp").child(photoids.get(i)).setValue("false");
+                mDatabase.child("Users").child(this.getUserId()).child("hasVotedDown").child(photoids.get(i)).setValue("false");
             }
         }
     }

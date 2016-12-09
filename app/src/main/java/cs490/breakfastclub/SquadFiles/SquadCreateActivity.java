@@ -27,6 +27,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 
+import cs490.breakfastclub.Classes.Notification;
 import cs490.breakfastclub.UserFiles.User;
 import cs490.breakfastclub.MyApplication;
 import cs490.breakfastclub.R;
@@ -70,6 +71,9 @@ public class SquadCreateActivity extends AppCompatActivity {
                     mDatabase.child("Squads/" + currentSquadKey).child("Members").child(currentUser.getUserId()).setPriority(0);
                     mDatabase.child("Users/" + currentUser.getUserId()).child("squad").setValue(currentSquadKey);
                     mDatabase.child("Users/" + currentUser.getUserId()).child("squadRole").setValue("captain");
+                    Notification n = new Notification( "Squad Creation","You have created squad " + squadName.getText(),
+                            currentUser.getUserId());
+                    n.addToFirebase();
                     StorageReference squadRef = mStorage.child("Squads/" + currentSquadKey);
                     Bitmap bitmap = ((BitmapDrawable) squadPhoto.getDrawable()).getBitmap();
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
