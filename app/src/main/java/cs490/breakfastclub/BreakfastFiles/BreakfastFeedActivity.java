@@ -296,6 +296,7 @@ public class BreakfastFeedActivity extends AppCompatActivity {
     }
 
     private void variableInit() {
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
         currentUser = ((MyApplication) getApplication()).getCurrentUser();
         currentBreakfast = ((MyApplication) getApplication()).getCurrentBreakfast();
