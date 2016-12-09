@@ -56,7 +56,6 @@ public class Photos {
         Squad squad = currentUser.getSquad();
         breakfastId = currentBreakfast;
 
-
         ref1 = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Photos").child(breakfastId);
         initPhotosRef(userChildEventListener, USER_PHOTOS);
 

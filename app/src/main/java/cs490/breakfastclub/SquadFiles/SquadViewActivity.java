@@ -129,6 +129,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
             public void onClick(View v) {
                 Intent intent = new Intent(SquadViewActivity.this, GalleryActivity.class);
                 intent.putExtra("photo set", 1);
+                // 0 is users, 1 is squad, 2 is breakfast feed
                 startActivity(intent);
             }
         });
