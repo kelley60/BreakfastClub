@@ -97,7 +97,7 @@ public class BreakfastFeedActivity extends AppCompatActivity {
     private void setNextImage() {
 
         //Fencepost
-        breakfastPhotoCount = photos.size() - 1;
+        breakfastPhotoCount = photos.size();
 
         if (currentPositionInFeed < breakfastPhotoCount) {
             currentPositionInFeed += 1;
