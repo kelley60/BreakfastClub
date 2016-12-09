@@ -18,6 +18,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 import cs490.breakfastclub.AdminViewUsersActivity;
+import cs490.breakfastclub.Classes.Notification;
 import cs490.breakfastclub.DownloadImageAsyncTask;
 import cs490.breakfastclub.R;
 import cs490.breakfastclub.RepeatOffendersActivity;
@@ -144,12 +145,22 @@ public class UserAdapter extends ArrayAdapter<User>
                 mDatabase.child("Users").child(user.getUserId()).child("permissions").setValue(user.getPermissions());
                 Log.d("Permissions", user.getName() + " - Add");
                 lblTitle.setText("Moderator");
+
+                Notification n = new Notification( "Permission Change",
+                        "You have been promoted to the role of Moderator!",
+                        user.getUserId());
+                n.addToFirebase();
             }
             else if(getContext().getClass() == RepeatOffendersActivity.class)
             {
                 user.setNumberOfOffensives(4);
                 Log.d("Class", user.getName() + " numberOfOffensives = " + user.getNumberOfOffensives());
                 mDatabase.child("Users").child(user.getUserId()).child("numberOfOffensives").setValue(user.getNumberOfOffensives());
+
+                Notification n = new Notification( "Repeat Offender",
+                        "You have been deemed a regular poster of inappropriate material. Enjoy the banhammer.",
+                        user.getUserId());
+                n.addToFirebase();
             }
 
             }
@@ -167,12 +178,22 @@ public class UserAdapter extends ArrayAdapter<User>
                 mDatabase.child("Users").child(user.getUserId()).child("permissions").setValue(user.getPermissions());
                 Log.d("Permissions", user.getName() + " - Remove");
                 lblTitle.setText("Member");
+
+                Notification n = new Notification( "Permission Change",
+                        "You have been demoted to the role of Member.",
+                        user.getUserId());
+                n.addToFirebase();
             }
             else if(getContext().getClass() == RepeatOffendersActivity.class)
             {
                 user.setNumberOfOffensives(0);
                 Log.d("Class", user.getName() + " numberOfOffensives = " + user.getNumberOfOffensives());
                 mDatabase.child("Users").child(user.getUserId()).child("numberOfOffensives").setValue(user.getNumberOfOffensives());
+
+                Notification n = new Notification( "Repeat Offender",
+                        "The mods are generous and gracious mods. Your posting privelages have been reinstated.",
+                        user.getUserId());
+                n.addToFirebase();
             }
 
             }
