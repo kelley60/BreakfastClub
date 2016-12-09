@@ -256,9 +256,8 @@ public class Photos {
                         break;
                     }
                     case SQUAD_PHOTOS: {
-                        //TODO squad role == captain
-                        // if(currentUser.getSquad().getPermissions() == User.Permissions.Moderator ||
-                        if (currentUser.getUserId() == dataSnapshot.child("user id").getValue().toString()) {
+                         if(currentUser.getSquadRole().equals("captain")
+                            || currentUser.getUserId() == dataSnapshot.child("user id").getValue().toString()) {
                             if (dataSnapshot.child("isSquadProfile").getValue().toString() == "true") {
                                 //TODO get default profile picture and set the surrent user profile also
                                 ref.child("Squads/" + currentUser.getSquad().getSquadID()).child("profileImageUrl").setValue("");
