@@ -23,6 +23,7 @@ import com.squareup.picasso.Picasso;
 import cs490.breakfastclub.CameraAndPhotos.GalleryActivity;
 import cs490.breakfastclub.UserFiles.User;
 
+
 public class ProfileViewActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
@@ -168,6 +169,18 @@ public class ProfileViewActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(ProfileViewActivity.this, GalleryActivity.class);
                     intent.putExtra("photo set", 0);
+                    startActivity(intent);
+                }
+            });
+
+            //((MyApplication) getApplication()).getCurrentUser().addTestNotification();
+
+            Button btnNotifications = (Button) findViewById(R.id.btnNotifications);
+            btnNotifications.setVisibility(View.VISIBLE);
+            btnNotifications.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ProfileViewActivity.this, NotificationViewActivity.class);
                     startActivity(intent);
                 }
             });

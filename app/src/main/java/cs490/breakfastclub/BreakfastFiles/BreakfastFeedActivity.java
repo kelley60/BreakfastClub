@@ -278,6 +278,10 @@ public class BreakfastFeedActivity extends AppCompatActivity {
         // Remove picture from BreakfastFeed
 
         // Update database with picture removed
+
+        // TODO: Trevor
+        // Send push notification to user if they have push notifications enabled
+
     }
 
     private void setPictureScore(){

@@ -94,6 +94,7 @@
             android:name=".LocationService"
             android:exported="false" />
 
+        <activity android:name=".NotificationViewActivity"></activity>
         <activity android:name=".BreakfastFiles.TimeUntilBreakfastActivity" />
         <activity android:name=".BreakfastFiles.NotOnCampusActivity"></activity>
     </application>
