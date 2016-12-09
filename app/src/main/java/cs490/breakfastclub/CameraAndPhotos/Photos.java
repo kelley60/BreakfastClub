@@ -216,8 +216,29 @@ public class Photos {
         String commentKey = dataSnapshot.getKey();
 
     }
-
-
+/*
+    public void removePhoto(String photoId, int code)
+    {
+        switch (code) {
+            case USER_PHOTOS:
+            {
+                break;
+            }
+            case USER_PHOTOS:
+            {
+                break;
+            }
+            case USER_PHOTOS:
+            {
+                break;
+            }
+            case default:
+            {
+                break;
+            }
+        }
+    }
+*/
 
     //GETTERS AND SETTERS --------------------------------------------------------------
 

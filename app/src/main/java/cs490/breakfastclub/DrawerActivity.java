@@ -1,9 +1,6 @@
 package cs490.breakfastclub;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -15,17 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.Calendar;
-
 import cs490.breakfastclub.BreakfastFiles.BreakfastFeedActivity;
-import cs490.breakfastclub.CameraAndPhotos.CameraActivity;
-import cs490.breakfastclub.BreakfastFiles.Breakfast;
-import cs490.breakfastclub.GeofenceFiles.GeofenceManager;
-import cs490.breakfastclub.SquadFiles.SquadInviteActivity;
-import cs490.breakfastclub.UserFiles.User;
 import cs490.breakfastclub.BreakfastFiles.CreateBreakfastActivity;
+import cs490.breakfastclub.CameraAndPhotos.CameraActivity;
+import cs490.breakfastclub.GeofenceFiles.GeofenceManager;
 import cs490.breakfastclub.SquadFiles.SquadCreateActivity;
 import cs490.breakfastclub.SquadFiles.SquadViewActivity;
+import cs490.breakfastclub.UserFiles.User;
 
 public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -41,7 +34,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
 
         Intent locationService = new Intent(getApplicationContext(), LocationService.class);
-//        getApplicationContext().startService(locationService);
+        getApplicationContext().startService(locationService);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
