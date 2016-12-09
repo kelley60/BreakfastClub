@@ -29,6 +29,7 @@ import java.util.LinkedHashMap;
 
 import cs490.breakfastclub.CameraAndPhotos.CameraActivity;
 import cs490.breakfastclub.CameraAndPhotos.Photos;
+import cs490.breakfastclub.Classes.Notification;
 import cs490.breakfastclub.Classes.Post;
 import cs490.breakfastclub.Classes.TimeFunctions;
 import cs490.breakfastclub.MyApplication;
@@ -263,7 +264,10 @@ public class BreakfastFeedActivity extends AppCompatActivity {
 
                     // Update user in the database
                     mDatabase.child("Users").child(u.getUserId()).child("numberOfOffensives").setValue(u.getNumberOfOffensives());
-
+                    Notification n = new Notification( "Post Removal",
+                            "Your post was deemed inappropriate and has been removed from the Campus Feed",
+                            u.getUserId());
+                    n.addToFirebase();
                 }
 
             }
@@ -279,8 +283,6 @@ public class BreakfastFeedActivity extends AppCompatActivity {
 
         // Update database with picture removed
 
-        // TODO: Trevor
-        // Send push notification to user if they have push notifications enabled
 
     }
 

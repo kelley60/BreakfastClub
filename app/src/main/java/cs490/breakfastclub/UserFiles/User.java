@@ -96,6 +96,7 @@ public class User {
     public void setSquad(Squad squad)
     {
         this.squad = squad;
+        if(squad != null)
         getCurrentPhotos().setUserSquadPhotos(this.squad.getSquadID());
     }
 
@@ -259,6 +260,12 @@ public class User {
         }
         notifications.add(n);
         n.addToFirebase();
+    }
+
+    public void clearNotifications()
+    {
+        gotNotificationsFromFirebase = false;
+        notifications.clear();
     }
 
     public boolean removeNotification(Notification toRemove)
