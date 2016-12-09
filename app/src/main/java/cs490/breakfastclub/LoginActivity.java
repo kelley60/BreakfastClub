@@ -49,6 +49,7 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import cs490.breakfastclub.BreakfastFiles.Breakfast;
@@ -290,16 +291,19 @@ public class LoginActivity extends AppCompatActivity {
 
                                     LinkedHashMap<String, Boolean> hasVotedUp = new LinkedHashMap<String, Boolean>();
                                     LinkedHashMap<String, Boolean> hasVotedDown = new LinkedHashMap<String, Boolean>();
-                                    String photocount = dataSnapshot.child("getHasVoted").getChildrenCount() + "";
-                                    int photoCount = Integer.parseInt(photocount);
+                                    String photocount = dataSnapshot.child("hasVotedUp").getChildrenCount() + "";
 
-                                    for (int i = 0; i < photoCount; i++) {
-                                        String upValuePictureKey = dataSnapshot.child("hasVotedUp").getValue().toString();
-                                        String downValuePictureKey = dataSnapshot.child("hasVotedDown").getValue().toString();
+                                    Iterator<DataSnapshot> upValuePictureIterable = dataSnapshot.child("hasVotedUp").getChildren().iterator();
+                                    Iterator<DataSnapshot> downValuePictureIterable = dataSnapshot.child("hasVotedDown").getChildren().iterator();
+
+                                    while (upValuePictureIterable.hasNext()) {
+                                        String upValuePictureKey = upValuePictureIterable.next().getKey();
                                         Boolean upValue = Boolean.parseBoolean(dataSnapshot.child("hasVotedUp").child(upValuePictureKey).getValue().toString());
-                                        Boolean downValue = Boolean.parseBoolean(dataSnapshot.child("hasVotedDown").child(downValuePictureKey).getValue().toString());
-
                                         hasVotedUp.put(upValuePictureKey, upValue);
+                                    }
+                                    while (downValuePictureIterable.hasNext()){
+                                        String downValuePictureKey = downValuePictureIterable.next().getKey();
+                                        Boolean downValue = Boolean.parseBoolean(dataSnapshot.child("hasVotedDown").child(downValuePictureKey).getValue().toString());
                                         hasVotedDown.put(downValuePictureKey, downValue);
                                     }
 

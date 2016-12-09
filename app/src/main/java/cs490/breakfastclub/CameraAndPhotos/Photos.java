@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedHashMap;
 
+import cs490.breakfastclub.Classes.Notification;
 import cs490.breakfastclub.SquadFiles.Squad;
 import cs490.breakfastclub.UserFiles.User;
 
@@ -278,6 +279,21 @@ public class Photos {
                                 ref.child("Breakfasts/" + breakfastId).child("Photos").child(photoId).removeValue();
                                 ref.child("Breakfasts/" + breakfastId).child("Votes").child(photoId).removeValue();
                                 ref.child("Photos/" + breakfastId).child(photoId).child("isBreakfast").setValue("false");
+
+                                if(currentUser.getUserId() == dataSnapshot.child("user id").getValue().toString())
+                                { // Removing own post
+                                    Notification n = new Notification("Post Removed",
+                                            "You have removed your own post from the Campus Feed.",
+                                            currentUser.getUserId());
+                                    n.addToFirebase();
+                                }
+                                else
+                                { // Mod removing post
+                                    Notification n = new Notification("Post Removed",
+                                            "Your post was deemed inappropriate and has been removed from the Campus Feed.",
+                                            dataSnapshot.child("user id").getValue().toString());
+                                    n.addToFirebase();
+                                }
                             }
                         }
                         break;
