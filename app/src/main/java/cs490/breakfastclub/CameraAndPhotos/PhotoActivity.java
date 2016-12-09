@@ -75,7 +75,7 @@ public class PhotoActivity extends AppCompatActivity {
 
         m_vwImage = (ImageView) findViewById(R.id.imgDisplay);
         m_vwImage.setImageBitmap(photo.getbMap());
-
+        //Picasso.with(this).load(photoUri).into(m_vwImage);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
