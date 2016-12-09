@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    tools:context="cs490.breakfastclub.BestPictureActivity"
+    android:background="@drawable/gradient_background" >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/Purdue_Gold"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/PopupOverlay">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <!-- Put all other UI elements below this comment! -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/my_toolbar"
+        android:layout_margin="10dp"
+        android:background="@color/Purdue_White">
+
+        <TextView
+            android:id="@+id/lbl1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Best Picture"
+            android:layout_centerHorizontal="true"
+            android:textSize="20sp"
+            android:layout_margin="10dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/lblBestPicName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="[user's name here]"
+            android:textStyle="italic"
+            android:layout_below="@id/lbl1"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"/>
+
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/lblBestPicName"
+            android:layout_margin="10dp"
+            app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"/>
+    </RelativeLayout>
+
+
+</RelativeLayout>
