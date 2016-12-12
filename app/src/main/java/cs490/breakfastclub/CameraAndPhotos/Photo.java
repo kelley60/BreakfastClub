@@ -182,6 +182,14 @@ public class Photo implements Parcelable {
         return bitMap;
     }
 
+  /*  public void setBytes()
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bMap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bytes = baos.toByteArray();
+    }
+*/
+
     public void addPhotoToFirebase(final User currentUser, final String currentBreakfast)
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

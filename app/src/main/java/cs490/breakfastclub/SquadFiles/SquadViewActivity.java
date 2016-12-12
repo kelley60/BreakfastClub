@@ -130,6 +130,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
             public void onClick(View v) {
                 Intent intent = new Intent(SquadViewActivity.this, GalleryActivity.class);
                 intent.putExtra("photo set", 1);
+                // 0 is users, 1 is squad, 2 is breakfast feed
                 startActivity(intent);
             }
         });
@@ -298,7 +299,7 @@ public class SquadViewActivity extends AppCompatActivity implements GoogleApiCli
                             {
                                 new AlertDialog.Builder(SquadViewActivity.this)
                                 .setIcon(android.R.drawable.ic_dialog_alert)
-                                .setTitle("Dun dun dunnnnnnn")
+                                .setTitle("Steer your ship, Captain")
                                 .setMessage("Would you like to delete your squad or change ownership?")
                                 .setPositiveButton("Change Owner", new DialogInterface.OnClickListener() {
                                     @Override
