@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="time until breakfast"
+        android:text="0 days 13 hours 30 minutes 25 seconds"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/countdownTextId"

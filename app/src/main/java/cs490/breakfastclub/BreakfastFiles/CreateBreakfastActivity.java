@@ -58,9 +58,9 @@ public class CreateBreakfastActivity extends AppCompatActivity {
 
         endBreakfastButton.setVisibility(View.INVISIBLE);
 
-        if (currentUser.getPermissions() == User.Permissions.Developer){
+        //if (currentUser.getPermissions() == User.Permissions.Developer){
             endBreakfastButton.setVisibility(View.VISIBLE);
-        }
+        //}
 
         endBreakfastButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -179,11 +179,6 @@ public class Photo implements Parcelable {
         {
             e.printStackTrace();
         }
-        catch (Exception e){
-            Log.v("Photo.java","In here");
-            e.printStackTrace();
-            Log.e("Photo.java", e.getLocalizedMessage());
-        }
         return bitMap;
     }
 

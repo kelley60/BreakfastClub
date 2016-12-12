@@ -310,9 +310,9 @@ public class LoginActivity extends AppCompatActivity {
                                     currentUser.setHasVotedUp(hasVotedUp);
                                     currentUser.setHasVotedDown(hasVotedDown);
 
-                                    //String currentPosition = dataSnapshot.child("currentPositionInFeed").getValue() + "";
-                                    //currentUser.setCurrentPositionInFeed(Integer.parseInt(currentPosition));
-                                    currentUser.setCurrentPositionInFeed(0);
+                                    String currentPosition = dataSnapshot.child("currentPositionInFeed").getValue() + "";
+                                    currentUser.setCurrentPositionInFeed(Integer.parseInt(currentPosition));
+                                    //currentUser.setCurrentPositionInFeed(0);
 
                                     // Load the current application photos from firebase
                                     currentUser.setPermissions(User.Permissions.valueOf((String) dataSnapshot.child("permissions").getValue()));
